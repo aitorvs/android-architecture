@@ -1,0 +1,46 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.example.android.architecture.blueprints.todoapp"
+        minSdkVersion 16
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Support lib
+    implementation deps.support.appcompat
+    implementation deps.support.recyclerview
+    implementation deps.support.annotations
+    implementation deps.support.design
+
+    // External deps
+    implementation 'com.uber.rib:rib-android:0.9.1'
+    implementation deps.external.dagger
+    implementation deps.external.rxbinding
+    implementation deps.external.timber
+    implementation (deps.external.materialDrawer) {
+        transitive = true
+    }
+
+    annotationProcessor 'com.uber.rib:rib-compiler-test:0.9.1'
+    annotationProcessor deps.apt.daggerCompiler
+
+    testImplementation 'com.uber.rib:rib-test-utils:0.9.1'
+    testImplementation deps.test.junit
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}
