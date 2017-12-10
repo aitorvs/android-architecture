@@ -3,12 +3,12 @@ package com.example.android.architecture.blueprints.todoapp.root;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 /**
  * Top level view for {@link RootBuilder.RootScope}.
  */
-class RootView extends FrameLayout implements RootInteractor.RootPresenter {
+class RootView extends RelativeLayout implements RootInteractor.RootPresenter {
 
     public RootView(Context context) {
         this(context, null);

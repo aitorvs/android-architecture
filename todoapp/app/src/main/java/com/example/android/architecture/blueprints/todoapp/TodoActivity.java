@@ -26,8 +26,10 @@ public class TodoActivity extends RibActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        drawer = new DrawerBuilder().withActivity(this)
+        drawer = new DrawerBuilder()
+            .withActivity(this)
             .withToolbar(toolbar)
+            .withHasStableIds(true)
             .withDrawerLayout(R.layout.material_drawer_fits_not)
             .withHeader(R.layout.nav_header)
             .addDrawerItems(

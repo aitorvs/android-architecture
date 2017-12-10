@@ -1,26 +1,31 @@
-package com.example.android.architecture.blueprints.todoapp.root;
+package com.example.android.architecture.blueprints.todoapp.root.tasks;
 
 import android.support.annotation.Nullable;
+
 import com.uber.rib.core.Bundle;
 import com.uber.rib.core.Interactor;
 import com.uber.rib.core.RibInteractor;
+import com.uber.rib.core.Presenter;
+import com.uber.rib.core.Router;
+
 import javax.inject.Inject;
 
 /**
- * Coordinates Business Logic for {@link RootScope}.
+ * Coordinates Business Logic for {@link TasksScope}.
  *
  * TODO describe the logic of this scope.
  */
 @RibInteractor
-public class RootInteractor
-        extends Interactor<RootInteractor.RootPresenter, RootRouter> {
+public class TasksInteractor
+        extends Interactor<TasksInteractor.TasksPresenter, TasksRouter> {
 
-    @Inject RootPresenter presenter;
+    @Inject TasksPresenter presenter;
 
     @Override
     protected void didBecomeActive(@Nullable Bundle savedInstanceState) {
         super.didBecomeActive(savedInstanceState);
-        getRouter().attachTasks();
+
+        // TODO: Add attachment logic here (RxSubscriptions, etc.).
     }
 
     @Override
@@ -34,5 +39,5 @@ public class RootInteractor
     /**
      * Presenter interface implemented by this RIB's view.
      */
-    interface RootPresenter { }
+    interface TasksPresenter { }
 }
