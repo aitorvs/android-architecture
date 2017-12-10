@@ -1,19 +1,16 @@
 package com.example.android.architecture.blueprints.todoapp.root.tasks;
 
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.example.android.architecture.blueprints.todoapp.R;
 import com.uber.rib.core.InteractorBaseComponent;
 import com.uber.rib.core.ViewBuilder;
-import java.lang.annotation.Retention;
-
-import javax.inject.Scope;
-import javax.inject.Qualifier;
-
-import dagger.Provides;
 import dagger.Binds;
 import dagger.BindsInstance;
+import dagger.Provides;
+import java.lang.annotation.Retention;
+import javax.inject.Qualifier;
+import javax.inject.Scope;
 
 import static java.lang.annotation.RetentionPolicy.CLASS;
 

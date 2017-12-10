@@ -4,6 +4,8 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.example.android.architecture.blueprints.todoapp.R;
 import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskInteractor;
 import com.uber.rib.core.InteractorBaseComponent;
 import com.uber.rib.core.ViewBuilder;
 import dagger.Binds;
@@ -57,6 +59,12 @@ public class RootBuilder
     public abstract static class Module {
 
         @RootScope
+        @Provides
+        static NewTaskInteractor.Listener newTaskListener(RootInteractor rootInteractor) {
+            return rootInteractor.new NewTaskListener();
+        }
+
+        @RootScope
         @Binds
         abstract RootInteractor.RootPresenter presenter(RootView view);
 
@@ -66,7 +74,8 @@ public class RootBuilder
             Component component,
             RootView view,
             RootInteractor interactor) {
-            return new RootRouter(view, interactor, component, new TasksBuilder(component));
+            return new RootRouter(view, interactor, component, new TasksBuilder(component),
+                new NewTaskBuilder(component));
         }
 
         // TODO: Create provider methods for dependencies created by this Rib. These should be static.
@@ -78,7 +87,8 @@ public class RootBuilder
     interface Component extends
         InteractorBaseComponent<RootInteractor>,
         BuilderComponent,
-        TasksBuilder.ParentComponent
+        TasksBuilder.ParentComponent,
+        NewTaskBuilder.ParentComponent
     {
 
         @dagger.Component.Builder
