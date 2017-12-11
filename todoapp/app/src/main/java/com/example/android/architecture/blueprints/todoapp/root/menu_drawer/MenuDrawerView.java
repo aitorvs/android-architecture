@@ -14,7 +14,7 @@ import io.reactivex.Observable;
  */
 class MenuDrawerView extends NavigationView implements MenuDrawerInteractor.MenuDrawerPresenter {
 
-    private final BehaviorRelay<MenuEvent> behaviorRelay = BehaviorRelay.create();
+    private final BehaviorRelay<MenuEvent> behaviorRelay = BehaviorRelay.createDefault(MenuEvent.TODO_LIST);
     private final Relay<MenuEvent> menuRelay = behaviorRelay.toSerialized();
 
     public MenuDrawerView(Context context) {
@@ -50,8 +50,18 @@ class MenuDrawerView extends NavigationView implements MenuDrawerInteractor.Menu
                 default:
                     break;
             }
-            item.setCheckable(true);
+            item.setChecked(true);
             return true;
         });
+        setCurrentItemAsChecked();
+    }
+
+    private void setCurrentItemAsChecked() {
+        // set the item that is checked
+        getMenu().findItem(R.id.list_navigation_menu_item).setCheckable(true);
+        getMenu().findItem(R.id.statistics_navigation_menu_item).setCheckable(true);
+        getMenu().findItem(R.id.list_navigation_menu_item).setChecked(behaviorRelay.getValue() == MenuEvent.TODO_LIST);
+        getMenu().findItem(R.id.statistics_navigation_menu_item)
+            .setChecked(behaviorRelay.getValue() == MenuEvent.STATISTICS);
     }
 }
