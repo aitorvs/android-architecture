@@ -2,7 +2,7 @@ package com.example.android.architecture.blueprints.todoapp.root;
 
 import android.support.annotation.Nullable;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerInteractor;
-import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskInteractor;
+import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksInteractor;
 import com.uber.rib.core.Bundle;
 import com.uber.rib.core.Interactor;
 import com.uber.rib.core.RibInteractor;
@@ -34,14 +34,6 @@ public class RootInteractor
         // TODO: Perform any required clean up here, or delete this method entirely if not needed.
     }
 
-    class NewTaskListener implements NewTaskInteractor.Listener {
-        @Override
-        public void addTask() {
-            Timber.d("addTask() called");
-            gotoAddTask();
-        }
-    }
-
     class MenuDrawerListener implements MenuDrawerInteractor.Listener {
         @Override
         public void todoListSelected() {
@@ -60,23 +52,28 @@ public class RootInteractor
         }
     }
 
+    class TaskListener implements TasksInteractor.Listener {
+        @Override
+        public void onAddNewTask() {
+            Timber.d("onAddNewTask() called");
+            gotoAddTask();
+        }
+    }
+
     private void gotoStatistics() {
         getRouter().detachAddTasks();
         getRouter().detachTasks();
-        getRouter().detachNewTask();
         getRouter().attachStatistics();
     }
 
     private void gotoTodoList() {
         getRouter().detachAddTasks();
         getRouter().detachStatistics();
-        getRouter().attachNewTask();
         getRouter().attachTasks();
     }
 
     private void gotoAddTask() {
         getRouter().detachTasks();
-        getRouter().detachNewTask();
         getRouter().attachAddTasks();
     }
 

@@ -1,5 +1,6 @@
 package com.example.android.architecture.blueprints.todoapp.root;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.example.android.architecture.blueprints.todoapp.R;
+import com.example.android.architecture.blueprints.todoapp.TodoActivity;
 import com.uber.rib.core.RibActivity;
 
 /**
@@ -65,9 +67,10 @@ class RootView extends DrawerLayout implements RootInteractor.RootPresenter {
         return isDrawerOpen(GravityCompat.START);
     }
 
+    @SuppressLint("WrongConstant")
     private void setupToolbar() {
         ((RibActivity) getContext()).setSupportActionBar(toolbar);
-        ActionBar ab = ((RibActivity) getContext()).getSupportActionBar();
+        ActionBar ab = (ActionBar) getContext().getSystemService(TodoActivity.ACTION_BAR_SERVICE);
         if (ab != null) {
             ab.setHomeAsUpIndicator(R.drawable.ic_menu);
             ab.setDisplayHomeAsUpEnabled(true);

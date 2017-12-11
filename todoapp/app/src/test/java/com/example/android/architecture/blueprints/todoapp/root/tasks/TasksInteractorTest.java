@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 public class TasksInteractorTest extends RibTestBasePlaceholder {
 
     @Mock TasksInteractor.TasksPresenter presenter;
+    @Mock TasksInteractor.Listener listener;
     @Mock TasksRouter router;
 
     private TasksInteractor interactor;
@@ -19,7 +20,7 @@ public class TasksInteractorTest extends RibTestBasePlaceholder {
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        interactor = TestTasksInteractor.create(presenter);
+        interactor = TestTasksInteractor.create(presenter, listener);
     }
 
     /**

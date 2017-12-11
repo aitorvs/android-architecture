@@ -5,8 +5,6 @@ import com.example.android.architecture.blueprints.todoapp.root.add_task.AddTask
 import com.example.android.architecture.blueprints.todoapp.root.add_task.AddTaskRouter;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerRouter;
-import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskBuilder;
-import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskRouter;
 import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsRouter;
 import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksBuilder;
@@ -22,22 +20,19 @@ import timber.log.Timber;
 public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder.Component> {
 
     private final TasksBuilder taskBuilder;
-    private final NewTaskBuilder newTaskBuilder;
     private final MenuDrawerBuilder menuDrawerBuilder;
     private final StatisticsBuilder statisticsBuilder;
     private final AddTaskBuilder addTaskBuilder;
     @Nullable private TasksRouter taskRouter;
     @Nullable private MenuDrawerRouter menuDrawerRouter;
-    @Nullable private NewTaskRouter newTaskRouter;
     @Nullable private StatisticsRouter statisticsRouter;
     @Nullable private AddTaskRouter addTaskRouter;
 
     public RootRouter(RootView view, RootInteractor interactor, RootBuilder.Component component,
-        TasksBuilder tasksBuilder, NewTaskBuilder newTaskBuilder, MenuDrawerBuilder menuDrawerBuilder,
+        TasksBuilder tasksBuilder, MenuDrawerBuilder menuDrawerBuilder,
         StatisticsBuilder statisticsBuilder, AddTaskBuilder addTaskBuilder) {
         super(view, interactor, component);
         this.taskBuilder = tasksBuilder;
-        this.newTaskBuilder = newTaskBuilder;
         this.menuDrawerBuilder = menuDrawerBuilder;
         this.statisticsBuilder = statisticsBuilder;
         this.addTaskBuilder = addTaskBuilder;
@@ -57,22 +52,6 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
             getView().viewContainer().removeView(taskRouter.getView());
             taskRouter = null;
         }
-    }
-
-    final void detachNewTask() {
-        Timber.d("detachNewTask() called");
-        if (newTaskRouter != null) {
-            detachChild(newTaskRouter);
-            getView().viewContainer().removeView(newTaskRouter.getView());
-            newTaskRouter = null;
-        }
-    }
-
-    final void attachNewTask() {
-        Timber.d("attachNewTask() called");
-        newTaskRouter = newTaskBuilder.build(getView().viewContainer());
-        attachChild(newTaskRouter);
-        getView().viewContainer().addView(newTaskRouter.getView());
     }
 
     final void attachMenuDrawer() {

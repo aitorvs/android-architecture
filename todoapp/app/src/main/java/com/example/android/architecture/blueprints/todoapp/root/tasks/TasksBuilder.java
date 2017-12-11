@@ -49,7 +49,7 @@ public class TasksBuilder
     }
 
     public interface ParentComponent {
-        // TODO: Define dependencies required from your parent interactor here.
+        TasksInteractor.Listener tasksListener();
     }
 
     @dagger.Module

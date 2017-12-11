@@ -8,8 +8,7 @@ import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.Menu
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksBuilder;
-import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskBuilder;
-import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskInteractor;
+import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksInteractor;
 import com.uber.rib.core.InteractorBaseComponent;
 import com.uber.rib.core.ViewBuilder;
 import dagger.Binds;
@@ -73,8 +72,8 @@ public class RootBuilder
 
         @RootScope
         @Provides
-        static NewTaskInteractor.Listener newTaskListener(RootInteractor rootInteractor) {
-            return rootInteractor.new NewTaskListener();
+        static TasksInteractor.Listener tasksListener(RootInteractor rootInteractor) {
+            return rootInteractor.new TaskListener();
         }
 
         @RootScope
@@ -88,7 +87,7 @@ public class RootBuilder
             RootView view,
             RootInteractor interactor) {
             return new RootRouter(view, interactor, component, new TasksBuilder(component),
-                new NewTaskBuilder(component), new MenuDrawerBuilder(component), new StatisticsBuilder(component),
+                new MenuDrawerBuilder(component), new StatisticsBuilder(component),
                 new AddTaskBuilder(component));
         }
     }
@@ -100,7 +99,6 @@ public class RootBuilder
         InteractorBaseComponent<RootInteractor>,
         BuilderComponent,
         TasksBuilder.ParentComponent,
-        NewTaskBuilder.ParentComponent,
         MenuDrawerBuilder.ParentComponent,
         StatisticsBuilder.ParentComponent,
         AddTaskBuilder.ParentComponent
