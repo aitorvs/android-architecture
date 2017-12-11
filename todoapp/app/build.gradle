@@ -36,12 +36,14 @@ dependencies {
     implementation deps.external.dagger
     implementation deps.external.rxbinding
     implementation deps.external.timber
+    implementation deps.external.butterknife
     implementation (deps.external.materialDrawer) {
         transitive = true
     }
 
     annotationProcessor 'com.uber.rib:rib-compiler-test:0.9.1'
     annotationProcessor deps.apt.daggerCompiler
+    annotationProcessor deps.apt.butterknife
 
     testImplementation 'com.uber.rib:rib-test-utils:0.9.1'
     testImplementation deps.test.junit
