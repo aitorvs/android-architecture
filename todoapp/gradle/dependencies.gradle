@@ -22,6 +22,7 @@ def versions = [
     intellij: "2017.2",
     rave: "2.0.0",
     errorProne: '2.0.19',
+    butterknife: '8.8.1',
 ]
 
 def apt = [
@@ -37,6 +38,7 @@ def apt = [
     autoValueAnnotations: "com.jakewharton.auto.value:auto-value-annotations:1.5",
     raveCompiler: "com.uber:rave-compiler:${versions.rave}",
     errorProneAnnotations: "com.google.errorprone:error_prone_annotations:${versions.errorProne}",
+    butterknife: "com.jakewharton:butterknife-compiler:${versions.butterknife}",
 ]
 
 def build = [
@@ -82,7 +84,8 @@ def external = [
     reactiveStreams: "org.reactivestreams:reactive-streams:1.0.0",
     roboelectricBase: "org.robolectric:robolectric:${versions.robolectric}",
     rxbinding: 'com.jakewharton.rxbinding2:rxbinding:2.0.0',
-    leakcanaryDebug: 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    leakcanaryDebug: 'com.squareup.leakcanary:leakcanary-android:1.5.4',
+    butterknife: "com.jakewharton:butterknife:${versions.butterknife}",
 ]
 
 def uber = [
