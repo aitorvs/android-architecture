@@ -38,14 +38,14 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
         this.statisticsBuilder = statisticsBuilder;
     }
 
-    public final void attachTasks() {
+    final void attachTasks() {
         Timber.d("attachTasks() called");
         taskRouter = taskBuilder.build(getView().viewContainer());
         attachChild(taskRouter);
         getView().viewContainer().addView(taskRouter.getView());
     }
 
-    public final void detachTasks() {
+    final void detachTasks() {
         Timber.d("detachTasks() called");
         if (taskRouter != null) {
             detachChild(taskRouter);
@@ -54,7 +54,7 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
         }
     }
 
-    public final void detachNewTask() {
+    final void detachNewTask() {
         Timber.d("detachNewTask() called");
         if (newTaskRouter != null) {
             detachChild(newTaskRouter);
@@ -63,14 +63,14 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
         }
     }
 
-    public final void attachNewTask() {
+    final void attachNewTask() {
         Timber.d("attachNewTask() called");
         newTaskRouter = newTaskBuilder.build(getView().viewContainer());
         attachChild(newTaskRouter);
         getView().viewContainer().addView(newTaskRouter.getView());
     }
 
-    public final void attachMenuDrawer() {
+    final void attachMenuDrawer() {
         Timber.d("attachMenuDrawer() called");
         // The menu drawer is attached to the root view directly and not to the
         menuDrawerRouter = menuDrawerBuilder.build(getView());
@@ -78,14 +78,14 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
         getView().addView(menuDrawerRouter.getView());
     }
 
-    public final void attachStatistics() {
+    final void attachStatistics() {
         Timber.d("attachStatistics() called");
         statisticsRouter = statisticsBuilder.build(getView().viewContainer());
         attachChild(statisticsRouter);
         getView().viewContainer().addView(statisticsRouter.getView());
     }
 
-    public final void detachStatistics() {
+    final void detachStatistics() {
         Timber.d("detachStatistics() called");
         if (statisticsRouter != null) {
             detachChild(statisticsRouter);
