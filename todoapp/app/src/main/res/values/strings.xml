@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TO-DO-RIB</string>
+    <string name="app_name">TO-DO-RIBs</string>
     <string name="todo_list">TO-DO list</string>
     <string name="statistics">Statistics</string>
     <string name="todos">TO-DOs</string>
