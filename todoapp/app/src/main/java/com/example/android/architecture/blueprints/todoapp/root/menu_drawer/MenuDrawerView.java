@@ -47,7 +47,10 @@ class MenuDrawerView extends NavigationView implements MenuDrawerInteractor.Menu
                 case R.id.statistics_navigation_menu_item:
                     menuRelay.accept(MenuEvent.STATISTICS);
                     break;
+                default:
+                    break;
             }
+            item.setCheckable(true);
             return true;
         });
     }
