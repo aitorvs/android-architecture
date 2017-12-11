@@ -22,6 +22,7 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
     private final MenuDrawerBuilder menuDrawerBuilder;
     @Nullable private TasksRouter taskRouter;
     @Nullable private MenuDrawerRouter menuDrawerRouter;
+    @Nullable private NewTaskRouter newTaskRouter;
 
     public RootRouter(RootView view, RootInteractor interactor, RootBuilder.Component component,
         TasksBuilder tasksBuilder, NewTaskBuilder newTaskBuilder, MenuDrawerBuilder menuDrawerBuilder) {
@@ -32,12 +33,14 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
     }
 
     public final void attachTasks() {
+        Timber.d("attachTasks() called");
         taskRouter = taskBuilder.build(getView().viewContainer());
         attachChild(taskRouter);
         getView().viewContainer().addView(taskRouter.getView());
     }
 
     public final void detachTasks() {
+        Timber.d("detachTasks() called");
         if (taskRouter != null) {
             detachChild(taskRouter);
             getView().viewContainer().removeView(taskRouter.getView());
@@ -45,9 +48,18 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
         }
     }
 
+    public final void detachNewTask() {
+        Timber.d("detachNewTask() called");
+        if (newTaskRouter != null) {
+            detachChild(newTaskRouter);
+            getView().viewContainer().removeView(newTaskRouter.getView());
+            newTaskRouter = null;
+        }
+    }
+
     public final void attachNewTask() {
         Timber.d("attachNewTask() called");
-        NewTaskRouter newTaskRouter = newTaskBuilder.build(getView().viewContainer());
+        newTaskRouter = newTaskBuilder.build(getView().viewContainer());
         attachChild(newTaskRouter);
         getView().viewContainer().addView(newTaskRouter.getView());
     }
