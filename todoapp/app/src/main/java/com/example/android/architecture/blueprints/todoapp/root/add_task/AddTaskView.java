@@ -14,6 +14,7 @@ import com.example.android.architecture.blueprints.todoapp.R;
 import com.example.android.architecture.blueprints.todoapp.util.Strings;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.jakewharton.rxrelay2.PublishRelay;
+import com.jakewharton.rxrelay2.Relay;
 import io.reactivex.Observable;
 import timber.log.Timber;
 
@@ -26,7 +27,7 @@ class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.AddTask
     @BindView(R.id.add_task_description) EditText description;
     @BindView(R.id.done_button) View doneButton;
 
-    private final PublishRelay<Pair<String, String>> publishRelay = PublishRelay.create();
+    private final Relay<Pair<String, String>> publishRelay = PublishRelay.<Pair<String, String>>create().toSerialized();
     private Observable<Boolean> titleObservable;
     private Observable<Boolean> descriptionObservable;
 
