@@ -32,7 +32,8 @@ class MenuDrawerView extends NavigationView implements MenuDrawerInteractor.Menu
 
     @Override
     public Observable<MenuEvent> menuEvents() {
-        return menuRelay;
+        // only emits distinct events
+        return menuRelay.distinctUntilChanged();
     }
 
     @Override
