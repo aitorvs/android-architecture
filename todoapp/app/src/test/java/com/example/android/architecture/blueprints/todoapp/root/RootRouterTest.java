@@ -1,6 +1,7 @@
 package com.example.android.architecture.blueprints.todoapp.root;
 
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskBuilder;
 import com.uber.rib.core.RibTestBasePlaceholder;
@@ -24,7 +25,7 @@ public class RootRouterTest extends RibTestBasePlaceholder {
         MockitoAnnotations.initMocks(this);
 
         router = new RootRouter(view, interactor, component, new TasksBuilder(component), new NewTaskBuilder(component),
-            new MenuDrawerBuilder(component));
+            new MenuDrawerBuilder(component), new StatisticsBuilder(component));
     }
 
     /**

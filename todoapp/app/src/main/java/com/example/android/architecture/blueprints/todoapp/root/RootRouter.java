@@ -5,6 +5,8 @@ import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.Menu
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerRouter;
 import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskRouter;
+import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsRouter;
 import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksRouter;
 import com.uber.rib.core.ViewRouter;
@@ -20,16 +22,20 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
     private final TasksBuilder taskBuilder;
     private final NewTaskBuilder newTaskBuilder;
     private final MenuDrawerBuilder menuDrawerBuilder;
+    private final StatisticsBuilder statisticsBuilder;
     @Nullable private TasksRouter taskRouter;
     @Nullable private MenuDrawerRouter menuDrawerRouter;
     @Nullable private NewTaskRouter newTaskRouter;
+    @Nullable private StatisticsRouter statisticsRouter;
 
     public RootRouter(RootView view, RootInteractor interactor, RootBuilder.Component component,
-        TasksBuilder tasksBuilder, NewTaskBuilder newTaskBuilder, MenuDrawerBuilder menuDrawerBuilder) {
+        TasksBuilder tasksBuilder, NewTaskBuilder newTaskBuilder, MenuDrawerBuilder menuDrawerBuilder,
+        StatisticsBuilder statisticsBuilder) {
         super(view, interactor, component);
         this.taskBuilder = tasksBuilder;
         this.newTaskBuilder = newTaskBuilder;
         this.menuDrawerBuilder = menuDrawerBuilder;
+        this.statisticsBuilder = statisticsBuilder;
     }
 
     public final void attachTasks() {
@@ -70,6 +76,22 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
         menuDrawerRouter = menuDrawerBuilder.build(getView());
         attachChild(menuDrawerRouter);
         getView().addView(menuDrawerRouter.getView());
+    }
+
+    public final void attachStatistics() {
+        Timber.d("attachStatistics() called");
+        statisticsRouter = statisticsBuilder.build(getView().viewContainer());
+        attachChild(statisticsRouter);
+        getView().viewContainer().addView(statisticsRouter.getView());
+    }
+
+    public final void detachStatistics() {
+        Timber.d("detachStatistics() called");
+        if (statisticsRouter != null) {
+            detachChild(statisticsRouter);
+            getView().viewContainer().removeView(statisticsRouter.getView());
+            statisticsRouter = null;
+        }
     }
 
     public final boolean handleHomeItemSelected() {

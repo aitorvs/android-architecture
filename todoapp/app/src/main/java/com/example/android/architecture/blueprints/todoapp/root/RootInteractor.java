@@ -25,8 +25,6 @@ public class RootInteractor
         super.didBecomeActive(savedInstanceState);
         // the menu drawer is always there
         getRouter().attachMenuDrawer();
-        // attach the FAB to create new tasks
-        getRouter().attachNewTask();
     }
 
     @Override
@@ -47,7 +45,8 @@ public class RootInteractor
         @Override
         public void todoListSelected() {
             Timber.d("todoListSelected() called");
-            // TODO detach the statistics view
+            getRouter().detachStatistics();
+            getRouter().attachNewTask();
             getRouter().attachTasks();
             // close the menu
             presenter.closeMenu();
@@ -57,7 +56,8 @@ public class RootInteractor
         public void statisticsSelected() {
             Timber.d("statisticsSelected() called");
             getRouter().detachTasks();
-            // TODO attach the statistics view
+            getRouter().detachNewTask();
+            getRouter().attachStatistics();
             // close the menu
             presenter.closeMenu();
         }
