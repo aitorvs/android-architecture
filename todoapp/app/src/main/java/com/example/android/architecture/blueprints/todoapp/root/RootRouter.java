@@ -1,7 +1,6 @@
 package com.example.android.architecture.blueprints.todoapp.root;
 
 import android.support.annotation.Nullable;
-import android.support.v4.view.GravityCompat;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerRouter;
 import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskBuilder;
@@ -62,14 +61,14 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
     }
 
     public final boolean handleHomeItemSelected() {
-        getView().openDrawer(GravityCompat.START);
+        getView().openMenu();
         return true;
     }
 
     @Override
     public boolean handleBackPress() {
-        if (getView().isDrawerOpen(GravityCompat.START)) {
-            getView().closeDrawer(GravityCompat.START);
+        if (getView().isMenuOpen()) {
+            getView().closeMenu();
             return true;
         }
 
