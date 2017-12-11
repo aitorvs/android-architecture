@@ -9,7 +9,7 @@ import io.reactivex.Observable;
 import javax.inject.Inject;
 
 /**
- * Coordinates Business Logic for {@link NewTaskScope}.
+ * Coordinates Business Logic for {@link NewTaskBuilder.NewTaskScope}.
  *
  * TODO describe the logic of this scope.
  */

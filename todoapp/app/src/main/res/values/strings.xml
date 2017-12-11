@@ -3,4 +3,6 @@
     <string name="todo_list">TO-DO list</string>
     <string name="statistics">Statistics</string>
     <string name="todos">TO-DOs</string>
+    <string name="task_title">Task title</string>
+    <string name="task_description">Task description</string>
 </resources>

@@ -3,6 +3,7 @@ package com.example.android.architecture.blueprints.todoapp.root;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.example.android.architecture.blueprints.todoapp.R;
+import com.example.android.architecture.blueprints.todoapp.root.add_task.AddTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsBuilder;
@@ -87,7 +88,8 @@ public class RootBuilder
             RootView view,
             RootInteractor interactor) {
             return new RootRouter(view, interactor, component, new TasksBuilder(component),
-                new NewTaskBuilder(component), new MenuDrawerBuilder(component), new StatisticsBuilder(component));
+                new NewTaskBuilder(component), new MenuDrawerBuilder(component), new StatisticsBuilder(component),
+                new AddTaskBuilder(component));
         }
     }
 
@@ -100,7 +102,8 @@ public class RootBuilder
         TasksBuilder.ParentComponent,
         NewTaskBuilder.ParentComponent,
         MenuDrawerBuilder.ParentComponent,
-        StatisticsBuilder.ParentComponent
+        StatisticsBuilder.ParentComponent,
+        AddTaskBuilder.ParentComponent
     {
 
         @dagger.Component.Builder

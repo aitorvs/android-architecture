@@ -7,7 +7,7 @@ import com.uber.rib.core.RibInteractor;
 import javax.inject.Inject;
 
 /**
- * Coordinates Business Logic for {@link StatisticsScope}.
+ * Coordinates Business Logic for {@link StatisticsBuilder.StatisticsScope}.
  *
  * TODO describe the logic of this scope.
  */

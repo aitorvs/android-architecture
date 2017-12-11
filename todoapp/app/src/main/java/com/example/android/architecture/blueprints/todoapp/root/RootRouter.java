@@ -1,6 +1,8 @@
 package com.example.android.architecture.blueprints.todoapp.root;
 
 import android.support.annotation.Nullable;
+import com.example.android.architecture.blueprints.todoapp.root.add_task.AddTaskBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.add_task.AddTaskRouter;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerRouter;
 import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskBuilder;
@@ -23,19 +25,22 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
     private final NewTaskBuilder newTaskBuilder;
     private final MenuDrawerBuilder menuDrawerBuilder;
     private final StatisticsBuilder statisticsBuilder;
+    private final AddTaskBuilder addTaskBuilder;
     @Nullable private TasksRouter taskRouter;
     @Nullable private MenuDrawerRouter menuDrawerRouter;
     @Nullable private NewTaskRouter newTaskRouter;
     @Nullable private StatisticsRouter statisticsRouter;
+    @Nullable private AddTaskRouter addTaskRouter;
 
     public RootRouter(RootView view, RootInteractor interactor, RootBuilder.Component component,
         TasksBuilder tasksBuilder, NewTaskBuilder newTaskBuilder, MenuDrawerBuilder menuDrawerBuilder,
-        StatisticsBuilder statisticsBuilder) {
+        StatisticsBuilder statisticsBuilder, AddTaskBuilder addTaskBuilder) {
         super(view, interactor, component);
         this.taskBuilder = tasksBuilder;
         this.newTaskBuilder = newTaskBuilder;
         this.menuDrawerBuilder = menuDrawerBuilder;
         this.statisticsBuilder = statisticsBuilder;
+        this.addTaskBuilder = addTaskBuilder;
     }
 
     final void attachTasks() {
@@ -91,6 +96,22 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
             detachChild(statisticsRouter);
             getView().viewContainer().removeView(statisticsRouter.getView());
             statisticsRouter = null;
+        }
+    }
+
+    final void attachAddTasks() {
+        Timber.d("attachAddTasks() called");
+        addTaskRouter = addTaskBuilder.build(getView().viewContainer());
+        attachChild(addTaskRouter);
+        getView().viewContainer().addView(addTaskRouter.getView());
+    }
+
+    final void detachAddTasks() {
+        Timber.d("detachStatistics() called");
+        if (addTaskRouter != null) {
+            detachChild(addTaskRouter);
+            getView().viewContainer().removeView(addTaskRouter.getView());
+            addTaskRouter = null;
         }
     }
 

@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 /**
- * Coordinates Business Logic for {@link RootScope}.
+ * Coordinates Business Logic for {@link RootBuilder.RootScope}.
  *
  * TODO describe the logic of this scope.
  */
@@ -38,6 +38,7 @@ public class RootInteractor
         @Override
         public void addTask() {
             Timber.d("addTask() called");
+            gotoAddTask();
         }
     }
 
@@ -60,15 +61,23 @@ public class RootInteractor
     }
 
     private void gotoStatistics() {
+        getRouter().detachAddTasks();
         getRouter().detachTasks();
         getRouter().detachNewTask();
         getRouter().attachStatistics();
     }
 
     private void gotoTodoList() {
+        getRouter().detachAddTasks();
         getRouter().detachStatistics();
         getRouter().attachNewTask();
         getRouter().attachTasks();
+    }
+
+    private void gotoAddTask() {
+        getRouter().detachTasks();
+        getRouter().detachNewTask();
+        getRouter().attachAddTasks();
     }
 
     /**

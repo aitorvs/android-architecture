@@ -11,7 +11,7 @@ import com.uber.rib.core.Router;
 import javax.inject.Inject;
 
 /**
- * Coordinates Business Logic for {@link TasksScope}.
+ * Coordinates Business Logic for {@link TasksBuilder.TasksScope}.
  *
  * TODO describe the logic of this scope.
  */
