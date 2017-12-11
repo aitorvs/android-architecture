@@ -3,19 +3,22 @@ package com.example.android.architecture.blueprints.todoapp.root;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.example.android.architecture.blueprints.todoapp.R;
+import com.uber.rib.core.RibActivity;
 
 /**
  * Top level view for {@link RootBuilder.RootScope}.
  */
-class RootView extends RelativeLayout implements RootInteractor.RootPresenter {
-    @BindView(R.id.root_container) FrameLayout container;
+class RootView extends DrawerLayout implements RootInteractor.RootPresenter {
+    @BindView(R.id.root_container) ViewGroup container;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     public RootView(Context context) {
         this(context, null);
@@ -33,9 +36,23 @@ class RootView extends RelativeLayout implements RootInteractor.RootPresenter {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        setupToolbar();
     }
 
     @NonNull public final ViewGroup viewContainer() {
         return container;
+    }
+
+    @NonNull public final Toolbar getToolbar() {
+        return this.toolbar;
+    }
+
+    private void setupToolbar() {
+        ((RibActivity) getContext()).setSupportActionBar(toolbar);
+        ActionBar ab = ((RibActivity) getContext()).getSupportActionBar();
+        if (ab != null) {
+            ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
     }
 }

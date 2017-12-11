@@ -50,6 +50,9 @@ public class NewTaskBuilder
         return (NewTaskView) inflater.inflate(R.layout.new_task_rib, parentViewGroup, false);
     }
 
+    /**
+     * Define dependencies required from your parent interactor here.
+     */
     public interface ParentComponent {
         NewTaskInteractor.Listener listener();
     }

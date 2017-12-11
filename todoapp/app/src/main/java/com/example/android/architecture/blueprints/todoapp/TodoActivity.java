@@ -1,50 +1,29 @@
 package com.example.android.architecture.blueprints.todoapp;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import com.example.android.architecture.blueprints.todoapp.root.RootBuilder;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.example.android.architecture.blueprints.todoapp.root.RootRouter;
 import com.uber.rib.core.RibActivity;
 import com.uber.rib.core.ViewRouter;
 
 public class TodoActivity extends RibActivity {
-    @Nullable private Drawer drawer;
+    private RootRouter router;
 
     @Override
     protected ViewRouter<?, ?, ?> createRouter(ViewGroup parentViewGroup) {
         RootBuilder rootBuilder = new RootBuilder(new RootBuilder.ParentComponent() {});
-        return rootBuilder.build(parentViewGroup);
+        router = rootBuilder.build(parentViewGroup);
+        return router;
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        drawer = new DrawerBuilder()
-            .withActivity(this)
-            .withToolbar(toolbar)
-            .withHasStableIds(true)
-            .withDrawerLayout(R.layout.material_drawer_fits_not)
-            .withHeader(R.layout.nav_header)
-            .addDrawerItems(
-                new PrimaryDrawerItem().withName(R.string.todo_list).withIcon(R.drawable.ic_list),
-                new PrimaryDrawerItem().withName(R.string.statistics).withIcon(R.drawable.ic_statistics)
-            )
-            .build();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawer != null && drawer.isDrawerOpen()) {
-            drawer.closeDrawer();
-        } else {
-            super.onBackPressed();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // if the menu item clicked is the home button, let the {@link RootRouter} handle it
+            case android.R.id.home:
+                return router.handleHomeItemSelected();
         }
+        return super.onOptionsItemSelected(item);
     }
 }

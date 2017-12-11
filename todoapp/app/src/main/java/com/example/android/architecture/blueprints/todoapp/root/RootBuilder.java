@@ -3,6 +3,8 @@ package com.example.android.architecture.blueprints.todoapp.root;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.example.android.architecture.blueprints.todoapp.R;
+import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskInteractor;
@@ -60,6 +62,12 @@ public class RootBuilder
 
         @RootScope
         @Provides
+        static MenuDrawerInteractor.Listener menuDrawerListener(RootInteractor rootInteractor) {
+            return rootInteractor.new MenuDrawerListener();
+        }
+
+        @RootScope
+        @Provides
         static NewTaskInteractor.Listener newTaskListener(RootInteractor rootInteractor) {
             return rootInteractor.new NewTaskListener();
         }
@@ -75,7 +83,7 @@ public class RootBuilder
             RootView view,
             RootInteractor interactor) {
             return new RootRouter(view, interactor, component, new TasksBuilder(component),
-                new NewTaskBuilder(component));
+                new NewTaskBuilder(component), new MenuDrawerBuilder(component));
         }
 
         // TODO: Create provider methods for dependencies created by this Rib. These should be static.
@@ -88,7 +96,8 @@ public class RootBuilder
         InteractorBaseComponent<RootInteractor>,
         BuilderComponent,
         TasksBuilder.ParentComponent,
-        NewTaskBuilder.ParentComponent
+        NewTaskBuilder.ParentComponent,
+        MenuDrawerBuilder.ParentComponent
     {
 
         @dagger.Component.Builder

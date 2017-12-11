@@ -1,6 +1,7 @@
 package com.example.android.architecture.blueprints.todoapp.root;
 
 import android.support.annotation.Nullable;
+import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.new_task.NewTaskInteractor;
 import com.uber.rib.core.Bundle;
 import com.uber.rib.core.Interactor;
@@ -15,14 +16,18 @@ import timber.log.Timber;
  */
 @RibInteractor
 public class RootInteractor
-        extends Interactor<RootInteractor.RootPresenter, RootRouter> {
+    extends Interactor<RootInteractor.RootPresenter, RootRouter> {
 
     @Inject RootPresenter presenter;
 
     @Override
     protected void didBecomeActive(@Nullable Bundle savedInstanceState) {
         super.didBecomeActive(savedInstanceState);
+        // the menu drawer is always there
+        getRouter().attachMenuDrawer();
+        // attach the TO-DO tasks
         getRouter().attachTasks();
+        // attach the FAB to create new tasks
         getRouter().attachNewTask();
     }
 
@@ -37,6 +42,18 @@ public class RootInteractor
         @Override
         public void addTask() {
             Timber.d("addTask() called");
+        }
+    }
+
+    class MenuDrawerListener implements MenuDrawerInteractor.Listener {
+        @Override
+        public void todoListSelected() {
+            Timber.d("todoListSelected() called");
+        }
+
+        @Override
+        public void statisticsSelected() {
+            Timber.d("statisticsSelected() called");
         }
     }
 
