@@ -6,6 +6,7 @@ import com.uber.rib.core.Bundle;
 import com.uber.rib.core.Interactor;
 import com.uber.rib.core.RibInteractor;
 import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
 import javax.inject.Inject;
 
 /**
@@ -20,17 +21,20 @@ public class NewTaskInteractor
     @Inject NewTaskPresenter presenter;
     @Inject Listener listener;
 
+    private final CompositeDisposable disposables = new CompositeDisposable();
+
     @Override
     protected void didBecomeActive(@Nullable Bundle savedInstanceState) {
         super.didBecomeActive(savedInstanceState);
-        presenter.clicks()
-            .subscribe(o -> listener.addTask());
+
+        disposables.add(presenter.clicks()
+            .subscribe(o -> listener.addTask()));
     }
 
     @Override
     protected void willResignActive() {
         super.willResignActive();
-
+        disposables.clear();
         // TODO: Perform any required clean up here, or delete this method entirely if not needed.
     }
 

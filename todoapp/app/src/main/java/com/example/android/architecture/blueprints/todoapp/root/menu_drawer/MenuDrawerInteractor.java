@@ -5,6 +5,7 @@ import com.uber.rib.core.Bundle;
 import com.uber.rib.core.Interactor;
 import com.uber.rib.core.RibInteractor;
 import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
 import javax.inject.Inject;
 
 /**
@@ -19,24 +20,26 @@ public class MenuDrawerInteractor
     @Inject MenuDrawerPresenter presenter;
     @Inject Listener listener;
 
+    private final CompositeDisposable disposables = new CompositeDisposable();
+
     @Override
     protected void didBecomeActive(@Nullable Bundle savedInstanceState) {
         super.didBecomeActive(savedInstanceState);
 
-        presenter.menuEvents()
+        disposables.add(presenter.menuEvents()
             .subscribe(event -> {
                 if (event == MenuEvent.TODO_LIST) {
                     listener.todoListSelected();
                 } else if (event == MenuEvent.STATISTICS) {
                     listener.statisticsSelected();
                 }
-            });
+            }));
     }
 
     @Override
     protected void willResignActive() {
         super.willResignActive();
-
+        disposables.clear();
         // TODO: Perform any required clean up here, or delete this method entirely if not needed.
     }
 
