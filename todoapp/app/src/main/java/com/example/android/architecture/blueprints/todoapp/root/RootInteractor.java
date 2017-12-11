@@ -45,9 +45,7 @@ public class RootInteractor
         @Override
         public void todoListSelected() {
             Timber.d("todoListSelected() called");
-            getRouter().detachStatistics();
-            getRouter().attachNewTask();
-            getRouter().attachTasks();
+            gotoTodoList();
             // close the menu
             presenter.closeMenu();
         }
@@ -55,12 +53,22 @@ public class RootInteractor
         @Override
         public void statisticsSelected() {
             Timber.d("statisticsSelected() called");
-            getRouter().detachTasks();
-            getRouter().detachNewTask();
-            getRouter().attachStatistics();
+            gotoStatistics();
             // close the menu
             presenter.closeMenu();
         }
+    }
+
+    private void gotoStatistics() {
+        getRouter().detachTasks();
+        getRouter().detachNewTask();
+        getRouter().attachStatistics();
+    }
+
+    private void gotoTodoList() {
+        getRouter().detachStatistics();
+        getRouter().attachNewTask();
+        getRouter().attachTasks();
     }
 
     /**
