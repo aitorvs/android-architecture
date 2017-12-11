@@ -57,6 +57,9 @@ public class RootBuilder
         // TODO: Define dependencies required from your parent interactor here.
     }
 
+    /**
+     * Create provider methods for dependencies created by this Rib. These should be static.
+     */
     @dagger.Module
     public abstract static class Module {
 
@@ -85,8 +88,6 @@ public class RootBuilder
             return new RootRouter(view, interactor, component, new TasksBuilder(component),
                 new NewTaskBuilder(component), new MenuDrawerBuilder(component));
         }
-
-        // TODO: Create provider methods for dependencies created by this Rib. These should be static.
     }
 
     @RootScope
