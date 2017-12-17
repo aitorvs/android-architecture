@@ -20,7 +20,6 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
     private final TaskFlowBuilder taskBuilder;
     private final MenuDrawerBuilder menuDrawerBuilder;
     private final StatisticsBuilder statisticsBuilder;
-    @Nullable private MenuDrawerRouter menuDrawerRouter;
     @Nullable private StatisticsRouter statisticsRouter;
     @Nullable private TaskFlowRouter taskRouter;
 
@@ -50,7 +49,7 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
     final void attachMenuDrawer() {
         Timber.d("attachMenuDrawer() called");
         // The menu drawer is attached to the root view directly and not to the
-        menuDrawerRouter = menuDrawerBuilder.build(getView());
+        MenuDrawerRouter menuDrawerRouter = menuDrawerBuilder.build(getView());
         attachChild(menuDrawerRouter);
         getView().addView(menuDrawerRouter.getView());
     }
