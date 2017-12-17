@@ -2,11 +2,14 @@ package com.example.android.architecture.blueprints.todoapp.root.tasks;
 
 import com.uber.rib.core.RibTestBasePlaceholder;
 import com.uber.rib.core.InteractorHelper;
-
+import io.reactivex.Observable;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class TasksInteractorTest extends RibTestBasePlaceholder {
 
@@ -23,16 +26,11 @@ public class TasksInteractorTest extends RibTestBasePlaceholder {
         interactor = TestTasksInteractor.create(presenter, listener);
     }
 
-    /**
-     * TODO: Delete this example and add real tests.
-     */
     @Test
-    public void anExampleTest_withSomeConditions_shouldPass() {
-        // Use InteractorHelper to drive your interactor's lifecycle.
+    public void whenEmitsAddTask_shouldCallOnAddTaskListener() {
+        when(presenter.addTask()).thenReturn(Observable.just(new Object()));
         InteractorHelper.attach(interactor, presenter, router, null);
-        InteractorHelper.detach(interactor);
-
-        throw new RuntimeException("Remove this test and add real tests.");
+        verify(listener).onAddNewTask();
     }
 
 }

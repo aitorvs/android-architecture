@@ -49,7 +49,7 @@ public class TasksBuilder
     }
 
     public interface ParentComponent {
-        TasksInteractor.Listener tasksListener();
+        TasksInteractor.Listener listener();
     }
 
     @dagger.Module
@@ -61,10 +61,7 @@ public class TasksBuilder
 
         @TasksScope
         @Provides
-        static TasksRouter router(
-            Component component,
-            TasksView view,
-            TasksInteractor interactor) {
+        static TasksRouter router(Component component, TasksView view, TasksInteractor interactor) {
             return new TasksRouter(view, interactor, component);
         }
 
@@ -74,7 +71,10 @@ public class TasksBuilder
     @TasksScope
     @dagger.Component(modules = Module.class,
            dependencies = ParentComponent.class)
-    interface Component extends InteractorBaseComponent<TasksInteractor>, BuilderComponent {
+    interface Component extends
+        InteractorBaseComponent<TasksInteractor>,
+        BuilderComponent
+    {
 
         @dagger.Component.Builder
         interface Builder {

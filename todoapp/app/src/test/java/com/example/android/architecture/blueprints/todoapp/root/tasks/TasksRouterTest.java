@@ -2,7 +2,6 @@ package com.example.android.architecture.blueprints.todoapp.root.tasks;
 
 import com.uber.rib.core.RibTestBasePlaceholder;
 import com.uber.rib.core.RouterHelper;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

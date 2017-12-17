@@ -1,14 +1,12 @@
 package com.example.android.architecture.blueprints.todoapp.root;
 
 import android.support.annotation.Nullable;
-import com.example.android.architecture.blueprints.todoapp.root.add_task.AddTaskBuilder;
-import com.example.android.architecture.blueprints.todoapp.root.add_task.AddTaskRouter;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerRouter;
 import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsRouter;
-import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksBuilder;
-import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksRouter;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.TaskFlowBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.TaskFlowRouter;
 import com.uber.rib.core.ViewRouter;
 import timber.log.Timber;
 
@@ -19,37 +17,32 @@ import timber.log.Timber;
  */
 public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder.Component> {
 
-    private final TasksBuilder taskBuilder;
+    private final TaskFlowBuilder taskBuilder;
     private final MenuDrawerBuilder menuDrawerBuilder;
     private final StatisticsBuilder statisticsBuilder;
-    private final AddTaskBuilder addTaskBuilder;
-    @Nullable private TasksRouter taskRouter;
     @Nullable private MenuDrawerRouter menuDrawerRouter;
     @Nullable private StatisticsRouter statisticsRouter;
-    @Nullable private AddTaskRouter addTaskRouter;
+    @Nullable private TaskFlowRouter taskRouter;
 
     public RootRouter(RootView view, RootInteractor interactor, RootBuilder.Component component,
-        TasksBuilder tasksBuilder, MenuDrawerBuilder menuDrawerBuilder,
-        StatisticsBuilder statisticsBuilder, AddTaskBuilder addTaskBuilder) {
+        TaskFlowBuilder tasksBuilder, MenuDrawerBuilder menuDrawerBuilder, StatisticsBuilder statisticsBuilder) {
         super(view, interactor, component);
         this.taskBuilder = tasksBuilder;
         this.menuDrawerBuilder = menuDrawerBuilder;
         this.statisticsBuilder = statisticsBuilder;
-        this.addTaskBuilder = addTaskBuilder;
     }
 
     final void attachTasks() {
         Timber.d("attachTasks() called");
-        taskRouter = taskBuilder.build(getView().viewContainer());
+        taskRouter = taskBuilder.build();
         attachChild(taskRouter);
-        getView().viewContainer().addView(taskRouter.getView());
     }
 
     final void detachTasks() {
         Timber.d("detachTasks() called");
         if (taskRouter != null) {
             detachChild(taskRouter);
-            getView().viewContainer().removeView(taskRouter.getView());
+            getView().viewContainer().removeAllViews();
             taskRouter = null;
         }
     }
@@ -73,24 +66,8 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
         Timber.d("detachStatistics() called");
         if (statisticsRouter != null) {
             detachChild(statisticsRouter);
-            getView().viewContainer().removeView(statisticsRouter.getView());
+            getView().viewContainer().removeAllViews();
             statisticsRouter = null;
-        }
-    }
-
-    final void attachAddTasks() {
-        Timber.d("attachAddTasks() called");
-        addTaskRouter = addTaskBuilder.build(getView().viewContainer());
-        attachChild(addTaskRouter);
-        getView().viewContainer().addView(addTaskRouter.getView());
-    }
-
-    final void detachAddTasks() {
-        Timber.d("detachStatistics() called");
-        if (addTaskRouter != null) {
-            detachChild(addTaskRouter);
-            getView().viewContainer().removeView(addTaskRouter.getView());
-            addTaskRouter = null;
         }
     }
 
@@ -105,7 +82,9 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
             getView().closeMenu();
             return true;
         }
-
+        if (taskRouter != null) {
+            return taskRouter.handleBackPress();
+        }
         return super.handleBackPress();
     }
 }

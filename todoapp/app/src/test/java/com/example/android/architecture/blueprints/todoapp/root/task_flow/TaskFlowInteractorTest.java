@@ -1,24 +1,26 @@
-package com.example.android.architecture.blueprints.todoapp.root.add_task;
+package com.example.android.architecture.blueprints.todoapp.root.task_flow;
 
-import com.uber.rib.core.InteractorHelper;
 import com.uber.rib.core.RibTestBasePlaceholder;
+import com.uber.rib.core.EmptyPresenter;
+import com.uber.rib.core.InteractorHelper;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class AddTaskInteractorTest extends RibTestBasePlaceholder {
+public class TaskFlowInteractorTest extends RibTestBasePlaceholder {
 
-    @Mock AddTaskInteractor.AddTaskPresenter presenter;
-    @Mock AddTaskRouter router;
+    @Mock EmptyPresenter presenter;
+    @Mock TaskFlowRouter router;
 
-    private AddTaskInteractor interactor;
+    private TaskFlowInteractor interactor;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        interactor = TestAddTaskInteractor.create(presenter);
+        interactor = TestTaskFlowInteractor.create();
     }
 
     /**

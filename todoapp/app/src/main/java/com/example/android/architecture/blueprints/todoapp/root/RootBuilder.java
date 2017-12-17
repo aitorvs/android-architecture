@@ -3,12 +3,10 @@ package com.example.android.architecture.blueprints.todoapp.root;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.example.android.architecture.blueprints.todoapp.R;
-import com.example.android.architecture.blueprints.todoapp.root.add_task.AddTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsBuilder;
-import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksBuilder;
-import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksInteractor;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.TaskFlowBuilder;
 import com.uber.rib.core.InteractorBaseComponent;
 import com.uber.rib.core.ViewBuilder;
 import dagger.Binds;
@@ -71,12 +69,6 @@ public class RootBuilder
         }
 
         @RootScope
-        @Provides
-        static TasksInteractor.Listener tasksListener(RootInteractor rootInteractor) {
-            return rootInteractor.new TaskListener();
-        }
-
-        @RootScope
         @Binds
         abstract RootInteractor.RootPresenter presenter(RootView view);
 
@@ -86,9 +78,8 @@ public class RootBuilder
             Component component,
             RootView view,
             RootInteractor interactor) {
-            return new RootRouter(view, interactor, component, new TasksBuilder(component),
-                new MenuDrawerBuilder(component), new StatisticsBuilder(component),
-                new AddTaskBuilder(component));
+            return new RootRouter(view, interactor, component, new TaskFlowBuilder(component),
+                new MenuDrawerBuilder(component), new StatisticsBuilder(component));
         }
     }
 
@@ -98,10 +89,9 @@ public class RootBuilder
     interface Component extends
         InteractorBaseComponent<RootInteractor>,
         BuilderComponent,
-        TasksBuilder.ParentComponent,
+        TaskFlowBuilder.ParentComponent,
         MenuDrawerBuilder.ParentComponent,
-        StatisticsBuilder.ParentComponent,
-        AddTaskBuilder.ParentComponent
+        StatisticsBuilder.ParentComponent
     {
 
         @dagger.Component.Builder

@@ -19,7 +19,7 @@ import com.uber.rib.core.RibActivity;
 /**
  * Top level view for {@link RootBuilder.RootScope}.
  */
-class RootView extends DrawerLayout implements RootInteractor.RootPresenter {
+public class RootView extends DrawerLayout implements RootInteractor.RootPresenter {
     @BindView(R.id.root_container) ViewGroup container;
     @BindView(R.id.toolbar) Toolbar toolbar;
 
