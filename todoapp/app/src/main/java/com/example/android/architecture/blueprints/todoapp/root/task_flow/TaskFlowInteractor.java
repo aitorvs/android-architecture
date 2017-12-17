@@ -40,6 +40,11 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
     @Override
     public boolean handleBackPress() {
         Timber.d("handleBackPress() called");
-        return super.handleBackPress();
+        if (getRouter().isNewTaskAttached()) {
+            getRouter().detachNewTask();
+            getRouter().attachTasks();
+            return true;
+        }
+        return false;
     }
 }

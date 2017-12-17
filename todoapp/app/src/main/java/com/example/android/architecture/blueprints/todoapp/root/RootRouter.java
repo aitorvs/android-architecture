@@ -21,7 +21,7 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
     private final MenuDrawerBuilder menuDrawerBuilder;
     private final StatisticsBuilder statisticsBuilder;
     @Nullable private StatisticsRouter statisticsRouter;
-    @Nullable private TaskFlowRouter taskRouter;
+    @Nullable private TaskFlowRouter taskFlowRouter;
 
     public RootRouter(RootView view, RootInteractor interactor, RootBuilder.Component component,
         TaskFlowBuilder tasksBuilder, MenuDrawerBuilder menuDrawerBuilder, StatisticsBuilder statisticsBuilder) {
@@ -33,16 +33,16 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
 
     final void attachTasks() {
         Timber.d("attachTasks() called");
-        taskRouter = taskBuilder.build();
-        attachChild(taskRouter);
+        taskFlowRouter = taskBuilder.build();
+        attachChild(taskFlowRouter);
     }
 
     final void detachTasks() {
         Timber.d("detachTasks() called");
-        if (taskRouter != null) {
-            detachChild(taskRouter);
+        if (taskFlowRouter != null) {
+            detachChild(taskFlowRouter);
             getView().viewContainer().removeAllViews();
-            taskRouter = null;
+            taskFlowRouter = null;
         }
     }
 
@@ -75,15 +75,7 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
         return true;
     }
 
-    @Override
-    public boolean handleBackPress() {
-        if (getView().isMenuOpen()) {
-            getView().closeMenu();
-            return true;
-        }
-        if (taskRouter != null) {
-            return taskRouter.handleBackPress();
-        }
-        return super.handleBackPress();
+    boolean dispatchBackPress() {
+        return taskFlowRouter != null && taskFlowRouter.getInteractor().handleBackPress();
     }
 }

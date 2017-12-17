@@ -33,6 +33,15 @@ public class RootInteractor
         // TODO: Perform any required clean up here, or delete this method entirely if not needed.
     }
 
+    @Override
+    public boolean handleBackPress() {
+        if (getRouter().getView().isMenuOpen()) {
+            getRouter().getView().closeMenu();
+            return true;
+        }
+        return getRouter().dispatchBackPress();
+    }
+
     class MenuDrawerListener implements MenuDrawerInteractor.Listener {
         @Override
         public void todoListSelected() {

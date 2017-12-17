@@ -63,18 +63,7 @@ public class TaskFlowRouter
         }
     }
 
-    private boolean isNewTaskAttached() {
+    boolean isNewTaskAttached() {
         return newTaskRouter != null;
-    }
-
-    @Override
-    public boolean handleBackPress() {
-        Timber.d("handleBackPress() called");
-        if (isNewTaskAttached()) {
-            detachNewTask();
-            attachTasks();
-            return true;
-        }
-        return false;
     }
 }
