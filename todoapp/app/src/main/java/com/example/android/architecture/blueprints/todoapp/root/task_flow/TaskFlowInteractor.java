@@ -1,6 +1,7 @@
 package com.example.android.architecture.blueprints.todoapp.root.task_flow;
 
 import android.support.annotation.Nullable;
+import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksInteractor;
 import com.uber.rib.core.Bundle;
 import com.uber.rib.core.EmptyPresenter;
@@ -29,6 +30,10 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
             Timber.d("onAddNewTask() called");
             getRouter().detachTasks();
             getRouter().attachNewTask();
+        }
+
+        @Override public void onTaskSelected(Task selectedTask) {
+            Timber.d("onTaskSelected() called with: selectedTask = [" + selectedTask + "]");
         }
     }
 

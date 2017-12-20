@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.example.android.architecture.blueprints.todoapp"
+        applicationId "com.example.android.architecture.blueprints.todoribs"
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
@@ -32,18 +32,23 @@ dependencies {
     implementation deps.support.design
 
     // External deps
-    implementation 'com.uber.rib:rib-android:0.9.1'
+    implementation deps.uber.ribAndroid
     implementation deps.external.dagger
     implementation deps.external.rxbinding
     implementation deps.external.timber
     implementation deps.external.butterknife
+    implementation deps.external.stetho
+    implementation deps.arch.room
+    implementation deps.arch.roomRxJava2
 
     annotationProcessor 'com.uber.rib:rib-compiler-test:0.9.1'
     annotationProcessor deps.apt.daggerCompiler
     annotationProcessor deps.apt.butterknife
+    annotationProcessor deps.apt.room
 
     testImplementation 'com.uber.rib:rib-test-utils:0.9.1'
     testImplementation deps.test.junit
+    androidTestImplementation deps.test.room
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }

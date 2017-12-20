@@ -3,6 +3,7 @@ package com.example.android.architecture.blueprints.todoapp.root.statistics;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.example.android.architecture.blueprints.todoapp.R;
+import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
 import com.uber.rib.core.InteractorBaseComponent;
 import com.uber.rib.core.ViewBuilder;
 import dagger.Binds;
@@ -49,7 +50,7 @@ public class StatisticsBuilder
     }
 
     public interface ParentComponent {
-        // TODO: Define dependencies required from your parent interactor here.
+        TaskRepository taskRepository();
     }
 
     @dagger.Module

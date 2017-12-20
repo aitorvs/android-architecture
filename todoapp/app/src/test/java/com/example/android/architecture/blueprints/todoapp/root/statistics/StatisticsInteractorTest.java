@@ -1,17 +1,26 @@
 package com.example.android.architecture.blueprints.todoapp.root.statistics;
 
-import com.uber.rib.core.RibTestBasePlaceholder;
+import com.example.android.architecture.blueprints.todoapp.data.Task;
+import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
 import com.uber.rib.core.InteractorHelper;
-
+import com.uber.rib.core.RibTestBasePlaceholder;
+import io.reactivex.Observable;
+import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 public class StatisticsInteractorTest extends RibTestBasePlaceholder {
+
+    private static final Task TASK = new Task(1, "title", "description", false);
 
     @Mock StatisticsInteractor.StatisticsPresenter presenter;
     @Mock StatisticsRouter router;
+    @Mock TaskRepository taskRepository;
 
     private StatisticsInteractor interactor;
 
@@ -19,19 +28,20 @@ public class StatisticsInteractorTest extends RibTestBasePlaceholder {
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        interactor = TestStatisticsInteractor.create(presenter);
+        interactor = TestStatisticsInteractor.create(presenter, taskRepository);
     }
 
-    /**
-     * TODO: Delete this example and add real tests.
-     */
     @Test
-    public void anExampleTest_withSomeConditions_shouldPass() {
-        // Use InteractorHelper to drive your interactor's lifecycle.
+    public void whenTaskRepoEmitsTasks_shouldCallPresenterShowStatistics() {
+        when(taskRepository.getTasks()).thenReturn(Observable.just(Collections.singletonList(TASK)));
         InteractorHelper.attach(interactor, presenter, router, null);
-        InteractorHelper.detach(interactor);
-
-        throw new RuntimeException("Remove this test and add real tests.");
+        verify(presenter).showStatistics(0, 1);
     }
 
+    @Test
+    public void whenTaskRepoEmitsEmptyList_shouldCallPresenterShowStatistics() {
+        when(taskRepository.getTasks()).thenReturn(Observable.just(Collections.emptyList()));
+        InteractorHelper.attach(interactor, presenter, router, null);
+        verify(presenter).showStatistics(0, 0);
+    }
 }

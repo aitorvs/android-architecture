@@ -65,6 +65,12 @@ class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.AddTask
         return publishRelay;
     }
 
+    @Override
+    public void clear() {
+        title.setText("");
+        description.setText("");
+    }
+
     @OnClick(R.id.done_button) void done() {
         Timber.d("done() called");
         publishRelay.accept(new Pair<>(title.getText().toString(), description.getText().toString()));

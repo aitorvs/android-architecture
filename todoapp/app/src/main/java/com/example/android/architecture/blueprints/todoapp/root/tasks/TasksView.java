@@ -5,11 +5,17 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ListView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.example.android.architecture.blueprints.todoapp.R;
+import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxrelay2.PublishRelay;
+import com.jakewharton.rxrelay2.Relay;
 import io.reactivex.Observable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Top level view for {@link TasksBuilder.TasksScope}.
@@ -17,6 +23,14 @@ import io.reactivex.Observable;
 class TasksView extends CoordinatorLayout implements TasksInteractor.TasksPresenter {
 
     @BindView(R.id.add_task) View addTaskButton;
+    @BindView(R.id.tasks_list) ListView taskList;
+    private TasksAdapter taskAdapter;
+    private final PublishRelay<Task> completeTaskRelay = PublishRelay.create();
+    private final Relay<Task> completedTask = completeTaskRelay.toSerialized();
+    private final PublishRelay<Task> activateTaskRelay = PublishRelay.create();
+    private final Relay<Task> activatedTask = activateTaskRelay.toSerialized();
+    private final PublishRelay<Task> clickedTaskRelay = PublishRelay.create();
+    private final Relay<Task> clickedTask = clickedTaskRelay.toSerialized();
 
     public TasksView(Context context) {
         this(context, null);
@@ -34,10 +48,47 @@ class TasksView extends CoordinatorLayout implements TasksInteractor.TasksPresen
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        taskAdapter = new TasksAdapter(new ArrayList<>(0), new TasksAdapter.TaskItemListener() {
+            @Override
+            public void onTaskClick(Task task) {
+                clickedTask.accept(task);
+            }
+
+            @Override
+            public void onCompleteTaskClick(Task task) {
+                completedTask.accept(task);
+            }
+
+            @Override
+            public void onActivateTaskClick(Task task) {
+                activatedTask.accept(task);
+            }
+        });
+        taskList.setAdapter(taskAdapter);
     }
 
     @Override
     public Observable<Object> addTask() {
         return RxView.clicks(addTaskButton);
+    }
+
+    @Override
+    public Observable<Task> competedTask() {
+        return completedTask;
+    }
+
+    @Override
+    public Observable<Task> task() {
+        return clickedTask;
+    }
+
+    @Override
+    public Observable<Task> activateTask() {
+        return activatedTask;
+    }
+
+    @Override
+    public void showTasks(List<Task> tasks) {
+        taskAdapter.replaceData(tasks);
     }
 }

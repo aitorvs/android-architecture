@@ -3,16 +3,15 @@ package com.example.android.architecture.blueprints.todoapp.root.add_task;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.example.android.architecture.blueprints.todoapp.R;
+import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
 import com.uber.rib.core.InteractorBaseComponent;
 import com.uber.rib.core.ViewBuilder;
-import java.lang.annotation.Retention;
-
-import javax.inject.Scope;
-import javax.inject.Qualifier;
-
-import dagger.Provides;
 import dagger.Binds;
 import dagger.BindsInstance;
+import dagger.Provides;
+import java.lang.annotation.Retention;
+import javax.inject.Qualifier;
+import javax.inject.Scope;
 
 import static java.lang.annotation.RetentionPolicy.CLASS;
 
@@ -50,8 +49,11 @@ public class AddTaskBuilder
         return (AddTaskView) inflater.inflate(R.layout.add_task_rib, parentViewGroup, false);
     }
 
+    /**
+     * Define dependencies required from your parent interactor here.
+     */
     public interface ParentComponent {
-        // TODO: Define dependencies required from your parent interactor here.
+        TaskRepository taskRepository();
     }
 
     @dagger.Module

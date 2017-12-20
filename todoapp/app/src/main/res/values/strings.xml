@@ -6,4 +6,7 @@
     <string name="task_title">Task title</string>
     <string name="task_description">Task description</string>
     <string name="all_to_dos">All TO-DOs</string>
+    <string name="completed_tasks">Completed tasks: %d</string>
+    <string name="active_tasks">Active tasks: %d</string>
+    <string name="task_marked_completed">Task marked completed</string>
 </resources>

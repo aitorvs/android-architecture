@@ -3,4 +3,7 @@
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF4081</color>
+
+    <drawable name="touchFeedback">#CFD8DC</drawable>
+    <drawable name="completedTaskBackground">#CCCCCC</drawable>
 </resources>

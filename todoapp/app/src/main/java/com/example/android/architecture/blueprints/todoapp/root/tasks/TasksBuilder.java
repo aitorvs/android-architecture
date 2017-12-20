@@ -3,6 +3,7 @@ package com.example.android.architecture.blueprints.todoapp.root.tasks;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.example.android.architecture.blueprints.todoapp.R;
+import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
 import com.uber.rib.core.InteractorBaseComponent;
 import com.uber.rib.core.ViewBuilder;
 import dagger.Binds;
@@ -50,8 +51,12 @@ public class TasksBuilder
 
     public interface ParentComponent {
         TasksInteractor.Listener listener();
+        TaskRepository taskRepository();
     }
 
+    /**
+     * Create provider methods for dependencies created by this Rib. These should be static.
+     */
     @dagger.Module
     public abstract static class Module {
 

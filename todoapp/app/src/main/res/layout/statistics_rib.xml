@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         tools:text="Active tasks: 1"
-        android:text="Active tasks: 1"
+        android:text="@string/active_tasks"
         />
 
     <TextView
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         tools:text="Completed tasks: 1"
-        android:text="Completed tasks: 1"
+        android:text="@string/completed_tasks"
         />
 
 </com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsView>
