@@ -2,7 +2,7 @@ package com.example.android.architecture.blueprints.todoapp.root.task_flow;
 
 import android.support.annotation.Nullable;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
-import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksInteractor;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksInteractor;
 import com.uber.rib.core.Bundle;
 import com.uber.rib.core.EmptyPresenter;
 import com.uber.rib.core.Interactor;

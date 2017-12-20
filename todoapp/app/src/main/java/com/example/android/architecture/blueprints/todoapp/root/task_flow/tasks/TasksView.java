@@ -1,4 +1,4 @@
-package com.example.android.architecture.blueprints.todoapp.root.tasks;
+package com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks;
 
 import android.content.Context;
 import android.support.annotation.Nullable;

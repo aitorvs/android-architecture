@@ -1,4 +1,4 @@
-package com.example.android.architecture.blueprints.todoapp.root.tasks;
+package com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks;
 
 import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;

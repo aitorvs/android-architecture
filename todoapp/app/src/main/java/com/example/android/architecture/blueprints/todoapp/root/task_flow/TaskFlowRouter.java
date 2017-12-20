@@ -4,8 +4,8 @@ import android.support.annotation.Nullable;
 import android.view.ViewGroup;
 import com.example.android.architecture.blueprints.todoapp.root.add_task.AddTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.add_task.AddTaskRouter;
-import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksBuilder;
-import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksRouter;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksRouter;
 import com.uber.rib.core.Router;
 import timber.log.Timber;
 

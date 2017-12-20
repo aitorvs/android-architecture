@@ -2,7 +2,7 @@ package com.example.android.architecture.blueprints.todoapp.root.task_flow;
 
 import com.example.android.architecture.blueprints.todoapp.root.RootView;
 import com.example.android.architecture.blueprints.todoapp.root.add_task.AddTaskBuilder;
-import com.example.android.architecture.blueprints.todoapp.root.tasks.TasksBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksBuilder;
 import com.uber.rib.core.RibTestBasePlaceholder;
 import com.uber.rib.core.RouterHelper;
 
