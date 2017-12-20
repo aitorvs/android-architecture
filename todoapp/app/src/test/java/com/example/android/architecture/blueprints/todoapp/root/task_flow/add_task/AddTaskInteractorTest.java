@@ -1,4 +1,4 @@
-package com.example.android.architecture.blueprints.todoapp.root.add_task;
+package com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task;
 
 import android.support.v4.util.Pair;
 import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
