@@ -1,9 +1,6 @@
 package com.example.android.architecture.blueprints.todoapp.root.tasks;
 
 import android.support.annotation.Nullable;
-import android.support.design.widget.BaseTransientBottomBar;
-import android.support.design.widget.Snackbar;
-import com.example.android.architecture.blueprints.todoapp.R;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
 import com.uber.rib.core.Bundle;
@@ -65,7 +62,6 @@ public class TasksInteractor
 
     private void completeTask(Task task) {
         taskRepository.completeTask(task);
-        Snackbar.make(getRouter().getView(), R.string.task_marked_completed, BaseTransientBottomBar.LENGTH_LONG).show();
     }
 
     private void activateTask(Task task) {

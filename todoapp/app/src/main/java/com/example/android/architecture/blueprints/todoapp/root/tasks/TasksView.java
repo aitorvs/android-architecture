@@ -3,6 +3,7 @@ package com.example.android.architecture.blueprints.todoapp.root.tasks;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ListView;
@@ -56,6 +57,9 @@ class TasksView extends CoordinatorLayout implements TasksInteractor.TasksPresen
 
             @Override
             public void onCompleteTaskClick(Task task) {
+                Snackbar.make(TasksView.this, R.string.task_marked_completed, Snackbar.LENGTH_LONG)
+                    .show();
+
                 completedTask.accept(task);
             }
 
