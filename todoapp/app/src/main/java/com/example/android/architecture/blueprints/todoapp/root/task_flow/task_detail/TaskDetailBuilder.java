@@ -1,22 +1,19 @@
 package com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail;
 
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
 import com.example.android.architecture.blueprints.todoapp.R;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
+import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
 import com.uber.rib.core.InteractorBaseComponent;
 import com.uber.rib.core.ViewBuilder;
-import java.lang.annotation.Retention;
-
-import javax.inject.Named;
-import javax.inject.Scope;
-import javax.inject.Qualifier;
-
-import dagger.Provides;
 import dagger.Binds;
 import dagger.BindsInstance;
+import dagger.Provides;
+import java.lang.annotation.Retention;
+import javax.inject.Named;
+import javax.inject.Qualifier;
+import javax.inject.Scope;
 
 import static java.lang.annotation.RetentionPolicy.CLASS;
 
@@ -56,8 +53,11 @@ public class TaskDetailBuilder
         return (TaskDetailView) inflater.inflate(R.layout.task_detail_rib, parentViewGroup, false);
     }
 
+    /**
+     * Define dependencies required from your parent interactor here.
+     */
     public interface ParentComponent {
-        // TODO: Define dependencies required from your parent interactor here.
+        TaskRepository taskRepository();
     }
 
     @dagger.Module

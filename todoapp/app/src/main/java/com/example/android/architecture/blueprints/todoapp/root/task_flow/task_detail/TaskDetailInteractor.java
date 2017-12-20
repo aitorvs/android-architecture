@@ -1,18 +1,14 @@
 package com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail;
 
 import android.support.annotation.Nullable;
-
 import com.example.android.architecture.blueprints.todoapp.data.Task;
+import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
 import com.uber.rib.core.Bundle;
 import com.uber.rib.core.Interactor;
 import com.uber.rib.core.RibInteractor;
-import com.uber.rib.core.Presenter;
-import com.uber.rib.core.Router;
-
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import javax.inject.Inject;
-import javax.inject.Named;
 import timber.log.Timber;
 
 /**
@@ -26,6 +22,7 @@ public class TaskDetailInteractor
 
     @Inject TaskDetailPresenter presenter;
     @Inject @TaskDetailBuilder.TaskDetailInternal Task selectedTask;
+    @Inject TaskRepository taskRepository;
 
     private final CompositeDisposable disposable = new CompositeDisposable();
 
@@ -38,6 +35,14 @@ public class TaskDetailInteractor
         disposable.add(presenter
             .onEditTask()
             .subscribe(o -> Timber.d("edit task")));
+
+        disposable.add(presenter
+            .completeTask()
+            .subscribe(o -> taskRepository.completeTask(selectedTask)));
+
+        disposable.add(presenter
+            .activateTask()
+            .subscribe(o -> taskRepository.activateTask(selectedTask)));
     }
 
     @Override
@@ -53,5 +58,7 @@ public class TaskDetailInteractor
     interface TaskDetailPresenter {
         void showDetailTask(Task task);
         Observable<Object> onEditTask();
+        Observable<Object> completeTask();
+        Observable<Object> activateTask();
     }
 }
