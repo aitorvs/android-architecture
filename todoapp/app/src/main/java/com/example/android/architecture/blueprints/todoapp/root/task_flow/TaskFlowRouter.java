@@ -2,8 +2,11 @@ package com.example.android.architecture.blueprints.todoapp.root.task_flow;
 
 import android.support.annotation.Nullable;
 import android.view.ViewGroup;
+import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskRouter;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailRouter;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksRouter;
 import com.uber.rib.core.Router;
@@ -19,16 +22,19 @@ public class TaskFlowRouter
     private final ViewGroup parentView;
     private final AddTaskBuilder newTaskBuilder;
     private final TasksBuilder tasksBuilder;
+    private final TaskDetailBuilder taskDetailBuilder;
     @Nullable private TasksRouter tasksRouter;
     @Nullable private AddTaskRouter newTaskRouter;
+    @Nullable private TaskDetailRouter taskDetailRouter;
 
-    public TaskFlowRouter(TaskFlowInteractor interactor, TaskFlowBuilder.Component component, ViewGroup viewGroup,
-        TasksBuilder tasksBuilder, AddTaskBuilder addTaskBuilder) {
+    TaskFlowRouter(TaskFlowInteractor interactor, TaskFlowBuilder.Component component, ViewGroup viewGroup,
+        TasksBuilder tasksBuilder, AddTaskBuilder addTaskBuilder, TaskDetailBuilder taskDetailBuilder) {
 
         super(interactor, component);
         this.parentView = viewGroup;
         this.tasksBuilder = tasksBuilder;
         this.newTaskBuilder = addTaskBuilder;
+        this.taskDetailBuilder = taskDetailBuilder;
     }
 
     void attachTasks() {
@@ -65,5 +71,24 @@ public class TaskFlowRouter
 
     boolean isNewTaskAttached() {
         return newTaskRouter != null;
+    }
+
+    void attachTaskDetails(Task selectedTask) {
+        Timber.d("attachTaskDetails() called");
+        taskDetailRouter = taskDetailBuilder.build(parentView, selectedTask);
+        attachChild(taskDetailRouter);
+        parentView.addView(taskDetailRouter.getView());
+    }
+
+    void detachTaskDetails() {
+        if (taskDetailRouter != null) {
+            detachChild(taskDetailRouter);
+            parentView.removeView(taskDetailRouter.getView());
+            taskDetailRouter = null;
+        }
+    }
+
+    boolean isTaskDetailsAttached() {
+        return taskDetailRouter != null;
     }
 }

@@ -2,6 +2,7 @@ package com.example.android.architecture.blueprints.todoapp.root.task_flow;
 
 import com.example.android.architecture.blueprints.todoapp.root.RootView;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksBuilder;
 import com.uber.rib.core.RibTestBasePlaceholder;
 import com.uber.rib.core.RouterHelper;
@@ -23,7 +24,7 @@ public class TaskFlowRouterTest extends RibTestBasePlaceholder {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         router = new TaskFlowRouter(interactor, component, rootView.viewContainer(), new TasksBuilder(component),
-            new AddTaskBuilder(component));
+            new AddTaskBuilder(component), new TaskDetailBuilder(component));
     }
 
     /**

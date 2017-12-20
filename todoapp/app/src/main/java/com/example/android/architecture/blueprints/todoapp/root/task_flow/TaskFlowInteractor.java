@@ -34,6 +34,8 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
 
         @Override public void onTaskSelected(Task selectedTask) {
             Timber.d("onTaskSelected() called with: selectedTask = [" + selectedTask + "]");
+            getRouter().detachTasks();
+            getRouter().attachTaskDetails(selectedTask);
         }
     }
 
@@ -47,6 +49,11 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
         Timber.d("handleBackPress() called");
         if (getRouter().isNewTaskAttached()) {
             getRouter().detachNewTask();
+            getRouter().attachTasks();
+            return true;
+        }
+        if (getRouter().isTaskDetailsAttached()) {
+            getRouter().detachTaskDetails();
             getRouter().attachTasks();
             return true;
         }
