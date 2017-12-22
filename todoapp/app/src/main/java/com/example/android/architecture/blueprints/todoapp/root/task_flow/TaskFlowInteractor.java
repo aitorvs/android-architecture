@@ -76,6 +76,7 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
         }
         if (getRouter().isEditTaskAttached()) {
             getRouter().detachEditTask();
+            // FIXME: This should be attachTaskDetails()
             getRouter().attachTasks();
             return true;
         }
