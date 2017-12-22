@@ -12,7 +12,7 @@ import io.reactivex.Observable;
 /**
  * Top level view for {@link MenuDrawerBuilder.MenuDrawerScope}.
  */
-class MenuDrawerView extends NavigationView implements MenuDrawerInteractor.MenuDrawerPresenter {
+public class MenuDrawerView extends NavigationView implements MenuDrawerInteractor.MenuDrawerPresenter {
 
     private final BehaviorRelay<MenuEvent> behaviorRelay = BehaviorRelay.createDefault(MenuEvent.TODO_LIST);
     private final Relay<MenuEvent> menuRelay = behaviorRelay.toSerialized();

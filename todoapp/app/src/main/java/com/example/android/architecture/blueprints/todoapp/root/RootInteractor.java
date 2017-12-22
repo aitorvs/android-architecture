@@ -60,12 +60,12 @@ public class RootInteractor
         }
     }
 
-    private void gotoStatistics() {
+    void gotoStatistics() {
         getRouter().detachTasks();
         getRouter().attachStatistics();
     }
 
-    private void gotoTodoList() {
+    void gotoTodoList() {
         getRouter().detachStatistics();
         getRouter().attachTasks();
     }

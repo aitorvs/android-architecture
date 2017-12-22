@@ -1,12 +1,13 @@
 package com.example.android.architecture.blueprints.todoapp.root;
 
-import com.uber.rib.core.RibTestBasePlaceholder;
 import com.uber.rib.core.InteractorHelper;
-
+import com.uber.rib.core.RibTestBasePlaceholder;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import static org.mockito.Mockito.verify;
 
 public class RootInteractorTest extends RibTestBasePlaceholder {
 
@@ -22,16 +23,48 @@ public class RootInteractorTest extends RibTestBasePlaceholder {
         interactor = TestRootInteractor.create(presenter);
     }
 
-    /**
-     * TODO: Delete this example and add real tests.
-     */
     @Test
-    public void anExampleTest_withSomeConditions_shouldPass() {
+    public void whenGotoStatistics_shouldDetachTasks() {
         // Use InteractorHelper to drive your interactor's lifecycle.
         InteractorHelper.attach(interactor, presenter, router, null);
+        interactor.gotoStatistics();
+        verify(router).detachTasks();
         InteractorHelper.detach(interactor);
+    }
 
-        throw new RuntimeException("Remove this test and add real tests.");
+    @Test
+    public void whenGotoStatistics_shouldAttachStatistics() {
+        // Use InteractorHelper to drive your interactor's lifecycle.
+        InteractorHelper.attach(interactor, presenter, router, null);
+        interactor.gotoStatistics();
+        verify(router).attachStatistics();
+        InteractorHelper.detach(interactor);
+    }
+
+    @Test
+    public void whenGotoTodoList_shouldDetachStatistics() {
+        // Use InteractorHelper to drive your interactor's lifecycle.
+        InteractorHelper.attach(interactor, presenter, router, null);
+        interactor.gotoTodoList();
+        verify(router).detachStatistics();
+        InteractorHelper.detach(interactor);
+    }
+
+    @Test
+    public void whenGotoTodoList_shouldAttachTasks() {
+        // Use InteractorHelper to drive your interactor's lifecycle.
+        InteractorHelper.attach(interactor, presenter, router, null);
+        interactor.gotoTodoList();
+        verify(router).attachTasks();
+        InteractorHelper.detach(interactor);
+    }
+
+    @Test
+    public void whenBecomeActive_shouldAttachDrawer() {
+        // Use InteractorHelper to drive your interactor's lifecycle.
+        InteractorHelper.attach(interactor, presenter, router, null);
+        verify(router).attachMenuDrawer();
+        InteractorHelper.detach(interactor);
     }
 
 }

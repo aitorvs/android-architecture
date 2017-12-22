@@ -17,27 +17,27 @@ import timber.log.Timber;
  */
 public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder.Component> {
 
-    private final TaskFlowBuilder taskBuilder;
+    private final TaskFlowBuilder taskFlowBuilder;
     private final MenuDrawerBuilder menuDrawerBuilder;
     private final StatisticsBuilder statisticsBuilder;
     @Nullable private StatisticsRouter statisticsRouter;
-    @Nullable private TaskFlowRouter taskFlowRouter;
+    @Nullable TaskFlowRouter taskFlowRouter;
 
-    public RootRouter(RootView view, RootInteractor interactor, RootBuilder.Component component,
-        TaskFlowBuilder tasksBuilder, MenuDrawerBuilder menuDrawerBuilder, StatisticsBuilder statisticsBuilder) {
+    RootRouter(RootView view, RootInteractor interactor, RootBuilder.Component component, TaskFlowBuilder tasksBuilder,
+        MenuDrawerBuilder menuDrawerBuilder, StatisticsBuilder statisticsBuilder) {
         super(view, interactor, component);
-        this.taskBuilder = tasksBuilder;
+        this.taskFlowBuilder = tasksBuilder;
         this.menuDrawerBuilder = menuDrawerBuilder;
         this.statisticsBuilder = statisticsBuilder;
     }
 
-    final void attachTasks() {
+    void attachTasks() {
         Timber.d("attachTasks() called");
-        taskFlowRouter = taskBuilder.build();
+        taskFlowRouter = taskFlowBuilder.build();
         attachChild(taskFlowRouter);
     }
 
-    final void detachTasks() {
+    void detachTasks() {
         Timber.d("detachTasks() called");
         if (taskFlowRouter != null) {
             detachChild(taskFlowRouter);
@@ -46,7 +46,7 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
         }
     }
 
-    final void attachMenuDrawer() {
+    void attachMenuDrawer() {
         Timber.d("attachMenuDrawer() called");
         // The menu drawer is attached to the root view directly and not to the
         MenuDrawerRouter menuDrawerRouter = menuDrawerBuilder.build(getView());
@@ -54,14 +54,14 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
         getView().addView(menuDrawerRouter.getView());
     }
 
-    final void attachStatistics() {
+    void attachStatistics() {
         Timber.d("attachStatistics() called");
         statisticsRouter = statisticsBuilder.build(getView().viewContainer());
         attachChild(statisticsRouter);
         getView().viewContainer().addView(statisticsRouter.getView());
     }
 
-    final void detachStatistics() {
+    void detachStatistics() {
         Timber.d("detachStatistics() called");
         if (statisticsRouter != null) {
             detachChild(statisticsRouter);

@@ -10,10 +10,7 @@ import com.uber.rib.core.ViewRouter;
 public class AddTaskRouter extends
         ViewRouter<AddTaskView, AddTaskInteractor, AddTaskBuilder.Component> {
 
-    public AddTaskRouter(
-            AddTaskView view,
-            AddTaskInteractor interactor,
-            AddTaskBuilder.Component component) {
+    AddTaskRouter(AddTaskView view, AddTaskInteractor interactor, AddTaskBuilder.Component component) {
         super(view, interactor, component);
     }
 }

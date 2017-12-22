@@ -52,7 +52,7 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
     /**
      * Care about what the {@link TaskDetailInteractor} has to say
      */
-    class TaskDetailLitener implements TaskDetailInteractor.Listener {
+    class TaskDetailListener implements TaskDetailInteractor.Listener {
         @Override
         public void onEditTask(Task task) {
             getRouter().detachTaskDetails();

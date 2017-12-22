@@ -1,8 +1,5 @@
 package com.example.android.architecture.blueprints.todoapp.root.menu_drawer;
 
-import android.support.annotation.NonNull;
-import android.view.View;
-
 import com.uber.rib.core.ViewRouter;
 
 /**
@@ -13,10 +10,7 @@ import com.uber.rib.core.ViewRouter;
 public class MenuDrawerRouter extends
         ViewRouter<MenuDrawerView, MenuDrawerInteractor, MenuDrawerBuilder.Component> {
 
-    public MenuDrawerRouter(
-            MenuDrawerView view,
-            MenuDrawerInteractor interactor,
-            MenuDrawerBuilder.Component component) {
+    MenuDrawerRouter(MenuDrawerView view, MenuDrawerInteractor interactor, MenuDrawerBuilder.Component component) {
         super(view, interactor, component);
     }
 }

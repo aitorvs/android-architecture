@@ -3,7 +3,6 @@ package com.example.android.architecture.blueprints.todoapp.root.task_flow.add_t
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.util.Pair;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
@@ -22,15 +21,13 @@ import timber.log.Timber;
 /**
  * Top level view for {@link AddTaskBuilder.AddTaskScope}.
  */
-class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.AddTaskPresenter {
+public class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.AddTaskPresenter {
 
     @BindView(R.id.add_task_title) EditText title;
     @BindView(R.id.add_task_description) EditText description;
     @BindView(R.id.done_button) View doneButton;
 
     private final Relay<TaskViewModel> publishRelay = PublishRelay.<TaskViewModel>create().toSerialized();
-    private Observable<Boolean> titleObservable;
-    private Observable<Boolean> descriptionObservable;
 
     public AddTaskView(Context context) {
         this(context, null);
@@ -48,14 +45,16 @@ class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.AddTask
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
-        titleObservable = RxTextView.textChanges(title)
-            .map(input -> !Strings.isBlank(input.toString()));
-        descriptionObservable = RxTextView.textChanges(description)
-            .map(input -> !Strings.isBlank(input.toString()));
+        // title view observable
+        Observable<Boolean> titleObservable =
+            RxTextView.textChanges(title).map(input -> !Strings.isBlank(input.toString()));
 
-        Observable.combineLatest(
-            titleObservable,
-            descriptionObservable,
+        // description view observable
+        Observable<Boolean> descriptionObservable =
+            RxTextView.textChanges(description).map(input -> !Strings.isBlank(input.toString()));
+
+        // combine view observables
+        Observable.combineLatest(titleObservable, descriptionObservable,
             (titleValid, descriptionValid) -> titleValid && descriptionValid)
             .distinctUntilChanged()
             .subscribe(valid -> doneButton.setEnabled(valid));

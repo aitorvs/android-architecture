@@ -1,8 +1,5 @@
 package com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail;
 
-import android.support.annotation.NonNull;
-import android.view.View;
-
 import com.uber.rib.core.ViewRouter;
 
 /**
@@ -13,10 +10,7 @@ import com.uber.rib.core.ViewRouter;
 public class TaskDetailRouter extends
         ViewRouter<TaskDetailView, TaskDetailInteractor, TaskDetailBuilder.Component> {
 
-    public TaskDetailRouter(
-            TaskDetailView view,
-            TaskDetailInteractor interactor,
-            TaskDetailBuilder.Component component) {
+    TaskDetailRouter(TaskDetailView view, TaskDetailInteractor interactor, TaskDetailBuilder.Component component) {
         super(view, interactor, component);
     }
 }

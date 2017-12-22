@@ -15,7 +15,7 @@ import timber.log.Timber;
 /**
  * Adds and removes children of {@link TaskFlowBuilder.TaskFlowScope}.
  *
- * TODO describe the possible child configurations of this scope.
+ * This task mainly attaches and detaches the views related to the task workflow.
  */
 public class TaskFlowRouter
         extends Router<TaskFlowInteractor, TaskFlowBuilder.Component> {
@@ -23,10 +23,10 @@ public class TaskFlowRouter
     private final AddTaskBuilder newTaskBuilder;
     private final TasksBuilder tasksBuilder;
     private final TaskDetailBuilder taskDetailBuilder;
-    @Nullable private TasksRouter tasksRouter;
-    @Nullable private AddTaskRouter newTaskRouter;
-    @Nullable private TaskDetailRouter taskDetailRouter;
-    @Nullable private AddTaskRouter editTaskRouter;
+    @Nullable TasksRouter tasksRouter;
+    @Nullable AddTaskRouter newTaskRouter;
+    @Nullable TaskDetailRouter taskDetailRouter;
+    @Nullable AddTaskRouter editTaskRouter;
 
     TaskFlowRouter(TaskFlowInteractor interactor, TaskFlowBuilder.Component component, ViewGroup viewGroup,
         TasksBuilder tasksBuilder, AddTaskBuilder addTaskBuilder, TaskDetailBuilder taskDetailBuilder) {
@@ -75,13 +75,14 @@ public class TaskFlowRouter
     }
 
     void attachTaskDetails(Task selectedTask) {
-        Timber.d("attachTaskDetails() called");
+        Timber.d("attachTaskDetails() called with: selectedTask = [" + selectedTask + "]");
         taskDetailRouter = taskDetailBuilder.build(parentView, selectedTask);
         attachChild(taskDetailRouter);
         parentView.addView(taskDetailRouter.getView());
     }
 
     void detachTaskDetails() {
+        Timber.d("detachTaskDetails() called");
         if (taskDetailRouter != null) {
             detachChild(taskDetailRouter);
             parentView.removeView(taskDetailRouter.getView());
@@ -105,6 +106,7 @@ public class TaskFlowRouter
     }
 
     void detachEditTask() {
+        Timber.d("detachEditTask() called");
         if (editTaskRouter != null) {
             detachChild(editTaskRouter);
             parentView.removeView(editTaskRouter.getView());

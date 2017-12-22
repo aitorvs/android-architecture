@@ -10,10 +10,7 @@ import com.uber.rib.core.ViewRouter;
 public class StatisticsRouter extends
         ViewRouter<StatisticsView, StatisticsInteractor, StatisticsBuilder.Component> {
 
-    public StatisticsRouter(
-            StatisticsView view,
-            StatisticsInteractor interactor,
-            StatisticsBuilder.Component component) {
+    StatisticsRouter(StatisticsView view, StatisticsInteractor interactor, StatisticsBuilder.Component component) {
         super(view, interactor, component);
     }
 }

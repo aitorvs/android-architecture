@@ -21,7 +21,7 @@ import io.reactivex.Observable;
 /**
  * Top level view for {@link TaskDetailBuilder.TaskDetailScope}.
  */
-class TaskDetailView extends CoordinatorLayout implements TaskDetailInteractor.TaskDetailPresenter {
+public class TaskDetailView extends CoordinatorLayout implements TaskDetailInteractor.TaskDetailPresenter {
     @BindView(R.id.task_detail_title) TextView taskTitle;
     @BindView(R.id.task_detail_description) TextView taskDescription;
     @BindView(R.id.task_detail_complete) CheckBox taskComplete;

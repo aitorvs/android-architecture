@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Top level view for {@link TasksBuilder.TasksScope}.
  */
-class TasksView extends CoordinatorLayout implements TasksInteractor.TasksPresenter {
+public class TasksView extends CoordinatorLayout implements TasksInteractor.TasksPresenter {
 
     @BindView(R.id.add_task) View addTaskButton;
     @BindView(R.id.tasks_list) ListView taskList;

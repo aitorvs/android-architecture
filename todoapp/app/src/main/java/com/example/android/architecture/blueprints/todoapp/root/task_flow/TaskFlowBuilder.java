@@ -72,7 +72,7 @@ public class TaskFlowBuilder extends Builder<TaskFlowRouter, TaskFlowBuilder.Par
         @TaskFlowScope
         @Provides
         static TaskDetailInteractor.Listener taskDetailListener(TaskFlowInteractor interactor) {
-            return interactor. new TaskDetailLitener();
+            return interactor. new TaskDetailListener();
         }
     }
 
