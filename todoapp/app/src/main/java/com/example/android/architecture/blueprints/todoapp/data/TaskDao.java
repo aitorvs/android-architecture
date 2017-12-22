@@ -50,5 +50,5 @@ interface TaskDao {
     void deleteAllTasks();
 
     @Query("UPDATE tasks SET done = :completed WHERE id = :taskId")
-    void completeTask(int taskId, boolean completed);
+    void completeTask(String taskId, boolean completed);
 }

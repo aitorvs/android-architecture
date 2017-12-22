@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import java.util.List;
+import java.util.UUID;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,9 +19,12 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public class TaskDaoTest {
-    private static final Task TASK_1 = new Task(1, "title 1", "description", false);
-    private static final Task TASK_1_BIS = new Task(1, "title 1", "desc bis", false);
-    private static final Task TASK_2 = new Task(2, "title 2", "description", false);
+    private static final String TASK_1_ID= UUID.randomUUID().toString();
+    private static final String TASK_2_ID= UUID.randomUUID().toString();
+
+    private static final Task TASK_1 = new Task(TASK_1_ID, "title 1", "description", false);
+    private static final Task TASK_1_BIS = new Task(TASK_1_ID, "title 1 bis", "desc bis", false);
+    private static final Task TASK_2 = new Task(TASK_2_ID, "title 2", "description", false);
     private TodoDatabase db;
 
     @Before

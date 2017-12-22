@@ -12,4 +12,5 @@ public interface TaskDataSource {
     void deleteAll();
     void completeTask(@NonNull Task task);
     void activateTask(@NonNull Task task);
+    void updateTask(@NonNull Task task);
 }

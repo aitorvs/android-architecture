@@ -2,9 +2,9 @@ package com.example.android.architecture.blueprints.todoapp.data;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import java.util.List;
+import java.util.UUID;
 
 public final class LocalTaskDataSource implements TaskDataSource {
     private final TaskDao taskDao;
@@ -20,8 +20,8 @@ public final class LocalTaskDataSource implements TaskDataSource {
 
     @Override
     public void newTask(@NonNull String title, @Nullable String description) {
-        //  unique id based on title and description
-        int id = title.hashCode();
+        //  UUID
+        String id = UUID.randomUUID().toString();
         // create the task
         Task task = new Task(id, title, description, false);
         // add the task to the DAO
@@ -45,5 +45,11 @@ public final class LocalTaskDataSource implements TaskDataSource {
     @Override
     public void activateTask(@NonNull Task task) {
         taskDao.completeTask(task.getId(), false);
+    }
+
+    @Override
+    public void updateTask(@NonNull Task task) {
+        // insert should replace
+        taskDao.insert(task);
     }
 }

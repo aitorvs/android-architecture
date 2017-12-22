@@ -54,19 +54,33 @@ public class LocalTaskDataSourceTest {
     }
 
     @Test
-    public void whenInsertDuplicateTask_shouldReplace() throws Exception {
+    public void whenSameTitledTasksAdded_shouldNotOverride() throws Exception {
         source.newTask("title", "desc");
         source.newTask("title", "desc duplicate");
         List<Task> tasks = source.getTasks().blockingFirst();
-        assertThat(tasks.size(), is(1));
+        assertThat(tasks.size(), is(2));
     }
 
     @Test
-    public void whenUpdateTask_descriptionShouldUpdate() throws Exception {
+    public void whenDescriptionUpdated_shouldSuccess() throws Exception {
         source.newTask("title", "desc");
-        source.newTask("title", "desc duplicate");
+        Task task = source.getTasks().blockingFirst().get(0);
+        Task updatedTask = new Task(task.getId(), task.getTitle(), "updated description", task.isDone());
+        source.updateTask(updatedTask);
         List<Task> tasks = source.getTasks().blockingFirst();
-        assertThat(tasks.get(0).getDescription(), is("desc duplicate"));
+        assertThat(tasks.size(), is(1));
+        assertThat(tasks.get(0).getDescription(), is("updated description"));
+    }
+
+    @Test
+    public void whenTitleUpdated_shouldSuccess() throws Exception {
+        source.newTask("title", "desc");
+        Task task = source.getTasks().blockingFirst().get(0);
+        Task updatedTask = new Task(task.getId(), "updated title", task.getTitle(), task.isDone());
+        source.updateTask(updatedTask);
+        List<Task> tasks = source.getTasks().blockingFirst();
+        assertThat(tasks.size(), is(1));
+        assertThat(tasks.get(0).getTitle(), is("updated title"));
     }
 
     @Test

@@ -7,19 +7,20 @@ import android.support.annotation.Nullable;
 
 @Entity(tableName = "tasks")
 public final class Task {
-    @PrimaryKey private final int id;
+    @PrimaryKey @NonNull private final String id;
     @NonNull private final String title;
     @Nullable private final String description;
     private final boolean done;
 
-    public Task(int id, @NonNull String title, @Nullable String description, boolean done) {
+    public Task(@NonNull String id, @NonNull String title, @Nullable String description, boolean done) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.done = done;
     }
 
-    public int getId() {
+    @NonNull
+    public String getId() {
         return id;
     }
 
@@ -42,15 +43,15 @@ public final class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        if (id != task.id) return false;
         if (done != task.done) return false;
+        if (!id.equals(task.id)) return false;
         if (!title.equals(task.title)) return false;
         return description != null ? description.equals(task.description) : task.description == null;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id.hashCode();
         result = 31 * result + title.hashCode();
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (done ? 1 : 0);

@@ -45,4 +45,9 @@ public class TaskRepository implements TaskDataSource {
     public void activateTask(@NonNull Task task) {
         executors.diskIO().execute(() -> localSource.activateTask(task));
     }
+
+    @Override
+    public void updateTask(@NonNull Task task) {
+        executors.diskIO().execute(() -> localSource.updateTask(task));
+    }
 }
