@@ -25,6 +25,9 @@ public class TasksView extends CoordinatorLayout implements TasksInteractor.Task
 
     @BindView(R.id.add_task) View addTaskButton;
     @BindView(R.id.tasks_list) ListView taskList;
+    @BindView(R.id.empty_view) View emptyView;
+    @BindView(R.id.tasks_content) View content;
+
     private TasksAdapter taskAdapter;
     private final PublishRelay<Task> completeTaskRelay = PublishRelay.create();
     private final Relay<Task> completedTask = completeTaskRelay.toSerialized();
@@ -93,6 +96,9 @@ public class TasksView extends CoordinatorLayout implements TasksInteractor.Task
 
     @Override
     public void showTasks(List<Task> tasks) {
+        boolean empty = tasks.isEmpty();
+        content.setVisibility(empty ? GONE : VISIBLE);
+        emptyView.setVisibility(empty ? VISIBLE : GONE);
         taskAdapter.replaceData(tasks);
     }
 }
