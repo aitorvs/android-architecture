@@ -56,11 +56,18 @@ public class TaskDaoTest {
     }
 
     @Test
-    public void whenSelectTaskByTitle_shouldSuccess() throws Exception {
+    public void whenSelectTaskById_shouldSuccess() throws Exception {
         db.taskDao().insert(TASK_1);
         db.taskDao().insert(TASK_2);
-        List<Task> tasks = db.taskDao().getTasksByTitle("title 1").blockingFirst();
-        assertThat(tasks.size(), is(1));
+        Task task = db.taskDao().findById(TASK_1_ID).blockingGet();
+        assertThat(task, is(TASK_1));
+    }
+
+    @Test
+    public void whenSelectTaskByWrongId_shouldNotFind() throws Exception {
+        db.taskDao().insert(TASK_1);
+        Task task = db.taskDao().findById("wrong id").blockingGet(TASK_2);
+        assertThat(task, is(TASK_2));
     }
 
     @Test

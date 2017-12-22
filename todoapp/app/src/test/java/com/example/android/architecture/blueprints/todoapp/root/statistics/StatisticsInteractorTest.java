@@ -15,8 +15,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class StatisticsInteractorTest extends RibTestBasePlaceholder {
-
-    private static final Task TASK = new Task(1, "title", "description", false);
+    private static final Task TASK = Task.create("title", "description");
 
     @Mock StatisticsInteractor.StatisticsPresenter presenter;
     @Mock StatisticsRouter router;

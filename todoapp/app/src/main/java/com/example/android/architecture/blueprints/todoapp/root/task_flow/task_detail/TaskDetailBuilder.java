@@ -58,6 +58,7 @@ public class TaskDetailBuilder
      */
     public interface ParentComponent {
         TaskRepository taskRepository();
+        TaskDetailInteractor.Listener taskDetailListener();
     }
 
     @dagger.Module

@@ -2,6 +2,7 @@ package com.example.android.architecture.blueprints.todoapp.root.task_flow;
 
 import android.support.annotation.Nullable;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksInteractor;
 import com.uber.rib.core.Bundle;
 import com.uber.rib.core.EmptyPresenter;
@@ -24,24 +25,40 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
         getRouter().attachTasks();
     }
 
+    protected void willResignActive() {
+        super.willResignActive();
+        Timber.d("willResignActive() called");
+    }
+
+    /**
+     * Care about what the {@link TasksInteractor} has to say
+     */
     class TasksListener implements TasksInteractor.Listener {
+
         @Override
         public void onAddNewTask() {
             Timber.d("onAddNewTask() called");
             getRouter().detachTasks();
             getRouter().attachNewTask();
         }
-
         @Override public void onTaskSelected(Task selectedTask) {
             Timber.d("onTaskSelected() called with: selectedTask = [" + selectedTask + "]");
             getRouter().detachTasks();
             getRouter().attachTaskDetails(selectedTask);
         }
+
     }
 
-    protected void willResignActive() {
-        super.willResignActive();
-        Timber.d("willResignActive() called");
+    /**
+     * Care about what the {@link TaskDetailInteractor} has to say
+     */
+    class TaskDetailLitener implements TaskDetailInteractor.Listener {
+        @Override
+        public void onEditTask(Task task) {
+            getRouter().detachTaskDetails();
+            getRouter().attachEditTask(task);
+        }
+
     }
 
     @Override
@@ -54,6 +71,11 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
         }
         if (getRouter().isTaskDetailsAttached()) {
             getRouter().detachTaskDetails();
+            getRouter().attachTasks();
+            return true;
+        }
+        if (getRouter().isEditTaskAttached()) {
+            getRouter().detachEditTask();
             getRouter().attachTasks();
             return true;
         }

@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 public class TasksInteractorTest extends RibTestBasePlaceholder {
 
-    private static final Task TASK = new Task(1, "title", "description", false);
+    private static final Task TASK = Task.create("title", "description");
     private static final List<Task> TASKS = Collections.singletonList(TASK);
 
     @Mock TasksInteractor.TasksPresenter presenter;
@@ -32,6 +32,13 @@ public class TasksInteractorTest extends RibTestBasePlaceholder {
         MockitoAnnotations.initMocks(this);
 
         interactor = TestTasksInteractor.create(presenter, listener, taskRepository);
+
+        // default streams
+        when(taskRepository.getTasks()).thenReturn(Observable.just(TASKS));
+        when(presenter.addTask()).thenReturn(Observable.just(Notification.INSTANCE));
+        when(presenter.task()).thenReturn(Observable.just(TASK));
+        when(presenter.competedTask()).thenReturn(Observable.just(TASK));
+        when(presenter.activateTask()).thenReturn(Observable.just(TASK));
     }
 
     @Test

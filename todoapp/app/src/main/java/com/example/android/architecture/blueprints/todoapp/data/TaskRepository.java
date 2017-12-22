@@ -3,6 +3,7 @@ package com.example.android.architecture.blueprints.todoapp.data;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.example.android.architecture.blueprints.todoapp.AppExecutors;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -49,5 +50,10 @@ public class TaskRepository implements TaskDataSource {
     @Override
     public void updateTask(@NonNull Task task) {
         executors.diskIO().execute(() -> localSource.updateTask(task));
+    }
+
+    @Override
+    public Maybe<Task> getTaskById(@NonNull String id) {
+        return localSource.getTaskById(id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 }

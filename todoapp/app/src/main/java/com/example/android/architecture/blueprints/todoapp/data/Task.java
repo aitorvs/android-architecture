@@ -1,18 +1,33 @@
 package com.example.android.architecture.blueprints.todoapp.data;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import java.util.UUID;
 
 @Entity(tableName = "tasks")
 public final class Task {
+    // This can be used to use in place of null tasks
+    public static final Task EMPTY = new Task("", "", "", false);
+
     @PrimaryKey @NonNull private final String id;
     @NonNull private final String title;
     @Nullable private final String description;
     private final boolean done;
 
-    public Task(@NonNull String id, @NonNull String title, @Nullable String description, boolean done) {
+    @Ignore
+    public static Task create(@NonNull String title, @Nullable String description) {
+        return new Task(UUID.randomUUID().toString(), title, description, false);
+    }
+
+    @Ignore
+    public Task update(@NonNull String title, @Nullable String description) {
+        return new Task(id, title, description, done);
+    }
+
+    Task(@NonNull String id, @NonNull String title, @Nullable String description, boolean done) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -36,6 +51,11 @@ public final class Task {
 
     public boolean isDone() {
         return done;
+    }
+
+    @Ignore
+    public boolean isEmpty() {
+        return this.equals(EMPTY);
     }
 
     @Override

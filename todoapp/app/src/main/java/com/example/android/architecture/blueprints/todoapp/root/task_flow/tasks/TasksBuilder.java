@@ -50,7 +50,7 @@ public class TasksBuilder
     }
 
     public interface ParentComponent {
-        TasksInteractor.Listener listener();
+        TasksInteractor.Listener tasksListener();
         TaskRepository taskRepository();
     }
 

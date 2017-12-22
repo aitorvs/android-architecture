@@ -3,6 +3,7 @@ package com.example.android.architecture.blueprints.todoapp.root.task_flow.add_t
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.example.android.architecture.blueprints.todoapp.R;
+import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
 import com.uber.rib.core.InteractorBaseComponent;
 import com.uber.rib.core.ViewBuilder;
@@ -10,6 +11,7 @@ import dagger.Binds;
 import dagger.BindsInstance;
 import dagger.Provides;
 import java.lang.annotation.Retention;
+import javax.inject.Named;
 import javax.inject.Qualifier;
 import javax.inject.Scope;
 
@@ -39,6 +41,26 @@ public class AddTaskBuilder
         Component component = DaggerAddTaskBuilder_Component.builder()
                 .parentComponent(getDependency())
                 .view(view)
+                .task(Task.EMPTY)
+                .interactor(interactor)
+                .build();
+        return component.addtaskRouter();
+    }
+
+    /**
+     * Builds a new {@link AddTaskRouter}.
+     *
+     * @param parentViewGroup parent view group that this router's view will be added to.
+     * @param task task to be edited
+     * @return a new {@link AddTaskRouter}.
+     */
+    public AddTaskRouter build(ViewGroup parentViewGroup, Task task) {
+        AddTaskView view = createView(parentViewGroup);
+        AddTaskInteractor interactor = new AddTaskInteractor();
+        Component component = DaggerAddTaskBuilder_Component.builder()
+                .parentComponent(getDependency())
+                .view(view)
+                .task(task)
                 .interactor(interactor)
                 .build();
         return component.addtaskRouter();
@@ -56,6 +78,9 @@ public class AddTaskBuilder
         TaskRepository taskRepository();
     }
 
+    /**
+     * Create provider methods for dependencies created by this Rib. These should be static
+     */
     @dagger.Module
     public abstract static class Module {
 
@@ -72,7 +97,10 @@ public class AddTaskBuilder
             return new AddTaskRouter(view, interactor, component);
         }
 
-        // TODO: Create provider methods for dependencies created by this Rib. These should be static.
+        @AddTaskScope
+        @EditableTask
+        @Binds
+        abstract Task selectedTask(@Named("selected_task") Task task);
     }
 
     @AddTaskScope
@@ -82,10 +110,9 @@ public class AddTaskBuilder
 
         @dagger.Component.Builder
         interface Builder {
-            @BindsInstance
-            Builder interactor(AddTaskInteractor interactor);
-            @BindsInstance
-            Builder view(AddTaskView view);
+            @BindsInstance Builder interactor(AddTaskInteractor interactor);
+            @BindsInstance Builder view(AddTaskView view);
+            @BindsInstance Builder task(@Named("selected_task") Task task);
             Builder parentComponent(ParentComponent component);
             Component build();
         }
@@ -101,5 +128,5 @@ public class AddTaskBuilder
 
     @Qualifier
     @Retention(CLASS)
-    @interface AddTaskInternal { }
+    @interface EditableTask { }
 }

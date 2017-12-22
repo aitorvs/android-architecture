@@ -5,6 +5,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import java.util.List;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
@@ -23,8 +24,8 @@ interface TaskDao {
      * @param title title of the task
      * @return {@link List} of {@link Task} that match the title.
      */
-    @Query("SELECT * FROM tasks WHERE title = :title")
-    Flowable<List<Task>> getTasksByTitle(String title);
+    @Query("SELECT * FROM tasks WHERE id = :id")
+    Maybe<Task> findById(String id);
 
     /**
      * Insert one {@link Task}

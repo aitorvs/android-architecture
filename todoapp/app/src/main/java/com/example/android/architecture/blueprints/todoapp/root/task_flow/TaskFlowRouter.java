@@ -26,6 +26,7 @@ public class TaskFlowRouter
     @Nullable private TasksRouter tasksRouter;
     @Nullable private AddTaskRouter newTaskRouter;
     @Nullable private TaskDetailRouter taskDetailRouter;
+    @Nullable private AddTaskRouter editTaskRouter;
 
     TaskFlowRouter(TaskFlowInteractor interactor, TaskFlowBuilder.Component component, ViewGroup viewGroup,
         TasksBuilder tasksBuilder, AddTaskBuilder addTaskBuilder, TaskDetailBuilder taskDetailBuilder) {
@@ -90,5 +91,24 @@ public class TaskFlowRouter
 
     boolean isTaskDetailsAttached() {
         return taskDetailRouter != null;
+    }
+
+    void attachEditTask(Task editableTask) {
+        Timber.d("attachEditTask() called with: editableTask = [" + editableTask + "]");
+        editTaskRouter = newTaskBuilder.build(parentView, editableTask);
+        attachChild(editTaskRouter);
+        parentView.addView(editTaskRouter.getView());
+    }
+
+    boolean isEditTaskAttached() {
+        return editTaskRouter != null;
+    }
+
+    void detachEditTask() {
+        if (editTaskRouter != null) {
+            detachChild(editTaskRouter);
+            parentView.removeView(editTaskRouter.getView());
+            editTaskRouter = null;
+        }
     }
 }

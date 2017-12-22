@@ -9,7 +9,6 @@ import com.uber.rib.core.RibInteractor;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 /**
  * Coordinates Business Logic for {@link TaskDetailBuilder.TaskDetailScope}
@@ -23,6 +22,7 @@ public class TaskDetailInteractor
     @Inject TaskDetailPresenter presenter;
     @Inject @TaskDetailBuilder.TaskDetailInternal Task selectedTask;
     @Inject TaskRepository taskRepository;
+    @Inject Listener listener;
 
     private final CompositeDisposable disposable = new CompositeDisposable();
 
@@ -34,7 +34,9 @@ public class TaskDetailInteractor
 
         disposable.add(presenter
             .onEditTask()
-            .subscribe(o -> Timber.d("edit task")));
+            // make sure we catch any modification in the detail view complete/active flag
+            .flatMap(o -> taskRepository.getTaskById(selectedTask.getId()).toObservable())
+            .subscribe(task -> listener.onEditTask(task)));
 
         disposable.add(presenter
             .completeTask()
@@ -51,6 +53,12 @@ public class TaskDetailInteractor
         disposable.dispose();
     }
 
+    /**
+     * Interface to be implemented by the parent RIB
+     */
+    public interface Listener {
+        void onEditTask(Task task);
+    }
 
     /**
      * Presenter interface implemented by this RIB's view.

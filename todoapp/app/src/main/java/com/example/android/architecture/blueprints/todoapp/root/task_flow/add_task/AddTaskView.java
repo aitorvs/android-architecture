@@ -11,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.example.android.architecture.blueprints.todoapp.R;
+import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.util.Strings;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.jakewharton.rxrelay2.PublishRelay;
@@ -27,7 +28,7 @@ class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.AddTask
     @BindView(R.id.add_task_description) EditText description;
     @BindView(R.id.done_button) View doneButton;
 
-    private final Relay<Pair<String, String>> publishRelay = PublishRelay.<Pair<String, String>>create().toSerialized();
+    private final Relay<TaskViewModel> publishRelay = PublishRelay.<TaskViewModel>create().toSerialized();
     private Observable<Boolean> titleObservable;
     private Observable<Boolean> descriptionObservable;
 
@@ -61,8 +62,14 @@ class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.AddTask
     }
 
     @Override
-    public Observable<Pair<String, String>> task() {
+    public Observable<TaskViewModel> task() {
         return publishRelay;
+    }
+
+    @Override
+    public void editTask(Task editableTask) {
+            title.setText(editableTask.getTitle());
+            description.setText(editableTask.getDescription());
     }
 
     @Override
@@ -73,6 +80,6 @@ class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.AddTask
 
     @OnClick(R.id.done_button) void done() {
         Timber.d("done() called");
-        publishRelay.accept(new Pair<>(title.getText().toString(), description.getText().toString()));
+        publishRelay.accept(new TaskViewModel(title.getText().toString(), description.getText().toString()));
     }
 }

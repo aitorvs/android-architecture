@@ -2,8 +2,9 @@ package com.example.android.architecture.blueprints.todoapp.root.task_flow.add_t
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.util.Pair;
+import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskBuilder.EditableTask;
 import com.uber.rib.core.Bundle;
 import com.uber.rib.core.Interactor;
 import com.uber.rib.core.RibInteractor;
@@ -23,6 +24,7 @@ public class AddTaskInteractor
 
     @Inject AddTaskPresenter presenter;
     @Inject TaskRepository taskRepository;
+    @Inject @EditableTask Task editableTask;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
     @Override
@@ -30,7 +32,17 @@ public class AddTaskInteractor
         super.didBecomeActive(savedInstanceState);
 
         disposables.add(presenter.task()
-            .subscribe(task -> insertTask(task.first, task.second)));
+            .filter(t -> editableTask.isEmpty()) // ADD task
+            .doOnNext(o -> presenter.clear())
+            .subscribe(task -> insertTask(task.title, task.description)));
+
+        disposables.add(presenter.task()
+            .filter(t -> !editableTask.isEmpty()) // EDIT task
+            .map(taskViewModel -> editableTask.update(taskViewModel.title, taskViewModel.description))
+            .doOnNext(ignored -> presenter.clear()) // side effect to clear view
+            .subscribe(this::updateTask));
+
+        presenter.editTask(editableTask);
     }
 
     @Override
@@ -43,15 +55,18 @@ public class AddTaskInteractor
      * Presenter interface implemented by this RIB's view.
      */
     interface AddTaskPresenter {
-        Observable<Pair<String, String>> task();
+        Observable<TaskViewModel> task();
+        void editTask(Task editableTask);
         void clear();
     }
 
     private void insertTask(@NonNull String title, @Nullable String description) {
         Timber.d("insertTask() called with: title = [" + title + "], description = [" + description + "]");
-        // insert to the repository
         taskRepository.newTask(title, description);
-        // all good clear the view form to enter a new one
-        presenter.clear();
+    }
+
+    private void updateTask(Task task) {
+        Timber.d("updateTask() called with: task = [" + task + "]");
+        taskRepository.updateTask(task);
     }
 }
