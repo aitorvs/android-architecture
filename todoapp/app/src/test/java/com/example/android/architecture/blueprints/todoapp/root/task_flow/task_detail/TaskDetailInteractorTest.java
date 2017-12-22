@@ -71,6 +71,30 @@ public class TaskDetailInteractorTest extends RibTestBasePlaceholder {
         verify(presenter).showDetailTask(TASK);
     }
 
+    @Test
+    public void whenAttached_getTaskByIdTwice() {
+        InteractorHelper.attach(interactor, presenter, router, null);
+        verify(taskRepository).getTaskById(TASK.getId());
+    }
+
+    @Test
+    public void whenAttached_shouldSubscribeToEditEvents() {
+        InteractorHelper.attach(interactor, presenter, router, null);
+        verify(presenter).onEditTask();
+    }
+
+    @Test
+    public void whenAttached_shouldSubscribeToCompleteTaskEvents() {
+        InteractorHelper.attach(interactor, presenter, router, null);
+        verify(presenter).completeTask();
+    }
+
+    @Test
+    public void whenAttached_shouldSubscribeToActivateTaskEvents() {
+        InteractorHelper.attach(interactor, presenter, router, null);
+        verify(presenter).activateTask();
+    }
+
     enum Notification {
         INSTANCE
     }

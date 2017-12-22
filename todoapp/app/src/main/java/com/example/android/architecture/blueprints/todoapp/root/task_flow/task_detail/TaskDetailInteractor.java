@@ -29,8 +29,11 @@ public class TaskDetailInteractor
     @Override
     protected void didBecomeActive(@Nullable Bundle savedInstanceState) {
         super.didBecomeActive(savedInstanceState);
-        // just show the task
-        presenter.showDetailTask(selectedTask);
+
+        // ensure the task is always up to date fetching from repo
+        disposable.add(taskRepository
+            .getTaskById(selectedTask.getId())
+            .subscribe(task -> presenter.showDetailTask(task)));
 
         disposable.add(presenter
             .onEditTask()
