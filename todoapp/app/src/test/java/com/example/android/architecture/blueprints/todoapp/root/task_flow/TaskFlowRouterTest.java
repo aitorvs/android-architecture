@@ -5,9 +5,9 @@ import com.example.android.architecture.blueprints.todoapp.root.RootView;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskRouter;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskView;
-import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailBuilder;
-import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailRouter;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailView;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowRouter;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksRouter;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksView;
@@ -33,11 +33,11 @@ public class TaskFlowRouterTest extends RibTestBasePlaceholder {
     @Mock TaskFlowInteractor interactor;
     @Mock RootView rootView;
     @Mock AddTaskBuilder addTaskBuilder;
-    @Mock TaskDetailBuilder taskDetailBuilder;
+    @Mock TaskDetailsFlowBuilder taskDetailsFlowBuilder;
     @Mock TasksBuilder tasksBuilder;
     @Mock TasksRouter tasksRouter;
     @Mock AddTaskRouter addTaskRouter;
-    @Mock TaskDetailRouter taskDetailRouter;
+    @Mock TaskDetailsFlowRouter taskDetailsFlowRouter;
     @Mock AddTaskRouter editTaskRouter;
     @Mock TasksView tasksView;
     @Mock AddTaskView addTaskView;
@@ -48,7 +48,7 @@ public class TaskFlowRouterTest extends RibTestBasePlaceholder {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        router = new TaskFlowRouter(interactor, component, rootView, tasksBuilder, addTaskBuilder, taskDetailBuilder);
+        router = new TaskFlowRouter(interactor, component, rootView, tasksBuilder, addTaskBuilder, taskDetailsFlowBuilder);
     }
 
     ////// Task list
@@ -174,89 +174,20 @@ public class TaskFlowRouterTest extends RibTestBasePlaceholder {
         assertThat(value, is(false));
     }
 
-    ////// Edit Task
-    
-    @Test
-    public void whenAttachEditTask_shouldBuildTasksRouter() {
-        when(addTaskBuilder.build(rootView, TASK)).thenReturn(editTaskRouter);
-        RouterHelper.attach(router);
-        router.attachEditTask(TASK);
-        verify(addTaskBuilder).build(rootView, TASK);
-        RouterHelper.detach(router);
-    }
-
-    @Test
-    public void whenAttachEditTask_shouldAttachView() {
-        when(addTaskBuilder.build(rootView, TASK)).thenReturn(editTaskRouter);
-        when(editTaskRouter.getView()).thenReturn(addTaskView);
-        RouterHelper.attach(router);
-        router.attachEditTask(TASK);
-        verify(rootView).addView(addTaskView);
-        RouterHelper.detach(router);
-    }
-
-    @Test
-    public void whenDetachEditTask_shouldRemoveView() {
-        // set to mock so that it is not null
-        router.editTaskRouter = editTaskRouter;
-        when(addTaskBuilder.build(rootView, TASK)).thenReturn(editTaskRouter);
-        when(editTaskRouter.getView()).thenReturn(addTaskView);
-        RouterHelper.attach(router);
-        router.detachEditTask();
-        verify(rootView).removeView(addTaskView);
-        RouterHelper.detach(router);
-    }
-
-    @Test
-    public void whenDetachEditTask_shouldNullRouter() {
-        // set to mock so that it is not null
-        router.editTaskRouter = editTaskRouter;
-        when(addTaskBuilder.build(rootView, TASK)).thenReturn(editTaskRouter);
-        when(editTaskRouter.getView()).thenReturn(addTaskView);
-        RouterHelper.attach(router);
-        router.detachEditTask();
-        assertEquals(router.editTaskRouter, null);
-        RouterHelper.detach(router);
-    }
-
-    @Test
-    public void whenDetachEditTaskOnNullRouter_shouldNotExecute() {
-        when(addTaskBuilder.build(rootView, TASK)).thenReturn(editTaskRouter);
-        when(editTaskRouter.getView()).thenReturn(addTaskView);
-        RouterHelper.attach(router);
-        router.detachEditTask();
-        verify(rootView, never()).removeView(addTaskView);
-        RouterHelper.detach(router);
-    }
-
-    @Test
-    public void whenEditTaskAttached_getterShouldReturnTrue() {
-        router.editTaskRouter = editTaskRouter;
-        boolean value = router.isEditTaskAttached();
-        assertThat(value, is(true));
-    }
-
-    @Test
-    public void whenEditTaskDetached_getterShouldReturnFalse() {
-        boolean value = router.isEditTaskAttached();
-        assertThat(value, is(false));
-    }
-
     ////// Task Details
 
     @Test
     public void whenAttachTaskDetails_shouldBuildTasksRouter() {
-        when(taskDetailBuilder.build(rootView, TASK)).thenReturn(taskDetailRouter);
+        when(taskDetailsFlowBuilder.build(rootView, TASK)).thenReturn(taskDetailsFlowRouter);
         RouterHelper.attach(router);
         router.attachTaskDetails(TASK);
-        verify(taskDetailBuilder).build(rootView, TASK);
+        verify(taskDetailsFlowBuilder).build(rootView, TASK);
         RouterHelper.detach(router);
     }
 
     @Test
     public void whenAttachTaskDetails_shouldAttachView() {
-        when(taskDetailBuilder.build(rootView, TASK)).thenReturn(taskDetailRouter);
-        when(taskDetailRouter.getView()).thenReturn(taskDetailView);
+        when(taskDetailsFlowBuilder.build(rootView, TASK)).thenReturn(taskDetailsFlowRouter);
         RouterHelper.attach(router);
         router.attachTaskDetails(TASK);
         verify(rootView).addView(taskDetailView);
@@ -266,9 +197,8 @@ public class TaskFlowRouterTest extends RibTestBasePlaceholder {
     @Test
     public void whenDetachTaskDetails_shouldRemoveView() {
         // set to mock so that it is not null
-        router.taskDetailRouter = taskDetailRouter;
-        when(taskDetailBuilder.build(rootView, TASK)).thenReturn(taskDetailRouter);
-        when(taskDetailRouter.getView()).thenReturn(taskDetailView);
+        router.taskDetailsFlowRouter = taskDetailsFlowRouter;
+        when(taskDetailsFlowBuilder.build(rootView, TASK)).thenReturn(taskDetailsFlowRouter);
         RouterHelper.attach(router);
         router.detachTaskDetails();
         verify(rootView).removeView(taskDetailView);
@@ -278,19 +208,17 @@ public class TaskFlowRouterTest extends RibTestBasePlaceholder {
     @Test
     public void whenDetachTaskDetails_shouldNullRouter() {
         // set to mock so that it is not null
-        router.taskDetailRouter = taskDetailRouter;
-        when(taskDetailBuilder.build(rootView, TASK)).thenReturn(taskDetailRouter);
-        when(taskDetailRouter.getView()).thenReturn(taskDetailView);
+        router.taskDetailsFlowRouter = taskDetailsFlowRouter;
+        when(taskDetailsFlowBuilder.build(rootView, TASK)).thenReturn(taskDetailsFlowRouter);
         RouterHelper.attach(router);
         router.detachTaskDetails();
-        assertEquals(router.taskDetailRouter, null);
+        assertEquals(router.taskDetailsFlowRouter, null);
         RouterHelper.detach(router);
     }
 
     @Test
     public void whenDetachTaskDetailsOnNullRouter_shouldNotExecute() {
-        when(taskDetailBuilder.build(rootView, TASK)).thenReturn(taskDetailRouter);
-        when(taskDetailRouter.getView()).thenReturn(taskDetailView);
+        when(taskDetailsFlowBuilder.build(rootView, TASK)).thenReturn(taskDetailsFlowRouter);
         RouterHelper.attach(router);
         router.detachTaskDetails();
         verify(rootView, never()).removeView(taskDetailView);
@@ -299,7 +227,7 @@ public class TaskFlowRouterTest extends RibTestBasePlaceholder {
 
     @Test
     public void whenTaskDetailsAttached_getterShouldReturnTrue() {
-        router.taskDetailRouter = taskDetailRouter;
+        router.taskDetailsFlowRouter = taskDetailsFlowRouter;
         boolean value = router.isTaskDetailsAttached();
         assertThat(value, is(true));
     }

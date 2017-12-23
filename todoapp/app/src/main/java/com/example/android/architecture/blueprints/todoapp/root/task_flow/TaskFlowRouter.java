@@ -5,8 +5,8 @@ import android.view.ViewGroup;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskRouter;
-import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailBuilder;
-import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailRouter;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowRouter;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksRouter;
 import com.uber.rib.core.Router;
@@ -22,20 +22,19 @@ public class TaskFlowRouter
     private final ViewGroup parentView;
     private final AddTaskBuilder newTaskBuilder;
     private final TasksBuilder tasksBuilder;
-    private final TaskDetailBuilder taskDetailBuilder;
+    private final TaskDetailsFlowBuilder taskDetailsFlowBuilder;
     @Nullable TasksRouter tasksRouter;
     @Nullable AddTaskRouter newTaskRouter;
-    @Nullable TaskDetailRouter taskDetailRouter;
-    @Nullable AddTaskRouter editTaskRouter;
+    @Nullable TaskDetailsFlowRouter taskDetailsFlowRouter;
 
     TaskFlowRouter(TaskFlowInteractor interactor, TaskFlowBuilder.Component component, ViewGroup viewGroup,
-        TasksBuilder tasksBuilder, AddTaskBuilder addTaskBuilder, TaskDetailBuilder taskDetailBuilder) {
+        TasksBuilder tasksBuilder, AddTaskBuilder addTaskBuilder, TaskDetailsFlowBuilder taskDetailsFlowBuilder) {
 
         super(interactor, component);
         this.parentView = viewGroup;
         this.tasksBuilder = tasksBuilder;
         this.newTaskBuilder = addTaskBuilder;
-        this.taskDetailBuilder = taskDetailBuilder;
+        this.taskDetailsFlowBuilder = taskDetailsFlowBuilder;
     }
 
     void attachTasks() {
@@ -76,41 +75,28 @@ public class TaskFlowRouter
 
     void attachTaskDetails(Task selectedTask) {
         Timber.d("attachTaskDetails() called with: selectedTask = [" + selectedTask + "]");
-        taskDetailRouter = taskDetailBuilder.build(parentView, selectedTask);
-        attachChild(taskDetailRouter);
-        parentView.addView(taskDetailRouter.getView());
+        taskDetailsFlowRouter = taskDetailsFlowBuilder.build(parentView, selectedTask);
+        attachChild(taskDetailsFlowRouter);
     }
 
     void detachTaskDetails() {
         Timber.d("detachTaskDetails() called");
-        if (taskDetailRouter != null) {
-            detachChild(taskDetailRouter);
-            parentView.removeView(taskDetailRouter.getView());
-            taskDetailRouter = null;
+        if (taskDetailsFlowRouter != null) {
+            detachChild(taskDetailsFlowRouter);
+            // remove any child that is attached here
+            parentView.removeAllViews();
+            taskDetailsFlowRouter = null;
         }
     }
 
     boolean isTaskDetailsAttached() {
-        return taskDetailRouter != null;
+        return taskDetailsFlowRouter != null;
     }
 
-    void attachEditTask(Task editableTask) {
-        Timber.d("attachEditTask() called with: editableTask = [" + editableTask + "]");
-        editTaskRouter = newTaskBuilder.build(parentView, editableTask);
-        attachChild(editTaskRouter);
-        parentView.addView(editTaskRouter.getView());
-    }
-
-    boolean isEditTaskAttached() {
-        return editTaskRouter != null;
-    }
-
-    void detachEditTask() {
-        Timber.d("detachEditTask() called");
-        if (editTaskRouter != null) {
-            detachChild(editTaskRouter);
-            parentView.removeView(editTaskRouter.getView());
-            editTaskRouter = null;
+    boolean dispatchBackPress() {
+        if (isTaskDetailsAttached()) {
+            return taskDetailsFlowRouter.getInteractor().handleBackPress();
         }
+        return false;
     }
 }

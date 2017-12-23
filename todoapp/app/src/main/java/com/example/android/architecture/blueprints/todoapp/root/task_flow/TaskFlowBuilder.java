@@ -4,8 +4,8 @@ import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
 import com.example.android.architecture.blueprints.todoapp.root.RootView;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskInteractor;
-import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailBuilder;
-import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailInteractor;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksInteractor;
 import com.uber.rib.core.Builder;
@@ -61,7 +61,7 @@ public class TaskFlowBuilder extends Builder<TaskFlowRouter, TaskFlowBuilder.Par
         @Provides
         static TaskFlowRouter router(Component component, TaskFlowInteractor interactor, RootView rootView) {
             return new TaskFlowRouter(interactor, component, rootView.viewContainer(), new TasksBuilder(component),
-                new AddTaskBuilder(component), new TaskDetailBuilder(component));
+                new AddTaskBuilder(component), new TaskDetailsFlowBuilder(component));
         }
 
         @TaskFlowScope
@@ -72,14 +72,14 @@ public class TaskFlowBuilder extends Builder<TaskFlowRouter, TaskFlowBuilder.Par
 
         @TaskFlowScope
         @Provides
-        static TaskDetailInteractor.Listener taskDetailListener(TaskFlowInteractor interactor) {
-            return interactor. new TaskDetailListener();
+        static AddTaskInteractor.Listener addTaskListener(TaskFlowInteractor interactor) {
+            return interactor. new AddOrEditTaskListener();
         }
 
         @TaskFlowScope
         @Provides
-        static AddTaskInteractor.Listener addTaskListener(TaskFlowInteractor interactor) {
-            return interactor. new AddOrEditTaskListener();
+        static TaskDetailsFlowInteractor.Listener taskDetailFlowListener(TaskFlowInteractor interactor) {
+            return interactor. new TaskDetailsFlowListener();
         }
     }
 
@@ -88,7 +88,7 @@ public class TaskFlowBuilder extends Builder<TaskFlowRouter, TaskFlowBuilder.Par
     public interface Component extends
         InteractorBaseComponent<TaskFlowInteractor>,
         BuilderComponent,
-        TaskDetailBuilder.ParentComponent,
+        TaskDetailsFlowBuilder.ParentComponent,
         AddTaskBuilder.ParentComponent,
         TasksBuilder.ParentComponent {
 

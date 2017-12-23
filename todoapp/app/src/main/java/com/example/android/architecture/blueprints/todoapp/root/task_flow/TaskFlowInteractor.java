@@ -3,7 +3,7 @@ package com.example.android.architecture.blueprints.todoapp.root.task_flow;
 import android.support.annotation.Nullable;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskInteractor;
-import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailInteractor;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksInteractor;
 import com.uber.rib.core.Bundle;
 import com.uber.rib.core.EmptyPresenter;
@@ -50,52 +50,41 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
 
     }
 
-    /**
-     * Care about what the {@link TaskDetailInteractor} has to say
-     */
-    class TaskDetailListener implements TaskDetailInteractor.Listener {
-        @Override
-        public void onEditTask(Task task) {
-            getRouter().detachTaskDetails();
-            getRouter().attachEditTask(task);
-        }
-
-    }
-
     class AddOrEditTaskListener implements AddTaskInteractor.Listener {
         @Override
-        public void onNewTaskAdded() {
-            getRouter().detachEditTask();
-            getRouter().detachNewTask();
-            getRouter().attachTasks();
-        }
-
-        @Override
-        public void onTaskUpdated() {
-            getRouter().detachEditTask();
+        public void onActionCompleted() {
             getRouter().detachNewTask();
             getRouter().attachTasks();
         }
     }
 
+    class TaskDetailsFlowListener implements TaskDetailsFlowInteractor.Listener {
+        @Override
+        public void onFlowFinished() {
+            getRouter().detachTaskDetails();
+            getRouter().attachTasks();
+        }
+    }
+
+    @Override
     public boolean handleBackPress() {
         Timber.d("handleBackPress() called");
-        if (getRouter().isNewTaskAttached()) {
-            getRouter().detachNewTask();
-            getRouter().attachTasks();
+        // first dispatch to children
+        if (getRouter().dispatchBackPress()) {
             return true;
         }
+
         if (getRouter().isTaskDetailsAttached()) {
             getRouter().detachTaskDetails();
             getRouter().attachTasks();
             return true;
         }
-        if (getRouter().isEditTaskAttached()) {
-            getRouter().detachEditTask();
-            // FIXME: This should be attachTaskDetails()
+
+        if (getRouter().isNewTaskAttached()) {
+            getRouter().detachNewTask();
             getRouter().attachTasks();
             return true;
         }
-        return false;
+        return super.handleBackPress();
     }
 }

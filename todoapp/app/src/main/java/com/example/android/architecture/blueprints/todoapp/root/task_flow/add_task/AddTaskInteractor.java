@@ -53,8 +53,7 @@ public class AddTaskInteractor
     }
 
     public interface Listener {
-        void onNewTaskAdded();
-        void onTaskUpdated();
+        void onActionCompleted();
     }
 
     /**
@@ -69,12 +68,12 @@ public class AddTaskInteractor
     private void insertTask(@NonNull String title, @Nullable String description) {
         Timber.d("insertTask() called with: title = [" + title + "], description = [" + description + "]");
         taskRepository.newTask(title, description);
-        listener.onNewTaskAdded();
+        listener.onActionCompleted();
     }
 
     private void updateTask(Task task) {
         Timber.d("updateTask() called with: task = [" + task + "]");
         taskRepository.updateTask(task);
-        listener.onTaskUpdated();
+        listener.onActionCompleted();
     }
 }
