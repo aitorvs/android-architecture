@@ -47,18 +47,9 @@ public class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.
         super.onFinishInflate();
         ButterKnife.bind(this);
         // title view observable
-        Observable<Boolean> titleObservable =
-            RxTextView.textChanges(title).map(input -> !Strings.isBlank(input.toString()));
-
-        // description view observable
-        Observable<Boolean> descriptionObservable =
-            RxTextView.textChanges(description).map(input -> !Strings.isBlank(input.toString()));
-
-        // combine view observables
-        Observable.combineLatest(titleObservable, descriptionObservable,
-            (titleValid, descriptionValid) -> titleValid && descriptionValid)
-            .distinctUntilChanged()
-            .subscribe(valid -> doneButton.setEnabled(valid));
+        RxTextView.textChanges(title)
+            .map(input -> !Strings.isBlank(input.toString()))
+            .subscribe(hasInput -> doneButton.setEnabled(hasInput));
     }
 
     @Override
