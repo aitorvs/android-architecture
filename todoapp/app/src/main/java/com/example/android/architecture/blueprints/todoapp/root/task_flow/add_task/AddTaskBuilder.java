@@ -76,6 +76,7 @@ public class AddTaskBuilder
      */
     public interface ParentComponent {
         TaskRepository taskRepository();
+        AddTaskInteractor.Listener addTaskListener();
     }
 
     /**

@@ -17,6 +17,7 @@ public class AddTaskInteractorTest extends RibTestBasePlaceholder {
 
     private static final TaskViewModel TASK_VIEW_MODEL = new TaskViewModel("title", "desc");
 
+    @Mock AddTaskInteractor.Listener listener;
     @Mock AddTaskInteractor.AddTaskPresenter presenter;
     @Mock AddTaskRouter router;
     @Mock TaskRepository taskRepository;
@@ -27,7 +28,7 @@ public class AddTaskInteractorTest extends RibTestBasePlaceholder {
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        interactor = TestAddTaskInteractor.create(presenter, taskRepository, Task.EMPTY);
+        interactor = TestAddTaskInteractor.create(listener, presenter, taskRepository, Task.EMPTY);
     }
 
     @Test

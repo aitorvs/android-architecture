@@ -2,6 +2,7 @@ package com.example.android.architecture.blueprints.todoapp.root.task_flow;
 
 import android.support.annotation.Nullable;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksInteractor;
 import com.uber.rib.core.Bundle;
@@ -61,7 +62,22 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
 
     }
 
-    @Override
+    class AddOrEditTaskListener implements AddTaskInteractor.Listener {
+        @Override
+        public void onNewTaskAdded() {
+            getRouter().detachEditTask();
+            getRouter().detachNewTask();
+            getRouter().attachTasks();
+        }
+
+        @Override
+        public void onTaskUpdated() {
+            getRouter().detachEditTask();
+            getRouter().detachNewTask();
+            getRouter().attachTasks();
+        }
+    }
+
     public boolean handleBackPress() {
         Timber.d("handleBackPress() called");
         if (getRouter().isNewTaskAttached()) {

@@ -22,6 +22,7 @@ import timber.log.Timber;
 public class AddTaskInteractor
         extends Interactor<AddTaskInteractor.AddTaskPresenter, AddTaskRouter> {
 
+    @Inject Listener listener;
     @Inject AddTaskPresenter presenter;
     @Inject TaskRepository taskRepository;
     @Inject @EditableTask Task editableTask;
@@ -51,6 +52,11 @@ public class AddTaskInteractor
         disposables.clear();
     }
 
+    public interface Listener {
+        void onNewTaskAdded();
+        void onTaskUpdated();
+    }
+
     /**
      * Presenter interface implemented by this RIB's view.
      */
@@ -63,10 +69,12 @@ public class AddTaskInteractor
     private void insertTask(@NonNull String title, @Nullable String description) {
         Timber.d("insertTask() called with: title = [" + title + "], description = [" + description + "]");
         taskRepository.newTask(title, description);
+        listener.onNewTaskAdded();
     }
 
     private void updateTask(Task task) {
         Timber.d("updateTask() called with: task = [" + task + "]");
         taskRepository.updateTask(task);
+        listener.onTaskUpdated();
     }
 }
