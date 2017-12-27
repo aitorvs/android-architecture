@@ -33,13 +33,16 @@ public class TaskDetailInteractor
         // ensure the task is always up to date fetching from repo
         disposable.add(taskRepository
             .getTaskById(selectedTask.getId())
-            .subscribe(task -> presenter.showDetailTask(task)));
+            .subscribe(task -> {
+                // update the selected task
+                selectedTask = task;
+                // update the view
+                presenter.showDetailTask(task);
+            }));
 
         disposable.add(presenter
             .onEditTask()
-            // make sure we catch any modification in the detail view complete/active flag
-            .flatMap(o -> taskRepository.getTaskById(selectedTask.getId()).toObservable())
-            .subscribe(task -> listener.onEditTask(task)));
+            .subscribe(o -> listener.onEditTask(selectedTask)));
 
         disposable.add(presenter
             .completeTask()
