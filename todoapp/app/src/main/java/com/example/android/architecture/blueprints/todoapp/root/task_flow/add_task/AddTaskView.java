@@ -3,6 +3,7 @@ package com.example.android.architecture.blueprints.todoapp.root.task_flow.add_t
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.app.ActionBar;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -12,6 +13,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.example.android.architecture.blueprints.todoapp.R;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
+import com.example.android.architecture.blueprints.todoapp.util.Services;
 import com.example.android.architecture.blueprints.todoapp.util.Strings;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.jakewharton.rxrelay2.PublishRelay;
@@ -29,6 +31,7 @@ public class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.
     @BindView(R.id.done_button) View doneButton;
 
     private final Relay<TaskViewModel> publishRelay = PublishRelay.<TaskViewModel>create().toSerialized();
+    private CharSequence savedToolbarTitle;
 
     public AddTaskView(Context context) {
         this(context, null);
@@ -59,8 +62,20 @@ public class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.
 
     @Override
     public void editTask(Task editableTask) {
-            title.setText(editableTask.getTitle());
-            description.setText(editableTask.getDescription());
+        title.setText(editableTask.getTitle());
+        description.setText(editableTask.getDescription());
+        // saved previous toolbar title and set the one for this view
+        savedToolbarTitle = getActionBar().getTitle();
+        getActionBar().setTitle(editableTask.isEmpty()
+            ? R.string.new_todo
+            : R.string.edit_todo);
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        // restore previous title
+        getActionBar().setTitle(savedToolbarTitle);
+        super.onDetachedFromWindow();
     }
 
     @Override
@@ -74,5 +89,9 @@ public class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getWindowToken(), 0);
         publishRelay.accept(new TaskViewModel(title.getText().toString(), description.getText().toString()));
+    }
+
+    private ActionBar getActionBar() {
+        return Services.getSupportActionBar(getContext());
     }
 }

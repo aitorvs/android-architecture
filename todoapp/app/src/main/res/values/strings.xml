@@ -11,4 +11,9 @@
     <string name="task_marked_completed">Task marked completed</string>
     <string name="you_have_no_todos">You have no TO-DOs</string>
     <string name="you_have_no_tasks">You have no tasks</string>
+    <string name="refresh">Refresh</string>
+    <string name="clear_completed">Clear completed</string>
+    <string name="filter">Filter</string>
+    <string name="new_todo">New TO-DO</string>
+    <string name="edit_todo">Edit TO-DO</string>
 </resources>
