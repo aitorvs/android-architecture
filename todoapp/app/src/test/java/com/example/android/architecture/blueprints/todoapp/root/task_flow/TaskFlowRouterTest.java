@@ -186,22 +186,13 @@ public class TaskFlowRouterTest extends RibTestBasePlaceholder {
     }
 
     @Test
-    public void whenAttachTaskDetails_shouldAttachView() {
-        when(taskDetailsFlowBuilder.build(rootView, TASK)).thenReturn(taskDetailsFlowRouter);
-        RouterHelper.attach(router);
-        router.attachTaskDetails(TASK);
-        verify(rootView).addView(taskDetailView);
-        RouterHelper.detach(router);
-    }
-
-    @Test
-    public void whenDetachTaskDetails_shouldRemoveView() {
+    public void whenDetachTaskDetails_shouldRemoveAllViews() {
         // set to mock so that it is not null
         router.taskDetailsFlowRouter = taskDetailsFlowRouter;
         when(taskDetailsFlowBuilder.build(rootView, TASK)).thenReturn(taskDetailsFlowRouter);
         RouterHelper.attach(router);
         router.detachTaskDetails();
-        verify(rootView).removeView(taskDetailView);
+        verify(rootView).removeAllViews();
         RouterHelper.detach(router);
     }
 
