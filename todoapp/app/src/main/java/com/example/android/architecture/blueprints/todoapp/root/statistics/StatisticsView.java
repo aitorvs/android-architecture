@@ -36,8 +36,13 @@ class StatisticsView extends LinearLayout implements StatisticsInteractor.Statis
     }
 
     @Override
-    public void showStatistics(int completed, int active) {
-        activeTasks.setText(getContext().getString(R.string.active_tasks, active));
-        completedTasks.setText(getContext().getString(R.string.completed_tasks, completed));
+    public void updateView(StatisticsViewModel viewModel) {
+        completedTasks.setVisibility(viewModel.isEmpty() ? GONE : VISIBLE);
+        if (viewModel.isEmpty()) {
+            activeTasks.setText(R.string.you_have_no_tasks);
+        } else {
+            activeTasks.setText(getContext().getString(R.string.active_tasks, viewModel.active));
+            completedTasks.setText(getContext().getString(R.string.completed_tasks, viewModel.completed));
+        }
     }
 }

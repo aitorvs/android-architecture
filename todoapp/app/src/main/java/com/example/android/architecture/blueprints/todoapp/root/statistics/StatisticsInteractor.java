@@ -43,7 +43,7 @@ public class StatisticsInteractor
                 active++;
             }
         }
-        presenter.showStatistics(completed, active);
+        presenter.updateView(StatisticsViewModel.create(completed, active));
     }
 
     @Override
@@ -57,6 +57,6 @@ public class StatisticsInteractor
      * Presenter interface implemented by this RIB's view.
      */
     interface StatisticsPresenter {
-        void showStatistics(int completed, int active);
+        void updateView(StatisticsViewModel viewModel);
     }
 }

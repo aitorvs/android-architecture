@@ -10,4 +10,5 @@
     <string name="active_tasks">Active tasks: %d</string>
     <string name="task_marked_completed">Task marked completed</string>
     <string name="you_have_no_todos">You have no TO-DOs</string>
+    <string name="you_have_no_tasks">You have no tasks</string>
 </resources>

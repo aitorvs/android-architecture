@@ -34,13 +34,13 @@ public class StatisticsInteractorTest extends RibTestBasePlaceholder {
     public void whenTaskRepoEmitsTasks_shouldCallPresenterShowStatistics() {
         when(taskRepository.getTasks()).thenReturn(Observable.just(Collections.singletonList(TASK)));
         InteractorHelper.attach(interactor, presenter, router, null);
-        verify(presenter).showStatistics(0, 1);
+        verify(presenter).updateView(StatisticsViewModel.create(0, 1));
     }
 
     @Test
     public void whenTaskRepoEmitsEmptyList_shouldCallPresenterShowStatistics() {
         when(taskRepository.getTasks()).thenReturn(Observable.just(Collections.emptyList()));
         InteractorHelper.attach(interactor, presenter, router, null);
-        verify(presenter).showStatistics(0, 0);
+        verify(presenter).updateView(StatisticsViewModel.create(0, 0));
     }
 }
