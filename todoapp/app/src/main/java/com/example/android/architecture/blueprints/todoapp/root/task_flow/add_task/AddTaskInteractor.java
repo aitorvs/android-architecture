@@ -32,6 +32,12 @@ public class AddTaskInteractor
     protected void didBecomeActive(@Nullable Bundle savedInstanceState) {
         super.didBecomeActive(savedInstanceState);
 
+        // watch for changes in the editable task to ensure we have the latest info.
+        // With this we ensure that the complete/active flag is correct even when changed from the task details screen
+        disposables.add(taskRepository
+            .getTaskById(editableTask.getId())
+            .subscribe(task -> editableTask = task));
+
         disposables.add(presenter.task()
             .filter(t -> editableTask.isEmpty()) // ADD task
             .doOnNext(o -> presenter.clear())
