@@ -35,10 +35,8 @@ public class TodoActivity extends RibActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // if the menu item clicked is the home button, let the {@link RootRouter} handle it
-            case android.R.id.home:
-                return router.handleHomeItemSelected();
+        if (router != null) {
+            return router.handleOptionsItemSelected(item);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -1,6 +1,6 @@
 package com.example.android.architecture.blueprints.todoapp.root.statistics;
 
-import com.uber.rib.core.ViewRouter;
+import com.example.android.architecture.blueprints.todoapp.ViewRouterExtension;
 
 /**
  * Adds and removes children of {@link StatisticsBuilder.StatisticsScope}.
@@ -8,7 +8,7 @@ import com.uber.rib.core.ViewRouter;
  * TODO describe the possible child configurations of this scope.
  */
 public class StatisticsRouter extends
-        ViewRouter<StatisticsView, StatisticsInteractor, StatisticsBuilder.Component> {
+    ViewRouterExtension<StatisticsView, StatisticsInteractor, StatisticsBuilder.Component> {
 
     StatisticsRouter(StatisticsView view, StatisticsInteractor interactor, StatisticsBuilder.Component component) {
         super(view, interactor, component);
