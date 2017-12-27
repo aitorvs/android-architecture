@@ -80,11 +80,6 @@ public class RootRouter extends ViewRouterExtension<RootView, RootInteractor, Ro
         }
     }
 
-    public final boolean handleHomeItemSelected() {
-        getView().openMenu();
-        return true;
-    }
-
     boolean dispatchBackPress() {
         return taskFlowRouter != null && taskFlowRouter.getInteractor().handleBackPress();
     }
