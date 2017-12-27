@@ -1,5 +1,8 @@
 package com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow;
 
+import com.example.android.architecture.blueprints.todoapp.root.RootView;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailBuilder;
 import com.uber.rib.core.RibTestBasePlaceholder;
 import com.uber.rib.core.RouterHelper;
 
@@ -12,6 +15,7 @@ public class TaskDetailsFlowRouterTest extends RibTestBasePlaceholder {
 
     @Mock TaskDetailsFlowBuilder.Component component;
     @Mock TaskDetailsFlowInteractor interactor;
+    @Mock RootView rootView;
 
     private TaskDetailsFlowRouter router;
 
