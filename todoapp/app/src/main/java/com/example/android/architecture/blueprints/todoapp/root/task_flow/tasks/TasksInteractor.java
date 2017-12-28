@@ -46,7 +46,10 @@ public class TasksInteractor
         // subscribe to the repository
         disposables.add(taskRepository
             .getTasks()
-            .subscribe(tasks -> presenter.showTasks(tasks)));
+            .map(TasksViewModel::success)
+            .startWith(TasksViewModel.loading())
+            .onErrorReturn(TasksViewModel::error)
+            .subscribe(model -> presenter.updateView(model)));
     }
 
     @Override
@@ -80,6 +83,6 @@ public class TasksInteractor
         Observable<Task> competedTask();
         Observable<Task> task();
         Observable<Task> activateTask();
-        void showTasks(List<Task> tasks);
+        void updateView(TasksViewModel model);
     }
 }

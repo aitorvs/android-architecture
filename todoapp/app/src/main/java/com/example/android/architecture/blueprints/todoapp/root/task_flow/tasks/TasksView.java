@@ -17,6 +17,7 @@ import com.jakewharton.rxrelay2.Relay;
 import io.reactivex.Observable;
 import java.util.ArrayList;
 import java.util.List;
+import timber.log.Timber;
 
 /**
  * Top level view for {@link TasksBuilder.TasksScope}.
@@ -27,6 +28,7 @@ public class TasksView extends CoordinatorLayout implements TasksInteractor.Task
     @BindView(R.id.tasks_list) ListView taskList;
     @BindView(R.id.empty_view) View emptyView;
     @BindView(R.id.tasks_content) View content;
+    @BindView(R.id.loading_tasks) View loadingView;
 
     private TasksAdapter taskAdapter;
     private final PublishRelay<Task> completeTaskRelay = PublishRelay.create();
@@ -95,10 +97,16 @@ public class TasksView extends CoordinatorLayout implements TasksInteractor.Task
     }
 
     @Override
-    public void showTasks(List<Task> tasks) {
-        boolean empty = tasks.isEmpty();
-        content.setVisibility(empty ? GONE : VISIBLE);
-        emptyView.setVisibility(empty ? VISIBLE : GONE);
-        taskAdapter.replaceData(tasks);
+    public void updateView(TasksViewModel model) {
+        loadingView.setVisibility(model.isLoading() ? VISIBLE: GONE);
+        if (model.isSuccess()) {
+            List<Task> tasks = model.getTasks();
+            boolean empty = tasks.isEmpty();
+            content.setVisibility(empty ? GONE : VISIBLE);
+            emptyView.setVisibility(empty ? VISIBLE : GONE);
+            taskAdapter.replaceData(tasks);
+        } else if (model.isError()) {
+            Timber.e(model.getError(), "Error updating the tasks view");
+        }
     }
 }

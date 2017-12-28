@@ -42,10 +42,10 @@ public class TasksInteractorTest extends RibTestBasePlaceholder {
     }
 
     @Test
-    public void whenTaskRepoEmitsTasks_shouldCallPresenterShowStatistics() {
+    public void whenTaskRepoEmitsTasks_shouldCallPresenterUpdateView() {
         when(taskRepository.getTasks()).thenReturn(Observable.just(TASKS));
         InteractorHelper.attach(interactor, presenter, router, null);
-        verify(presenter).showTasks(TASKS);
+        verify(presenter).updateView(TasksViewModel.success(TASKS));
     }
 
     @Test
