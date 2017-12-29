@@ -31,21 +31,24 @@ public class TasksInteractorTest extends RibTestBasePlaceholder {
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        interactor = TestTasksInteractor.create(presenter, listener, taskRepository);
+        interactor = TestTasksInteractor.create(presenter, listener, taskRepository, TasksInteractor.Filter.ALL);
 
         // default streams
         when(taskRepository.getTasks()).thenReturn(Observable.just(TASKS));
         when(presenter.addTask()).thenReturn(Observable.just(Notification.INSTANCE));
+        when(presenter.refreshTasks()).thenReturn(Observable.just(Notification.INSTANCE));
+        when(presenter.clearCompleted()).thenReturn(Observable.just(Notification.INSTANCE));
         when(presenter.selectTask()).thenReturn(Observable.just(TASK));
         when(presenter.competeTask()).thenReturn(Observable.just(TASK));
         when(presenter.activateTask()).thenReturn(Observable.just(TASK));
+        when(presenter.filter()).thenReturn(Observable.just(TasksInteractor.Filter.ALL));
     }
 
     @Test
     public void whenTaskRepoEmitsTasks_shouldCallPresenterUpdateView() {
         when(taskRepository.getTasks()).thenReturn(Observable.just(TASKS));
         InteractorHelper.attach(interactor, presenter, router, null);
-        verify(presenter).updateView(TasksViewModel.success(TASKS));
+        verify(presenter).updateView(TasksViewModel.success(TaskQueryResult.create(TASKS)));
     }
 
     @Test

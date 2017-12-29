@@ -33,6 +33,7 @@ public class TaskDetailInteractorTest extends RibTestBasePlaceholder {
         when(presenter.completeTask()).thenReturn(Observable.just(Notification.INSTANCE));
         when(presenter.activateTask()).thenReturn(Observable.just(Notification.INSTANCE));
         when(presenter.editTask()).thenReturn(Observable.just(Notification.INSTANCE));
+        when(presenter.deleteTask()).thenReturn(Observable.just(Notification.INSTANCE));
         when(taskRepository.getTaskById(TASK.getId())).thenReturn(Maybe.just(TASK));
     }
 

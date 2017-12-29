@@ -10,6 +10,7 @@ import dagger.Binds;
 import dagger.BindsInstance;
 import dagger.Provides;
 import java.lang.annotation.Retention;
+import javax.inject.Named;
 import javax.inject.Qualifier;
 import javax.inject.Scope;
 
@@ -33,12 +34,13 @@ public class TasksBuilder
      * @param parentViewGroup parent view group that this router's view will be added to.
      * @return a new {@link TasksRouter}.
      */
-    public TasksRouter build(ViewGroup parentViewGroup) {
+    public TasksRouter build(ViewGroup parentViewGroup, TasksInteractor.Filter filter) {
         TasksView view = createView(parentViewGroup);
         TasksInteractor interactor = new TasksInteractor();
         Component component = DaggerTasksBuilder_Component.builder()
                 .parentComponent(getDependency())
                 .view(view)
+                .filter(filter)
                 .interactor(interactor)
                 .build();
         return component.tasksRouter();
@@ -70,6 +72,11 @@ public class TasksBuilder
             return new TasksRouter(view, interactor, component);
         }
 
+        @TasksScope
+        @TasksInternal
+        @Binds
+        abstract TasksInteractor.Filter filter(@Named("task_filter") TasksInteractor.Filter filter);
+
         // TODO: Create provider methods for dependencies created by this Rib. These should be static.
     }
 
@@ -83,10 +90,9 @@ public class TasksBuilder
 
         @dagger.Component.Builder
         interface Builder {
-            @BindsInstance
-            Builder interactor(TasksInteractor interactor);
-            @BindsInstance
-            Builder view(TasksView view);
+            @BindsInstance Builder interactor(TasksInteractor interactor);
+            @BindsInstance Builder view(TasksView view);
+            @BindsInstance Builder filter(@Named("task_filter") TasksInteractor.Filter filter);
             Builder parentComponent(ParentComponent component);
             Component build();
         }

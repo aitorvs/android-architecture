@@ -81,15 +81,12 @@ public class TasksView extends CoordinatorLayout implements TasksInteractor.Task
                 return true;
             } else if (item.getItemId() == MENU_FILTER_ALL) {
                 filterEvent.accept(TasksInteractor.Filter.ALL);
-                tvFilterLabel.setText(R.string.all_to_dos);
                 return true;
             } else if (item.getItemId() == MENU_FILTER_ACTIVE) {
                 filterEvent.accept(TasksInteractor.Filter.ACTIVE);
-                tvFilterLabel.setText(R.string.active_to_dos);
                 return true;
             } else if (item.getItemId() == MENU_FILTER_COMPLETED) {
                 filterEvent.accept(TasksInteractor.Filter.COMPLETED);
-                tvFilterLabel.setText(R.string.completed_to_dos);
                 return true;
             }
             return false;
@@ -185,12 +182,22 @@ public class TasksView extends CoordinatorLayout implements TasksInteractor.Task
     @Override
     public void updateView(TasksViewModel model) {
         loadingView.setVisibility(model.isLoading() ? VISIBLE: GONE);
+        // populate the tasks
         if (model.isSuccess()) {
-            List<Task> tasks = model.getTasks();
+            List<Task> tasks = model.getData().getTasks();
             boolean empty = tasks.isEmpty();
             content.setVisibility(empty ? GONE : VISIBLE);
             emptyView.setVisibility(empty ? VISIBLE : GONE);
             taskAdapter.replaceData(tasks);
+
+            // update the list header
+            if (model.getData().isFilteredByActive()) {
+                tvFilterLabel.setText(R.string.active_to_dos);
+            } else if (model.getData().isFilteredByCompleted()) {
+                tvFilterLabel.setText(R.string.completed_to_dos);
+            } else {
+                tvFilterLabel.setText(R.string.all_to_dos);
+            }
         } else if (model.isError()) {
             Timber.e(model.getError(), "Error updating the tasks view");
         }

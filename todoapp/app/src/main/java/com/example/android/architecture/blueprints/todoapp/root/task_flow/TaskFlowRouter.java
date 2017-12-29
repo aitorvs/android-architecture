@@ -8,6 +8,7 @@ import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_ta
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowRouter;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksRouter;
 import com.uber.rib.core.Router;
 import timber.log.Timber;
@@ -37,9 +38,9 @@ public class TaskFlowRouter extends Router<TaskFlowInteractor, TaskFlowBuilder.C
         this.taskDetailsFlowBuilder = taskDetailsFlowBuilder;
     }
 
-    void attachTasks() {
+    void attachTasks(TasksInteractor.Filter defaultTasksFilter) {
         Timber.d("attachTasks() called");
-        tasksRouter = tasksBuilder.build(parentView);
+        tasksRouter = tasksBuilder.build(parentView, defaultTasksFilter);
         attachChild(tasksRouter);
         parentView.addView(tasksRouter.getView());
     }

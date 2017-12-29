@@ -1,5 +1,6 @@
 package com.example.android.architecture.blueprints.todoapp.root.task_flow;
 
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksInteractor;
 import com.uber.rib.core.EmptyPresenter;
 import com.uber.rib.core.InteractorHelper;
 import com.uber.rib.core.RibTestBasePlaceholder;
@@ -29,7 +30,7 @@ public class TaskFlowInteractorTest extends RibTestBasePlaceholder {
     @Test
     public void whenBecomeActive_shouldAttachTasks() {
         InteractorHelper.attach(interactor, presenter, router, null);
-        verify(router).attachTasks();
+        verify(router).attachTasks(TasksInteractor.Filter.ALL);
         InteractorHelper.detach(interactor);
     }
 

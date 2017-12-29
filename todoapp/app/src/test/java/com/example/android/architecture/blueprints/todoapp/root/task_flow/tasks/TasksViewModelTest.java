@@ -25,7 +25,7 @@ public class TasksViewModelTest {
     @Test
     public void whenIsLoading_tasksShouldBeNull() {
         TasksViewModel model = TasksViewModel.loading();
-        assertEquals(model.getTasks(), null);
+        assertEquals(model.getData(), null);
     }
 
     @Test
@@ -36,21 +36,21 @@ public class TasksViewModelTest {
 
     @Test
     public void whenIsSuccess_shouldNotBeError() {
-        TasksViewModel model = TasksViewModel.success(Collections.singletonList(Task.EMPTY));
+        TasksViewModel model = TasksViewModel.success(TaskQueryResult.create(Collections.singletonList(Task.EMPTY)));
         assertThat(model.isError(), is(false));
     }
 
     @Test
     public void whenIsSuccess_shouldNotBeLoading() {
-        TasksViewModel model = TasksViewModel.success(Collections.singletonList(Task.EMPTY));
+        TasksViewModel model = TasksViewModel.success(TaskQueryResult.create(Collections.singletonList(Task.EMPTY)));
         assertThat(model.isLoading(), is(false));
     }
 
     @Test
     public void whenIsSuccess_tasksShouldNotBeNull() {
         List<Task> tasks = Collections.singletonList(Task.EMPTY);
-        TasksViewModel model = TasksViewModel.success(tasks);
-        assertThat(model.getTasks(), is(tasks));
+        TasksViewModel model = TasksViewModel.success(TaskQueryResult.create(tasks));
+        assertThat(model.getData().getTasks(), is(tasks));
     }
 
     @Test

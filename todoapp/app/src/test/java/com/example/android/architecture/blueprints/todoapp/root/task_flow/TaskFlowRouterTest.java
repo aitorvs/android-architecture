@@ -9,6 +9,7 @@ import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_d
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowRouter;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksRouter;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksView;
 import com.uber.rib.core.RibTestBasePlaceholder;
@@ -55,19 +56,19 @@ public class TaskFlowRouterTest extends RibTestBasePlaceholder {
 
     @Test
     public void whenAttachTasks_shouldBuildTasksRouter() {
-        when(tasksBuilder.build(rootView)).thenReturn(tasksRouter);
+        when(tasksBuilder.build(rootView, TasksInteractor.Filter.ALL)).thenReturn(tasksRouter);
         RouterHelper.attach(router);
-        router.attachTasks();
-        verify(tasksBuilder).build(rootView);
+        router.attachTasks(TasksInteractor.Filter.ALL);
+        verify(tasksBuilder).build(rootView, TasksInteractor.Filter.ALL);
         RouterHelper.detach(router);
     }
 
     @Test
     public void whenAttachTasks_shouldAttachView() {
-        when(tasksBuilder.build(rootView)).thenReturn(tasksRouter);
+        when(tasksBuilder.build(rootView, TasksInteractor.Filter.ALL)).thenReturn(tasksRouter);
         when(tasksRouter.getView()).thenReturn(tasksView);
         RouterHelper.attach(router);
-        router.attachTasks();
+        router.attachTasks(TasksInteractor.Filter.ALL);
         verify(rootView).addView(tasksView);
         RouterHelper.detach(router);
     }
@@ -76,7 +77,7 @@ public class TaskFlowRouterTest extends RibTestBasePlaceholder {
     public void whenDetachTasks_shouldRemoveView() {
         // set to mock so that it is not null
         router.tasksRouter = tasksRouter;
-        when(tasksBuilder.build(rootView)).thenReturn(tasksRouter);
+        when(tasksBuilder.build(rootView, TasksInteractor.Filter.ALL)).thenReturn(tasksRouter);
         when(tasksRouter.getView()).thenReturn(tasksView);
         RouterHelper.attach(router);
         router.detachTasks();
@@ -88,7 +89,7 @@ public class TaskFlowRouterTest extends RibTestBasePlaceholder {
     public void whenDetachTasks_shouldNullRouter() {
         // set to mock so that it is not null
         router.tasksRouter = tasksRouter;
-        when(tasksBuilder.build(rootView)).thenReturn(tasksRouter);
+        when(tasksBuilder.build(rootView, TasksInteractor.Filter.ALL)).thenReturn(tasksRouter);
         when(tasksRouter.getView()).thenReturn(tasksView);
         RouterHelper.attach(router);
         router.detachTasks();
@@ -98,7 +99,7 @@ public class TaskFlowRouterTest extends RibTestBasePlaceholder {
 
     @Test
     public void whenDetachTasksOnNullRouter_shouldNotExecute() {
-        when(tasksBuilder.build(rootView)).thenReturn(tasksRouter);
+        when(tasksBuilder.build(rootView, TasksInteractor.Filter.ALL)).thenReturn(tasksRouter);
         when(tasksRouter.getView()).thenReturn(tasksView);
         RouterHelper.attach(router);
         router.detachTasks();

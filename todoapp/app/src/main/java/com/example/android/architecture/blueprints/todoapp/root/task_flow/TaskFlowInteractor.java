@@ -19,11 +19,12 @@ import timber.log.Timber;
 @RibInteractor
 public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRouter> {
 
-    @Override
+    private TasksInteractor.Filter defaultTasksFilter = TasksInteractor.Filter.ALL;
+
     protected void didBecomeActive(@Nullable Bundle savedInstanceState) {
         super.didBecomeActive(savedInstanceState);
 
-        getRouter().attachTasks();
+        getRouter().attachTasks(defaultTasksFilter);
     }
 
     protected void willResignActive() {
@@ -48,13 +49,18 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
             getRouter().attachTaskDetails(selectedTask);
         }
 
+        @Override
+        public void onFilterApplied(TasksInteractor.Filter filter) {
+            // update filter
+            defaultTasksFilter = filter;
+        }
     }
 
     class AddOrEditTaskListener implements AddTaskInteractor.Listener {
         @Override
         public void onActionCompleted() {
             getRouter().detachNewTask();
-            getRouter().attachTasks();
+            getRouter().attachTasks(defaultTasksFilter);
         }
     }
 
@@ -62,7 +68,7 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
         @Override
         public void onFlowFinished() {
             getRouter().detachTaskDetails();
-            getRouter().attachTasks();
+            getRouter().attachTasks(defaultTasksFilter);
         }
     }
 
@@ -76,13 +82,13 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
 
         if (getRouter().isTaskDetailsAttached()) {
             getRouter().detachTaskDetails();
-            getRouter().attachTasks();
+            getRouter().attachTasks(defaultTasksFilter);
             return true;
         }
 
         if (getRouter().isNewTaskAttached()) {
             getRouter().detachNewTask();
-            getRouter().attachTasks();
+            getRouter().attachTasks(defaultTasksFilter);
             return true;
         }
         return super.handleBackPress();

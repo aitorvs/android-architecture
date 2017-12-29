@@ -16,4 +16,20 @@ final class StatisticsViewModel {
     static StatisticsViewModel create(int completed, int active) {
         return new StatisticsViewModel(completed < 0 ? 0 : completed, active < 0 ? 0 : active);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StatisticsViewModel that = (StatisticsViewModel) o;
+        if (completed != that.completed) return false;
+        return active == that.active;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = completed;
+        result = 31 * result + active;
+        return result;
+    }
 }

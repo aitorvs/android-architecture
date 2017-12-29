@@ -2,17 +2,15 @@ package com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.example.android.architecture.blueprints.todoapp.data.Task;
-import java.util.List;
 
 import static com.example.android.architecture.blueprints.todoapp.util.Preconditions.checkNotNull;
 
 final class TasksViewModel {
-    @Nullable private final List<Task> tasks;
+    @Nullable private final TaskQueryResult tasks;
     @Nullable private final Throwable error;
     private final boolean isLoading;
 
-    private TasksViewModel(@Nullable List<Task> tasks, @Nullable Throwable error, boolean isLoading) {
+    private TasksViewModel(@Nullable TaskQueryResult tasks, @Nullable Throwable error, boolean isLoading) {
         this.tasks = tasks;
         this.error = error;
         this.isLoading = isLoading;
@@ -30,7 +28,7 @@ final class TasksViewModel {
         return error != null;
     }
 
-    List<Task> getTasks() {
+    TaskQueryResult getData() {
         return tasks;
     }
 
@@ -42,7 +40,7 @@ final class TasksViewModel {
         return new TasksViewModel(null, null, true);
     }
 
-    public static TasksViewModel success(@NonNull List<Task> tasks) {
+    public static TasksViewModel success(@NonNull TaskQueryResult tasks) {
         return new TasksViewModel(checkNotNull(tasks), null, false);
     }
 

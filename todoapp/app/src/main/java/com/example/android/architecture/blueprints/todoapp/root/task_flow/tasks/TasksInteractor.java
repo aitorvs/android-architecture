@@ -4,13 +4,13 @@ import android.support.annotation.Nullable;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
 import com.jakewharton.rxrelay2.BehaviorRelay;
-import com.jakewharton.rxrelay2.PublishRelay;
 import com.jakewharton.rxrelay2.Relay;
 import com.uber.rib.core.Bundle;
 import com.uber.rib.core.Interactor;
 import com.uber.rib.core.RibInteractor;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
+import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -26,13 +26,18 @@ public class TasksInteractor
     @Inject TasksPresenter presenter;
     @Inject Listener listener;
     @Inject TaskRepository taskRepository;
+    @Inject
+    @TasksBuilder.TasksInternal
+    Filter taskFilter;
 
     private final CompositeDisposable disposables = new CompositeDisposable();
-    private final Relay<Filter> filterRelay = BehaviorRelay.createDefault(Filter.ALL).toSerialized();
+    private Relay<Filter> filterRelay;
 
     @Override
     protected void didBecomeActive(@Nullable Bundle savedInstanceState) {
         super.didBecomeActive(savedInstanceState);
+
+        filterRelay = BehaviorRelay.createDefault(taskFilter).toSerialized();
 
         // subscribe to the presenter interface implemented by the TasksView
         disposables.add(presenter.addTask()
@@ -58,14 +63,16 @@ public class TasksInteractor
 
         // watch the filter
         disposables.add(filterRelay
-            .flatMap(filter -> {
-                if (filter == Filter.ACTIVE) {
-                    return taskRepository.getActiveTasks();
-                } else if (filter == Filter.COMPLETED) {
-                    return taskRepository.getCompletedTasks();
-                } else {
-                    return taskRepository.getTasks();
+            .doOnNext(filter -> listener.onFilterApplied(filter)) // notify the listener in side effect
+            .flatMap(this::getFilteredTasks, (filter, tasks) -> {
+                if (filter == Filter.COMPLETED) {
+                    return TaskQueryResult.createWithFilterCompleted(tasks);
+                } else if (filter == Filter.ACTIVE) {
+                    return TaskQueryResult.createWithFilterActive(tasks);
                 }
+
+                // default filter
+                return TaskQueryResult.create(tasks);
             })
             .map(TasksViewModel::success)
             .startWith(TasksViewModel.loading())
@@ -82,6 +89,7 @@ public class TasksInteractor
     public interface Listener {
         void onAddNewTask();
         void onTaskSelected(Task selectedTask);
+        void onFilterApplied(Filter filter);
     }
 
     private void completeTask(Task task) {
@@ -94,6 +102,16 @@ public class TasksInteractor
 
     private void showTaskDetails(Task task) {
         listener.onTaskSelected(task);
+    }
+
+    private Observable<List<Task>> getFilteredTasks(Filter filter) {
+        if (filter == Filter.ACTIVE) {
+            return taskRepository.getActiveTasks();
+        } else if (filter == Filter.COMPLETED) {
+            return taskRepository.getCompletedTasks();
+        } else {
+            return taskRepository.getTasks();
+        }
     }
 
     /**
@@ -110,7 +128,7 @@ public class TasksInteractor
         void updateView(TasksViewModel model);
     }
 
-    enum Filter {
+    public enum Filter {
         ALL, ACTIVE, COMPLETED
     }
 }
