@@ -41,8 +41,8 @@ public class TaskDetailInteractor
             }));
 
         disposable.add(presenter
-            .onEditTask()
-            .subscribe(o -> listener.onEditTask(selectedTask)));
+            .editTask()
+            .subscribe(o -> listener.editTask(selectedTask)));
 
         disposable.add(presenter
             .completeTask()
@@ -51,6 +51,13 @@ public class TaskDetailInteractor
         disposable.add(presenter
             .activateTask()
             .subscribe(o -> taskRepository.activateTask(selectedTask)));
+
+        disposable.add(presenter
+            .deleteTask()
+            .subscribe(o -> {
+                taskRepository.deleteTask(selectedTask);
+                listener.taskDeleted();
+            }));
     }
 
     @Override
@@ -63,7 +70,8 @@ public class TaskDetailInteractor
      * Interface to be implemented by the parent RIB
      */
     public interface Listener {
-        void onEditTask(Task task);
+        void editTask(Task task);
+        void taskDeleted();
     }
 
     /**
@@ -71,8 +79,9 @@ public class TaskDetailInteractor
      */
     interface TaskDetailPresenter {
         void showDetailTask(Task task);
-        Observable<Object> onEditTask();
+        Observable<Object> editTask();
         Observable<Object> completeTask();
         Observable<Object> activateTask();
+        Observable<Object> deleteTask();
     }
 }

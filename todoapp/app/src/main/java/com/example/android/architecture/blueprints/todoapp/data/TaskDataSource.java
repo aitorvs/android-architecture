@@ -8,9 +8,12 @@ import java.util.List;
 
 public interface TaskDataSource {
     Observable<List<Task>> getTasks();
+    Observable<List<Task>> getCompletedTasks();
+    Observable<List<Task>> getActiveTasks();
     void newTask(@NonNull String title, @Nullable String description);
-    void deleteTask(@NonNull String title);
+    void deleteCompletedTasks();
     void deleteAll();
+    void deleteTask(@NonNull Task task);
     void completeTask(@NonNull Task task);
     void activateTask(@NonNull Task task);
     void updateTask(@NonNull Task task);

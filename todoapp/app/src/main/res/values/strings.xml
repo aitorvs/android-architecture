@@ -6,6 +6,8 @@
     <string name="task_title">Task title</string>
     <string name="task_description">Task description</string>
     <string name="all_to_dos">All TO-DOs</string>
+    <string name="active_to_dos">Active TO-DOs</string>
+    <string name="completed_to_dos">Completed TO-DOs</string>
     <string name="completed_tasks">Completed tasks: %d</string>
     <string name="active_tasks">Active tasks: %d</string>
     <string name="task_marked_completed">Task marked completed</string>
@@ -16,4 +18,5 @@
     <string name="filter">Filter</string>
     <string name="new_todo">New TO-DO</string>
     <string name="edit_todo">Edit TO-DO</string>
+    <string name="delete_task">Delete task</string>
 </resources>

@@ -2,12 +2,12 @@ package com.example.android.architecture.blueprints.todoapp.root.task_flow.task_
 
 import android.support.annotation.Nullable;
 import android.view.ViewGroup;
-import com.example.android.architecture.blueprints.todoapp.RouterExtension;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskRouter;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailRouter;
+import com.uber.rib.core.Router;
 
 /**
  * Adds and removes children of {@link TaskDetailsFlowBuilder.TaskDetailsFlowScope}.
@@ -15,7 +15,7 @@ import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_d
  * TODO describe the possible child configurations of this scope.
  */
 public class TaskDetailsFlowRouter
-        extends RouterExtension<TaskDetailsFlowInteractor, TaskDetailsFlowBuilder.Component> {
+        extends Router<TaskDetailsFlowInteractor, TaskDetailsFlowBuilder.Component> {
 
     private final ViewGroup rootView;
     private final TaskDetailBuilder taskDetailBuilder;

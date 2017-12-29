@@ -24,17 +24,33 @@ public class TaskRepository implements TaskDataSource {
     }
 
     @Override
+    public Observable<List<Task>> getCompletedTasks() {
+        return localSource.getCompletedTasks().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<List<Task>> getActiveTasks() {
+        return localSource.getActiveTasks().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
     public void newTask(@NonNull String title, @Nullable String description) {
         executors.diskIO().execute(() -> localSource.newTask(title, description));
     }
 
-    @Override public void deleteTask(@NonNull String title) {
-        localSource.deleteTask(title);
+    @Override
+    public void deleteCompletedTasks() {
+        executors.diskIO().execute(localSource::deleteCompletedTasks);
     }
 
     @Override
     public void deleteAll() {
         localSource.deleteAll();
+    }
+
+    @Override
+    public void deleteTask(@NonNull Task task) {
+        executors.diskIO().execute(() -> localSource.deleteTask(task));
     }
 
     @Override

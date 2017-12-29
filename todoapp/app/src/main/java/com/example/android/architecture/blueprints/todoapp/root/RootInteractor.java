@@ -74,7 +74,6 @@ public class RootInteractor
      * Presenter interface implemented by this RIB's view.
      */
     interface RootPresenter {
-        void openMenu();
         void closeMenu();
         boolean isMenuOpen();
     }

@@ -2,7 +2,6 @@ package com.example.android.architecture.blueprints.todoapp.root.task_flow;
 
 import android.support.annotation.Nullable;
 import android.view.ViewGroup;
-import com.example.android.architecture.blueprints.todoapp.RouterExtension;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskRouter;
@@ -10,6 +9,7 @@ import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_d
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowRouter;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksRouter;
+import com.uber.rib.core.Router;
 import timber.log.Timber;
 
 /**
@@ -17,8 +17,8 @@ import timber.log.Timber;
  *
  * This task mainly attaches and detaches the views related to the task workflow.
  */
-public class TaskFlowRouter
-        extends RouterExtension<TaskFlowInteractor, TaskFlowBuilder.Component> {
+public class TaskFlowRouter extends Router<TaskFlowInteractor, TaskFlowBuilder.Component> {
+
     private final ViewGroup parentView;
     private final AddTaskBuilder newTaskBuilder;
     private final TasksBuilder tasksBuilder;

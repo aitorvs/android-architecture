@@ -1,14 +1,13 @@
 package com.example.android.architecture.blueprints.todoapp.root;
 
 import android.support.annotation.Nullable;
-import android.view.MenuItem;
-import com.example.android.architecture.blueprints.todoapp.ViewRouterExtension;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerRouter;
 import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsRouter;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.TaskFlowBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.TaskFlowRouter;
+import com.uber.rib.core.ViewRouter;
 import timber.log.Timber;
 
 /**
@@ -16,7 +15,7 @@ import timber.log.Timber;
  *
  * TODO describe the possible child configurations of this scope.
  */
-public class RootRouter extends ViewRouterExtension<RootView, RootInteractor, RootBuilder.Component> {
+public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder.Component> {
 
     private final TaskFlowBuilder taskFlowBuilder;
     private final MenuDrawerBuilder menuDrawerBuilder;
@@ -30,15 +29,6 @@ public class RootRouter extends ViewRouterExtension<RootView, RootInteractor, Ro
         this.taskFlowBuilder = tasksBuilder;
         this.menuDrawerBuilder = menuDrawerBuilder;
         this.statisticsBuilder = statisticsBuilder;
-    }
-
-    @Override
-    public boolean handleOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            getView().openMenu();
-            return true;
-        }
-        return super.handleOptionsItemSelected(item);
     }
 
     void attachTasks() {

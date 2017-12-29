@@ -9,9 +9,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.example.android.architecture.blueprints.todoapp.OptionsMenuService;
 import com.example.android.architecture.blueprints.todoapp.R;
 import com.example.android.architecture.blueprints.todoapp.TodoActivity;
 import com.uber.rib.core.RibActivity;
@@ -22,6 +25,23 @@ import com.uber.rib.core.RibActivity;
 public class RootView extends DrawerLayout implements RootInteractor.RootPresenter {
     @BindView(R.id.root_container) ViewGroup container;
     @BindView(R.id.toolbar) Toolbar toolbar;
+
+    private OptionsMenuService menuService;
+    private final OptionsMenuService.Listener menuListener = new OptionsMenuService.Listener() {
+        @Override
+        public void onPrepareOptionsMenu(Menu menu) {
+            /* no-op */
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            if (item.getItemId() == android.R.id.home) {
+                openMenu();
+                return true;
+            }
+            return false;
+        }
+    };
 
     public RootView(Context context) {
         this(context, null);
@@ -42,6 +62,19 @@ public class RootView extends DrawerLayout implements RootInteractor.RootPresent
         setupToolbar();
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        menuService = (OptionsMenuService) getContext().getSystemService(TodoActivity.OPTIONS_MENU_SERVICE);
+        menuService.addOptionsMenuListener(menuListener);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        menuService.removeOptionsMenuListener(menuListener);
+    }
+
     @NonNull public final ViewGroup viewContainer() {
         return container;
     }
@@ -50,8 +83,7 @@ public class RootView extends DrawerLayout implements RootInteractor.RootPresent
         return this.toolbar;
     }
 
-    @Override
-    public void openMenu() {
+    private void openMenu() {
         openDrawer(GravityCompat.START);
     }
 

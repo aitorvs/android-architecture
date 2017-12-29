@@ -19,19 +19,35 @@ public final class LocalTaskDataSource implements TaskDataSource {
     }
 
     @Override
+    public Observable<List<Task>> getCompletedTasks() {
+        return taskDao.getCompletedTasks().onBackpressureBuffer().toObservable();
+    }
+
+    @Override
+    public Observable<List<Task>> getActiveTasks() {
+        return taskDao.getActiveTasks().onBackpressureBuffer().toObservable();
+    }
+
+    @Override
     public void newTask(@NonNull String title, @Nullable String description) {
         Task task = Task.create(title, description);
         // add the task to the DAO
         taskDao.insert(task);
     }
 
-    @Override public void deleteTask(@NonNull String title) {
-        taskDao.deleteTaskByTitle(title);
+    @Override
+    public void deleteCompletedTasks() {
+        taskDao.deleteCompletedTasks();
     }
 
     @Override
     public void deleteAll() {
         taskDao.deleteAllTasks();
+    }
+
+    @Override
+    public void deleteTask(@NonNull Task task) {
+        taskDao.deleteTask(task);
     }
 
     @Override

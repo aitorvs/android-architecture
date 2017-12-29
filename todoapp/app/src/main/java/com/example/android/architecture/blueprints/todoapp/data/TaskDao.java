@@ -20,8 +20,25 @@ interface TaskDao {
     Flowable<List<Task>> getTasks();
 
     /**
+     * Delete tasks that are completed
+     */
+    @Query("DELETE FROM Tasks WHERE done = 1")
+    void deleteCompletedTasks();
+
+    /**
+     * @return Returns a list of tasks that are completed
+     */
+    @Query("SELECT * FROM tasks WHERE done = 1")
+    Flowable<List<Task>> getCompletedTasks();
+
+    /**
+     * @return Returns a list of {@link Task} that are active
+     */
+    @Query("SELECT * FROM tasks WHERE done = 0")
+    Flowable<List<Task>> getActiveTasks();
+    /**
      * Select all tasks by title.
-     * @param title title of the task
+     * @param id task identifier
      * @return {@link List} of {@link Task} that match the title.
      */
     @Query("SELECT * FROM tasks WHERE id = :id")
@@ -40,9 +57,6 @@ interface TaskDao {
      */
     @Delete
     void deleteTask(Task task);
-
-    @Query("DELETE FROM tasks WHERE title = :title")
-    void deleteTaskByTitle(String title);
 
     /**
      * Delete all the tasks in the database

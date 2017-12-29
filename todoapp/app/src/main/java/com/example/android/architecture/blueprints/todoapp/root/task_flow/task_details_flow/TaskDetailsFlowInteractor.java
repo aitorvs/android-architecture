@@ -8,8 +8,6 @@ import com.uber.rib.core.Bundle;
 import com.uber.rib.core.EmptyPresenter;
 import com.uber.rib.core.Interactor;
 import com.uber.rib.core.RibInteractor;
-import com.uber.rib.core.Router;
-
 import javax.inject.Inject;
 
 /**
@@ -43,9 +41,14 @@ public class TaskDetailsFlowInteractor extends Interactor<EmptyPresenter, TaskDe
 
     class TaskDetailListener implements TaskDetailInteractor.Listener {
         @Override
-        public void onEditTask(Task task) {
+        public void editTask(Task task) {
             getRouter().detachTaskDetails();
             getRouter().attachEditTask(selectedTask);
+        }
+
+        @Override
+        public void taskDeleted() {
+            listener.onFlowFinished();
         }
     }
 

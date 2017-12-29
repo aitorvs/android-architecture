@@ -19,12 +19,14 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public class TaskDaoTest {
-    private static final String TASK_1_ID= UUID.randomUUID().toString();
-    private static final String TASK_2_ID= UUID.randomUUID().toString();
+    private static final String TASK_1_ID = UUID.randomUUID().toString();
+    private static final String TASK_2_ID = UUID.randomUUID().toString();
+    private static final String TASK_COMPLETED_ID = UUID.randomUUID().toString();
 
     private static final Task TASK_1 = new Task(TASK_1_ID, "title 1", "description", false);
     private static final Task TASK_1_BIS = new Task(TASK_1_ID, "title 1 bis", "desc bis", false);
     private static final Task TASK_2 = new Task(TASK_2_ID, "title 2", "description", false);
+    private static final Task TASK_COMPLETED = new Task(TASK_COMPLETED_ID, "completed", "description", true);
     private TodoDatabase db;
 
     @Before
@@ -106,11 +108,28 @@ public class TaskDaoTest {
     }
 
     @Test
-    public void whenDeleteTaskByTitle_dbShouldBeEmpty() throws Exception {
+    public void whenDeleteCompletedTask_shouldSuccess() throws Exception {
         db.taskDao().insert(TASK_1);
-        db.taskDao().deleteTaskByTitle(TASK_1.getTitle());
-        // assert insertion
+        db.taskDao().insert(TASK_COMPLETED);
+        db.taskDao().deleteCompletedTasks();
         List<Task> tasks = db.taskDao().getTasks().blockingFirst();
-        assertThat(tasks.size(), is(0));
+        assertThat(tasks.size(), is(1));
+        assertThat(tasks.get(0).getTitle(), is(TASK_1.getTitle()));
+    }
+
+    @Test
+    public void whenGetCompletedTasks_shouldReturnOneItem() throws Exception {
+        db.taskDao().insert(TASK_1);
+        db.taskDao().insert(TASK_COMPLETED);
+        List<Task> tasks = db.taskDao().getCompletedTasks().blockingFirst();
+        assertThat(tasks.size(), is(1));
+    }
+
+    @Test
+    public void whenGetActiveTasks_shouldReturnOneItem() throws Exception {
+        db.taskDao().insert(TASK_1);
+        db.taskDao().insert(TASK_COMPLETED);
+        List<Task> tasks = db.taskDao().getActiveTasks().blockingFirst();
+        assertThat(tasks.size(), is(1));
     }
 }

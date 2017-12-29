@@ -93,13 +93,4 @@ public class LocalTaskDataSourceTest {
         List<Task> tasks = source.getTasks().blockingFirst();
         assertThat(tasks.size(), is(0));
     }
-
-    @Test
-    public void whenDeleteOneTask_dbShouldNotBeEmpty() throws Exception {
-        source.newTask("title", "desc");
-        source.newTask("title 2", "desc");
-        source.deleteTask("title");
-        List<Task> tasks = source.getTasks().blockingFirst();
-        assertThat(tasks.size(), is(1));
-    }
 }

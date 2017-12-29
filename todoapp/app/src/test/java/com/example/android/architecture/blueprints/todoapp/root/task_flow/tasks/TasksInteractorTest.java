@@ -36,8 +36,8 @@ public class TasksInteractorTest extends RibTestBasePlaceholder {
         // default streams
         when(taskRepository.getTasks()).thenReturn(Observable.just(TASKS));
         when(presenter.addTask()).thenReturn(Observable.just(Notification.INSTANCE));
-        when(presenter.task()).thenReturn(Observable.just(TASK));
-        when(presenter.competedTask()).thenReturn(Observable.just(TASK));
+        when(presenter.selectTask()).thenReturn(Observable.just(TASK));
+        when(presenter.competeTask()).thenReturn(Observable.just(TASK));
         when(presenter.activateTask()).thenReturn(Observable.just(TASK));
     }
 
@@ -57,14 +57,14 @@ public class TasksInteractorTest extends RibTestBasePlaceholder {
 
     @Test
     public void whenEmitsSelectedTask_shouldCallOnTaskSelectedListener() {
-        when(presenter.task()).thenReturn(Observable.just(TASK));
+        when(presenter.selectTask()).thenReturn(Observable.just(TASK));
         InteractorHelper.attach(interactor, presenter, router, null);
         verify(listener).onTaskSelected(TASK);
     }
 
     @Test
     public void whenEmitsTaskToComplete_shouldCallCompleteTaskRepo() {
-        when(presenter.competedTask()).thenReturn(Observable.just(TASK));
+        when(presenter.competeTask()).thenReturn(Observable.just(TASK));
         InteractorHelper.attach(interactor, presenter, router, null);
         verify(taskRepository).completeTask(TASK);
     }

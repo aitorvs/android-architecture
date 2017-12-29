@@ -32,7 +32,7 @@ public class TaskDetailInteractorTest extends RibTestBasePlaceholder {
         // default streams
         when(presenter.completeTask()).thenReturn(Observable.just(Notification.INSTANCE));
         when(presenter.activateTask()).thenReturn(Observable.just(Notification.INSTANCE));
-        when(presenter.onEditTask()).thenReturn(Observable.just(Notification.INSTANCE));
+        when(presenter.editTask()).thenReturn(Observable.just(Notification.INSTANCE));
         when(taskRepository.getTaskById(TASK.getId())).thenReturn(Maybe.just(TASK));
     }
 
@@ -52,17 +52,17 @@ public class TaskDetailInteractorTest extends RibTestBasePlaceholder {
 
     @Test
     public void whenEditTaskEmits_shouldCallRepoGetTaskById() {
-        when(presenter.onEditTask()).thenReturn(Observable.just(Notification.INSTANCE));
+        when(presenter.editTask()).thenReturn(Observable.just(Notification.INSTANCE));
         InteractorHelper.attach(interactor, presenter, router, null);
         verify(taskRepository).getTaskById(TASK.getId());
     }
 
     @Test
     public void whenEditTaskEmits_shouldCallOnEditListener() {
-        when(presenter.onEditTask()).thenReturn(Observable.just(Notification.INSTANCE));
+        when(presenter.editTask()).thenReturn(Observable.just(Notification.INSTANCE));
         when(taskRepository.getTaskById(TASK.getId())).thenReturn(Maybe.just(TASK));
         InteractorHelper.attach(interactor, presenter, router, null);
-        verify(listener).onEditTask(TASK);
+        verify(listener).editTask(TASK);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class TaskDetailInteractorTest extends RibTestBasePlaceholder {
     @Test
     public void whenAttached_shouldSubscribeToEditEvents() {
         InteractorHelper.attach(interactor, presenter, router, null);
-        verify(presenter).onEditTask();
+        verify(presenter).editTask();
     }
 
     @Test
