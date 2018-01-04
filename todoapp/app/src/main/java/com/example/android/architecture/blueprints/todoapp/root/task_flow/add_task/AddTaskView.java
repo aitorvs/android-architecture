@@ -48,6 +48,12 @@ public class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        // Request focus and show soft keyboard automatically
+        title.post(() -> {
+            title.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(title, 0);
+        });
     }
 
     @Override
