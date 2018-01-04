@@ -19,4 +19,5 @@
     <string name="new_todo">New TO-DO</string>
     <string name="edit_todo">Edit TO-DO</string>
     <string name="delete_task">Delete task</string>
+    <string name="todos_cannot_be_empty">TO-DOs cannot be empty</string>
 </resources>
