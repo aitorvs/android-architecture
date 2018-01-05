@@ -12,7 +12,9 @@ import com.example.android.architecture.blueprints.todoapp.data.TodoDatabase;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsScreen;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.TaskFlowBuilder;
+import com.example.android.architecture.blueprints.todoapp.screen_stack.ScreenStack;
 import com.uber.rib.core.InteractorBaseComponent;
 import com.uber.rib.core.ViewBuilder;
 import dagger.Binds;
@@ -49,7 +51,7 @@ public class RootBuilder
             .parentComponent(getDependency())
             .view(view)
             .interactor(interactor)
-            .context(parentViewGroup.getContext().getApplicationContext())
+            .context(parentViewGroup.getContext()) // activity context
             .build();
         return component.rootRouter();
     }
@@ -84,9 +86,11 @@ public class RootBuilder
         static RootRouter router(
             Component component,
             RootView view,
-            RootInteractor interactor) {
-            return new RootRouter(view, interactor, component, new TaskFlowBuilder(component),
-                new MenuDrawerBuilder(component), new StatisticsBuilder(component));
+            RootInteractor interactor,
+            ScreenStack stack
+        ) {
+            return new RootRouter(view, stack, interactor, component, new TaskFlowBuilder(component),
+                new MenuDrawerBuilder(component), new StatisticsScreen(new StatisticsBuilder(component)));
         }
 
         @RootScope
@@ -95,6 +99,12 @@ public class RootBuilder
             TodoDatabase db = Room
                 .databaseBuilder(context.getApplicationContext(), TodoDatabase.class, "Tasks.db").build();
             return new TaskRepository(new AppExecutors(), new LocalTaskDataSource(db));
+        }
+
+        @RootScope
+        @Provides
+        static ScreenStack screenStack(RootView rootView) {
+            return new ScreenStack(rootView.viewContainer());
         }
     }
 

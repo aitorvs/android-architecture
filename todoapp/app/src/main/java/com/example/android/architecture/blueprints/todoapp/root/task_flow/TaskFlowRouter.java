@@ -1,16 +1,21 @@
 package com.example.android.architecture.blueprints.todoapp.root.task_flow;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.ViewGroup;
+import com.example.android.architecture.blueprints.todoapp.RouterExtended;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
-import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskRouter;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskScreen;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowRouter;
-import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksRouter;
-import com.uber.rib.core.Router;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksScreen;
+import com.example.android.architecture.blueprints.todoapp.screen_stack.ScreenStack;
+import com.example.android.architecture.blueprints.todoapp.util.Services;
+import com.uber.rib.core.screenstack.lifecycle.ScreenStackEvent;
+import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 /**
@@ -18,60 +23,74 @@ import timber.log.Timber;
  *
  * This task mainly attaches and detaches the views related to the task workflow.
  */
-public class TaskFlowRouter extends Router<TaskFlowInteractor, TaskFlowBuilder.Component> {
+public class TaskFlowRouter extends RouterExtended<TaskFlowInteractor, TaskFlowBuilder.Component> {
 
     private final ViewGroup parentView;
-    private final AddTaskBuilder newTaskBuilder;
-    private final TasksBuilder tasksBuilder;
     private final TaskDetailsFlowBuilder taskDetailsFlowBuilder;
-    @Nullable TasksRouter tasksRouter;
-    @Nullable AddTaskRouter newTaskRouter;
+    private final ScreenStack backStack;
+    private final TasksScreen taskScreen;
+    private final AddTaskScreen addTaskScreen;
+    private final CompositeDisposable disposables = new CompositeDisposable();
+
     @Nullable TaskDetailsFlowRouter taskDetailsFlowRouter;
 
-    TaskFlowRouter(TaskFlowInteractor interactor, TaskFlowBuilder.Component component, ViewGroup viewGroup,
-        TasksBuilder tasksBuilder, AddTaskBuilder addTaskBuilder, TaskDetailsFlowBuilder taskDetailsFlowBuilder) {
+    TaskFlowRouter(ScreenStack screenStack, TaskFlowInteractor interactor, TaskFlowBuilder.Component component,
+        ViewGroup viewGroup, TasksScreen taskScreen, AddTaskScreen addTaskScreen,
+        TaskDetailsFlowBuilder taskDetailsFlowBuilder) {
 
         super(interactor, component);
         this.parentView = viewGroup;
-        this.tasksBuilder = tasksBuilder;
-        this.newTaskBuilder = addTaskBuilder;
         this.taskDetailsFlowBuilder = taskDetailsFlowBuilder;
+        this.backStack = screenStack;
+        this.taskScreen = taskScreen;
+        this.addTaskScreen = addTaskScreen;
+    }
+
+    @Override
+    protected void willAttach() {
+        disposables.add(taskScreen
+            .lifecycle()
+            .subscribe(event -> {
+                TasksRouter router = taskScreen.getRouter();
+                handleScreenEvents(router, event);
+
+                // check whether the tasks screen is appeared or not.
+                // When APPEARED, it means access to the menu, otherwise, home is configure as UP button
+                Context context = parentView.getContext();
+                if (event == ScreenStackEvent.APPEARED) {
+                    Services.setToolbarHomeAsMenu(context);
+                } else {
+                    Services.setToolbarHomeAsUp(context);
+                }
+            }));
+
+        disposables.add(addTaskScreen
+            .lifecycle()
+            .subscribe(event -> {
+                AddTaskRouter router = addTaskScreen.getRouter();
+                handleScreenEvents(router, event);
+            }));
+    }
+
+    @Override
+    protected void willDetach() {
+        super.willDetach();
+        disposables.clear();
     }
 
     void attachTasks(TasksInteractor.Filter defaultTasksFilter) {
         Timber.d("attachTasks() called");
-        tasksRouter = tasksBuilder.build(parentView, defaultTasksFilter);
-        attachChild(tasksRouter);
-        parentView.addView(tasksRouter.getView());
-    }
-
-    void detachTasks() {
-        Timber.d("detachTasks() called");
-        if (tasksRouter != null) {
-            detachChild(tasksRouter);
-            parentView.removeView(tasksRouter.getView());
-            tasksRouter = null;
-        }
+        taskScreen.setTaskFilter(defaultTasksFilter);
+        backStack.pushScreen(taskScreen);
     }
 
     void attachNewTask() {
         Timber.d("attachNewTask() called");
-        newTaskRouter = newTaskBuilder.build(parentView);
-        attachChild(newTaskRouter);
-        parentView.addView(newTaskRouter.getView());
+        backStack.pushScreen(addTaskScreen);
     }
 
-    void detachNewTask() {
-        Timber.d("detachNewTask() called");
-        if (newTaskRouter != null) {
-            detachChild(newTaskRouter);
-            parentView.removeView(newTaskRouter.getView());
-            newTaskRouter = null;
-        }
-    }
-
-    boolean isNewTaskAttached() {
-        return newTaskRouter != null;
+    void detachLatest() {
+        backStack.popScreen();
     }
 
     void attachTaskDetails(Task selectedTask) {
@@ -84,20 +103,7 @@ public class TaskFlowRouter extends Router<TaskFlowInteractor, TaskFlowBuilder.C
         Timber.d("detachTaskDetails() called");
         if (taskDetailsFlowRouter != null) {
             detachChild(taskDetailsFlowRouter);
-            // remove any child that is attached here
-            parentView.removeAllViews();
             taskDetailsFlowRouter = null;
         }
-    }
-
-    boolean isTaskDetailsAttached() {
-        return taskDetailsFlowRouter != null;
-    }
-
-    boolean dispatchBackPress() {
-        if (isTaskDetailsAttached()) {
-            return taskDetailsFlowRouter.getInteractor().handleBackPress();
-        }
-        return false;
     }
 }

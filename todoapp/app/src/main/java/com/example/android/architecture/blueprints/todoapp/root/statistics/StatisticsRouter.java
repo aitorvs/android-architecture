@@ -1,6 +1,9 @@
 package com.example.android.architecture.blueprints.todoapp.root.statistics;
 
+import android.support.annotation.VisibleForTesting;
 import com.uber.rib.core.ViewRouter;
+
+import static android.support.annotation.VisibleForTesting.PACKAGE_PRIVATE;
 
 /**
  * Adds and removes children of {@link StatisticsBuilder.StatisticsScope}.
@@ -9,7 +12,8 @@ import com.uber.rib.core.ViewRouter;
  */
 public class StatisticsRouter extends ViewRouter<StatisticsView, StatisticsInteractor, StatisticsBuilder.Component> {
 
-    StatisticsRouter(StatisticsView view, StatisticsInteractor interactor, StatisticsBuilder.Component component) {
+    @VisibleForTesting(otherwise = PACKAGE_PRIVATE)
+    public StatisticsRouter(StatisticsView view, StatisticsInteractor interactor, StatisticsBuilder.Component component) {
         super(view, interactor, component);
     }
 }

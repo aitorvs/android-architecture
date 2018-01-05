@@ -8,14 +8,17 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import com.example.android.architecture.blueprints.todoapp.root.RootBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.RootRouter;
+import com.example.android.architecture.blueprints.todoapp.util.Services;
 import com.uber.rib.core.RibActivity;
 import com.uber.rib.core.ViewRouter;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static com.example.android.architecture.blueprints.todoapp.util.Services.ACTION_BAR_SERVICE;
+import static com.example.android.architecture.blueprints.todoapp.util.Services.OPTIONS_MENU_SERVICE;
+
 public class TodoActivity extends RibActivity implements OptionsMenuService {
-    public static final String ACTION_BAR_SERVICE = "com.example.android.architecture.blueprints.todoapp.action_bar";
-    public static final String OPTIONS_MENU_SERVICE = "com.example.android.architecture.blueprints.todoapp.options_menu";
+
     private static final String TAG = "TodoActivity";
 
     private RootRouter router;
@@ -39,6 +42,13 @@ public class TodoActivity extends RibActivity implements OptionsMenuService {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // if anybody configure the menu as UP, then just handle the tap thru the onBackPressed().
+        if (item.getItemId() == android.R.id.home && Services.isMenuAsUp()) {
+            onBackPressed();
+            return true;
+        }
+
+        //...otherwise, just relay the event to the listeners in reverse order
         for (int i = menuListeners.size() - 1; i >= 0; i--) {
             Listener listener = menuListeners.get(i);
             boolean result = listener.onOptionsItemSelected(item);
@@ -51,12 +61,13 @@ public class TodoActivity extends RibActivity implements OptionsMenuService {
 
     @Override
     public Object getSystemService(@NonNull String name) {
-        if (ACTION_BAR_SERVICE.equals(name)) {
-            return getSupportActionBar();
-        } else if (OPTIONS_MENU_SERVICE.equals(name)) {
-            return this;
-        } else if (TAG.equals(name)) {
-            return this;
+        switch (name) {
+            case ACTION_BAR_SERVICE:
+                return getSupportActionBar();
+            case OPTIONS_MENU_SERVICE:
+                return this;
+            case TAG:
+                return this;
         }
 
         return super.getSystemService(name);

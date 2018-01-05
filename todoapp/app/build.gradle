@@ -33,6 +33,7 @@ dependencies {
 
     // External deps
     implementation deps.uber.ribAndroid
+    implementation deps.uber.ribScreenStackBase
     implementation deps.external.dagger
     implementation deps.external.rxbinding
     implementation deps.external.timber

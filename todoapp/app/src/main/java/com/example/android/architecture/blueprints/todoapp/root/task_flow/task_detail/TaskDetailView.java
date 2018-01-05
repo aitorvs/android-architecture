@@ -15,8 +15,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.example.android.architecture.blueprints.todoapp.OptionsMenuService;
 import com.example.android.architecture.blueprints.todoapp.R;
-import com.example.android.architecture.blueprints.todoapp.TodoActivity;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
+import com.example.android.architecture.blueprints.todoapp.util.Services;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.jakewharton.rxrelay2.Relay;
@@ -80,7 +80,7 @@ public class TaskDetailView extends CoordinatorLayout implements TaskDetailInter
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        menuService = (OptionsMenuService) getContext().getSystemService(TodoActivity.OPTIONS_MENU_SERVICE);
+        menuService = Services.getOptionsMenuService(getContext());
         menuService.addOptionsMenuListener(optionsMenuListener);
     }
 

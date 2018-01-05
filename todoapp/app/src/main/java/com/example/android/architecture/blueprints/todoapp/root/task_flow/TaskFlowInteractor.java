@@ -27,11 +27,6 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
         getRouter().attachTasks(defaultTasksFilter);
     }
 
-    protected void willResignActive() {
-        super.willResignActive();
-        Timber.d("willResignActive() called");
-    }
-
     /**
      * Care about what the {@link TasksInteractor} has to say
      */
@@ -40,12 +35,10 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
         @Override
         public void onAddNewTask() {
             Timber.d("onAddNewTask() called");
-            getRouter().detachTasks();
             getRouter().attachNewTask();
         }
         @Override public void onTaskSelected(Task selectedTask) {
             Timber.d("onTaskSelected() called with: selectedTask = [" + selectedTask + "]");
-            getRouter().detachTasks();
             getRouter().attachTaskDetails(selectedTask);
         }
 
@@ -56,41 +49,25 @@ public class TaskFlowInteractor extends Interactor<EmptyPresenter, TaskFlowRoute
         }
     }
 
+    /**
+     * Care about what the {@link AddTaskInteractor} has to say
+     */
     class AddOrEditTaskListener implements AddTaskInteractor.Listener {
         @Override
         public void onActionCompleted() {
-            getRouter().detachNewTask();
-            getRouter().attachTasks(defaultTasksFilter);
+            // task is added added, go back to list of tasks
+            getRouter().detachLatest();
         }
     }
 
+    /**
+     * Care about what the {@link TaskDetailsFlowInteractor} has to say
+     */
     class TaskDetailsFlowListener implements TaskDetailsFlowInteractor.Listener {
         @Override
         public void onFlowFinished() {
+            // just detach the task details flow
             getRouter().detachTaskDetails();
-            getRouter().attachTasks(defaultTasksFilter);
         }
-    }
-
-    @Override
-    public boolean handleBackPress() {
-        Timber.d("handleBackPress() called");
-        // first dispatch to children
-        if (getRouter().dispatchBackPress()) {
-            return true;
-        }
-
-        if (getRouter().isTaskDetailsAttached()) {
-            getRouter().detachTaskDetails();
-            getRouter().attachTasks(defaultTasksFilter);
-            return true;
-        }
-
-        if (getRouter().isNewTaskAttached()) {
-            getRouter().detachNewTask();
-            getRouter().attachTasks(defaultTasksFilter);
-            return true;
-        }
-        return super.handleBackPress();
     }
 }

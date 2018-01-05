@@ -15,8 +15,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.example.android.architecture.blueprints.todoapp.OptionsMenuService;
 import com.example.android.architecture.blueprints.todoapp.R;
-import com.example.android.architecture.blueprints.todoapp.TodoActivity;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
+import com.example.android.architecture.blueprints.todoapp.util.Services;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.jakewharton.rxrelay2.Relay;
@@ -134,7 +134,7 @@ public class TasksView extends CoordinatorLayout implements TasksInteractor.Task
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        menuService = (OptionsMenuService) getContext().getSystemService(TodoActivity.OPTIONS_MENU_SERVICE);
+        menuService = Services.getOptionsMenuService(getContext());
         menuService.addOptionsMenuListener(optionsMenuListener);
     }
 

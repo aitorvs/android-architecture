@@ -1,13 +1,17 @@
 package com.example.android.architecture.blueprints.todoapp.root.task_flow;
 
+import android.content.Context;
 import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
 import com.example.android.architecture.blueprints.todoapp.root.RootView;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskInteractor;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskScreen;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow.TaskDetailsFlowInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksInteractor;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksScreen;
+import com.example.android.architecture.blueprints.todoapp.screen_stack.ScreenStack;
 import com.uber.rib.core.Builder;
 import com.uber.rib.core.EmptyPresenter;
 import com.uber.rib.core.InteractorBaseComponent;
@@ -46,6 +50,8 @@ public class TaskFlowBuilder extends Builder<TaskFlowRouter, TaskFlowBuilder.Par
     public interface ParentComponent {
         RootView rootView();
         TaskRepository taskRepository();
+        ScreenStack screenStack();
+        Context context();
     }
 
     @dagger.Module
@@ -59,9 +65,11 @@ public class TaskFlowBuilder extends Builder<TaskFlowRouter, TaskFlowBuilder.Par
 
         @TaskFlowScope
         @Provides
-        static TaskFlowRouter router(Component component, TaskFlowInteractor interactor, RootView rootView) {
-            return new TaskFlowRouter(interactor, component, rootView.viewContainer(), new TasksBuilder(component),
-                new AddTaskBuilder(component), new TaskDetailsFlowBuilder(component));
+        static TaskFlowRouter router(Component component, TaskFlowInteractor interactor, RootView rootView,
+            ScreenStack stack) {
+            return new TaskFlowRouter(stack, interactor, component, rootView.viewContainer(),
+                new TasksScreen(new TasksBuilder(component)), new AddTaskScreen(new AddTaskBuilder(component)),
+                new TaskDetailsFlowBuilder(component));
         }
 
         @TaskFlowScope

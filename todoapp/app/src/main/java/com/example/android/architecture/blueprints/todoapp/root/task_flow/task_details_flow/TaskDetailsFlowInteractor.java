@@ -42,7 +42,6 @@ public class TaskDetailsFlowInteractor extends Interactor<EmptyPresenter, TaskDe
     class TaskDetailListener implements TaskDetailInteractor.Listener {
         @Override
         public void editTask(Task task) {
-            getRouter().detachTaskDetails();
             getRouter().attachEditTask(selectedTask);
         }
 
@@ -57,15 +56,5 @@ public class TaskDetailsFlowInteractor extends Interactor<EmptyPresenter, TaskDe
         public void onActionCompleted() {
             listener.onFlowFinished();
         }
-    }
-
-    @Override
-    public boolean handleBackPress() {
-        if (getRouter().isEditTaskAttached()) {
-            getRouter().detachEditTask();
-            getRouter().attachTaskDetails(selectedTask);
-            return true;
-        }
-        return super.handleBackPress();
     }
 }

@@ -1,13 +1,13 @@
 package com.example.android.architecture.blueprints.todoapp.root.task_flow.task_details_flow;
 
-import android.support.annotation.Nullable;
-import android.view.ViewGroup;
+import com.example.android.architecture.blueprints.todoapp.RouterExtended;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
-import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskRouter;
-import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailBuilder;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskScreen;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailRouter;
-import com.uber.rib.core.Router;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailScreen;
+import com.example.android.architecture.blueprints.todoapp.screen_stack.ScreenStack;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Adds and removes children of {@link TaskDetailsFlowBuilder.TaskDetailsFlowScope}.
@@ -15,53 +15,55 @@ import com.uber.rib.core.Router;
  * TODO describe the possible child configurations of this scope.
  */
 public class TaskDetailsFlowRouter
-        extends Router<TaskDetailsFlowInteractor, TaskDetailsFlowBuilder.Component> {
+        extends RouterExtended<TaskDetailsFlowInteractor, TaskDetailsFlowBuilder.Component> {
 
-    private final ViewGroup rootView;
-    private final TaskDetailBuilder taskDetailBuilder;
-    private final AddTaskBuilder editTaskBuilder;
+    private final ScreenStack backStack;
+    private final AddTaskScreen editTaskScreen;
+    private final TaskDetailScreen taskDetailScreen;
+    private final CompositeDisposable disposables = new CompositeDisposable();
+    private final int backStackIndex;
 
-    @Nullable TaskDetailRouter taskDetailRouter;
-    @Nullable AddTaskRouter editTaskRouter;
+    TaskDetailsFlowRouter(ScreenStack stack, TaskDetailsFlowInteractor interactor,
+        TaskDetailsFlowBuilder.Component component, TaskDetailScreen taskDetailScreen, AddTaskScreen addTaskScreen) {
 
-    public TaskDetailsFlowRouter(TaskDetailsFlowInteractor interactor, TaskDetailsFlowBuilder.Component component,
-        ViewGroup rootView, TaskDetailBuilder taskDetailBuilder, AddTaskBuilder editTaskBuilder) {
         super(interactor, component);
 
-        this.rootView = rootView;
-        this.taskDetailBuilder = taskDetailBuilder;
-        this.editTaskBuilder = editTaskBuilder;
+        this.backStack = stack;
+        this.backStackIndex = backStack.size() - 1; // save the index to the last item in the backstack
+        this.editTaskScreen = addTaskScreen;
+        this.taskDetailScreen = taskDetailScreen;
+    }
+
+    @Override
+    protected void willAttach() {
+        disposables.add(taskDetailScreen
+            .lifecycle()
+            .subscribe(event -> {
+                TaskDetailRouter router = taskDetailScreen.getRouter();
+                handleScreenEvents(router, event);
+            }));
+
+        disposables.add(editTaskScreen
+            .lifecycle()
+            .subscribe(event -> {
+                AddTaskRouter router = editTaskScreen.getRouter();
+                handleScreenEvents(router, event);
+            }));
+    }
+
+    @Override
+    protected void willDetach() {
+        backStack.popBackTo(backStackIndex, false);
+        disposables.clear();
     }
 
     void attachTaskDetails(Task selectedTask) {
-        taskDetailRouter = taskDetailBuilder.build(rootView, selectedTask);
-        attachChild(taskDetailRouter);
-        rootView.addView(taskDetailRouter.getView());
-    }
-
-    void detachTaskDetails() {
-        if (taskDetailRouter != null) {
-            detachChild(taskDetailRouter);
-            rootView.removeView(taskDetailRouter.getView());
-            taskDetailRouter = null;
-        }
+        taskDetailScreen.setTask(selectedTask);
+        backStack.pushScreen(taskDetailScreen);
     }
 
     void attachEditTask(Task selectedTask) {
-        editTaskRouter = editTaskBuilder.build(rootView, selectedTask);
-        attachChild(editTaskRouter);
-        rootView.addView(editTaskRouter.getView());
-    }
-
-    void detachEditTask() {
-        if (editTaskRouter != null) {
-            detachChild(editTaskRouter);
-            rootView.removeView(editTaskRouter.getView());
-            editTaskRouter = null;
-        }
-    }
-
-    boolean isEditTaskAttached() {
-        return editTaskRouter != null;
+        editTaskScreen.setEditableTask(selectedTask);
+        backStack.pushScreen(editTaskScreen);
     }
 }

@@ -99,6 +99,7 @@ def uber = [
     rave: "com.uber:rave:${versions.rave}",
     ribUava: "com.uber.rib:rib-uava:${versions.ribs}",
     ribAndroid: "com.uber.rib:rib-android:${versions.ribs}",
+    ribScreenStackBase: "com.uber.rib:rib-screen-stack-base:${versions.ribs}",
 ]
 
 def arch = [

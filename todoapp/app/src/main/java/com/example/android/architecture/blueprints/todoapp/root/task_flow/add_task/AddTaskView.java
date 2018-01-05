@@ -51,8 +51,7 @@ public class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.
         // Request focus and show soft keyboard automatically
         title.post(() -> {
             title.requestFocus();
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(title, 0);
+            Services.showSoftKeyboard(getContext(), title);
         });
     }
 
@@ -76,6 +75,7 @@ public class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.
     public void onDetachedFromWindow() {
         // restore previous title
         getActionBar().setTitle(savedToolbarTitle);
+        Services.hideSoftKeyboard(getContext(), this);
         super.onDetachedFromWindow();
     }
 

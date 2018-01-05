@@ -5,8 +5,11 @@ import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskInteractor;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.add_task.AddTaskScreen;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailInteractor;
+import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailScreen;
+import com.example.android.architecture.blueprints.todoapp.screen_stack.ScreenStack;
 import com.uber.rib.core.Builder;
 import com.uber.rib.core.EmptyPresenter;
 import com.uber.rib.core.InteractorBaseComponent;
@@ -49,6 +52,7 @@ public class TaskDetailsFlowBuilder extends Builder<TaskDetailsFlowRouter, TaskD
     public interface ParentComponent {
         TaskRepository taskRepository();
         TaskDetailsFlowInteractor.Listener taskDetailsFlowListener();
+        ScreenStack backStack();
     }
 
     /**
@@ -66,9 +70,10 @@ public class TaskDetailsFlowBuilder extends Builder<TaskDetailsFlowRouter, TaskD
         @TaskDetailsFlowScope
         @Provides
         static TaskDetailsFlowRouter router(Component component, TaskDetailsFlowInteractor interactor,
-            @Named("root_view") ViewGroup rootView) {
-            return new TaskDetailsFlowRouter(interactor, component, rootView, new TaskDetailBuilder(component),
-                new AddTaskBuilder(component));
+            @Named("root_view") ViewGroup rootView, ScreenStack stack) {
+            return new TaskDetailsFlowRouter(stack, interactor, component,
+                new TaskDetailScreen(new TaskDetailBuilder(component)),
+                new AddTaskScreen(new AddTaskBuilder(component)));
         }
 
         @TaskDetailsFlowScope

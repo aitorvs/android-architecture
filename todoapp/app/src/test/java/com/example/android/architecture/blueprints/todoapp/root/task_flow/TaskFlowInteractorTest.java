@@ -1,5 +1,6 @@
 package com.example.android.architecture.blueprints.todoapp.root.task_flow;
 
+import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.tasks.TasksInteractor;
 import com.uber.rib.core.EmptyPresenter;
 import com.uber.rib.core.InteractorHelper;
@@ -18,6 +19,7 @@ public class TaskFlowInteractorTest extends RibTestBasePlaceholder {
 
     private TaskFlowInteractor interactor;
     private TaskFlowInteractor.TasksListener tasksListener;
+    private TaskFlowInteractor.TaskDetailsFlowListener taskDetailsFlowListener;
 
     @Before
     public void setup() {
@@ -25,6 +27,7 @@ public class TaskFlowInteractorTest extends RibTestBasePlaceholder {
 
         interactor = TestTaskFlowInteractor.create();
         tasksListener = interactor.new TasksListener();
+        taskDetailsFlowListener = interactor.new TaskDetailsFlowListener();
     }
 
     @Test
@@ -35,18 +38,35 @@ public class TaskFlowInteractorTest extends RibTestBasePlaceholder {
     }
 
     @Test
-    public void whenTaskListener_onAddNewTask_shouldDetachTasks() {
-        InteractorHelper.attach(interactor, presenter, router, null);
-        tasksListener.onAddNewTask();
-        verify(router).detachTasks();
-        InteractorHelper.detach(interactor);
-    }
-
-    @Test
     public void whenTaskListener_onAddNewTask_shouldAttachNewTask() {
         InteractorHelper.attach(interactor, presenter, router, null);
         tasksListener.onAddNewTask();
         verify(router).attachNewTask();
+        InteractorHelper.detach(interactor);
+    }
+
+    @Test
+    public void whenTaskListener_onTaskSelected_shouldAttachTaskDetails() {
+        InteractorHelper.attach(interactor, presenter, router, null);
+        tasksListener.onTaskSelected(Task.EMPTY);
+        verify(router).attachTaskDetails(Task.EMPTY);
+        InteractorHelper.detach(interactor);
+    }
+
+    @Test
+    public void whenTaskDetailsFlowListener_onFlowFinished_shouldDetachTaskDetails() {
+        InteractorHelper.attach(interactor, presenter, router, null);
+        taskDetailsFlowListener.onFlowFinished();
+        verify(router).detachTaskDetails();
+        InteractorHelper.detach(interactor);
+    }
+
+    @Test
+    public void whenTaskDetailsFlowListener_onFlowFinished_shouldNotReattachTasks() {
+        InteractorHelper.attach(interactor, presenter, router, null);
+        taskDetailsFlowListener.onFlowFinished();
+        // once, because it is called when attached
+        verify(router).attachTasks(TasksInteractor.Filter.ALL);
         InteractorHelper.detach(interactor);
     }
 }

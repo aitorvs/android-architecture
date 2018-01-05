@@ -1,13 +1,15 @@
 package com.example.android.architecture.blueprints.todoapp.root;
 
 import android.support.annotation.Nullable;
+import com.example.android.architecture.blueprints.todoapp.ViewRouterExtended;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerRouter;
-import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsRouter;
+import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsScreen;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.TaskFlowBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.TaskFlowRouter;
-import com.uber.rib.core.ViewRouter;
+import com.example.android.architecture.blueprints.todoapp.screen_stack.ScreenStack;
+import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 /**
@@ -15,20 +17,39 @@ import timber.log.Timber;
  *
  * TODO describe the possible child configurations of this scope.
  */
-public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder.Component> {
+public class RootRouter extends ViewRouterExtended<RootView, RootInteractor, RootBuilder.Component> {
 
     private final TaskFlowBuilder taskFlowBuilder;
     private final MenuDrawerBuilder menuDrawerBuilder;
-    private final StatisticsBuilder statisticsBuilder;
-    @Nullable private StatisticsRouter statisticsRouter;
+    private final StatisticsScreen statisticsScreen;
+    private final ScreenStack screenStack;
+
+    private final CompositeDisposable disposables = new CompositeDisposable();
+
     @Nullable TaskFlowRouter taskFlowRouter;
 
-    RootRouter(RootView view, RootInteractor interactor, RootBuilder.Component component, TaskFlowBuilder tasksBuilder,
-        MenuDrawerBuilder menuDrawerBuilder, StatisticsBuilder statisticsBuilder) {
+    RootRouter(RootView view, ScreenStack screenStack, RootInteractor interactor, RootBuilder.Component component, TaskFlowBuilder tasksBuilder,
+        MenuDrawerBuilder menuDrawerBuilder, StatisticsScreen statisticsScreen) {
         super(view, interactor, component);
         this.taskFlowBuilder = tasksBuilder;
         this.menuDrawerBuilder = menuDrawerBuilder;
-        this.statisticsBuilder = statisticsBuilder;
+        this.statisticsScreen = statisticsScreen;
+        this.screenStack = screenStack;
+    }
+
+    @Override
+    protected void willAttach() {
+        disposables.add(statisticsScreen
+            .lifecycle()
+            .subscribe(event -> {
+                StatisticsRouter router = statisticsScreen.getRouter();
+                handleScreenEvents(router, event);
+            }));
+    }
+
+    @Override
+    protected void willDetach() {
+        disposables.clear();
     }
 
     void attachTasks() {
@@ -41,14 +62,14 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
         Timber.d("detachTasks() called");
         if (taskFlowRouter != null) {
             detachChild(taskFlowRouter);
-            getView().viewContainer().removeAllViews();
             taskFlowRouter = null;
+            screenStack.popBackTo(-1, false);
         }
     }
 
     void attachMenuDrawer() {
-        Timber.d("attachMenuDrawer() called");
-        // The menu drawer is attached to the root view directly and not to the
+        // The menu drawer is attached to the root view directly and not to the view container.
+        // it is also not part of the view back-stack so we handle it manualy
         MenuDrawerRouter menuDrawerRouter = menuDrawerBuilder.build(getView());
         attachChild(menuDrawerRouter);
         getView().addView(menuDrawerRouter.getView());
@@ -56,21 +77,15 @@ public class RootRouter extends ViewRouter<RootView, RootInteractor, RootBuilder
 
     void attachStatistics() {
         Timber.d("attachStatistics() called");
-        statisticsRouter = statisticsBuilder.build(getView().viewContainer());
-        attachChild(statisticsRouter);
-        getView().viewContainer().addView(statisticsRouter.getView());
+        screenStack.pushScreen(statisticsScreen);
     }
 
     void detachStatistics() {
         Timber.d("detachStatistics() called");
-        if (statisticsRouter != null) {
-            detachChild(statisticsRouter);
-            getView().viewContainer().removeAllViews();
-            statisticsRouter = null;
-        }
+        screenStack.popBackTo(-1, false);
     }
 
     boolean dispatchBackPress() {
-        return taskFlowRouter != null && taskFlowRouter.getInteractor().handleBackPress();
+        return screenStack.handleBackPress();
     }
 }

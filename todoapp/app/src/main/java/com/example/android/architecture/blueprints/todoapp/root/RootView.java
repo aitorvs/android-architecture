@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.Menu;
@@ -16,8 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.example.android.architecture.blueprints.todoapp.OptionsMenuService;
 import com.example.android.architecture.blueprints.todoapp.R;
-import com.example.android.architecture.blueprints.todoapp.TodoActivity;
-import com.uber.rib.core.RibActivity;
+import com.example.android.architecture.blueprints.todoapp.util.Services;
 
 /**
  * Top level view for {@link RootBuilder.RootScope}.
@@ -65,7 +63,7 @@ public class RootView extends DrawerLayout implements RootInteractor.RootPresent
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        menuService = (OptionsMenuService) getContext().getSystemService(TodoActivity.OPTIONS_MENU_SERVICE);
+        menuService = Services.getOptionsMenuService(getContext());
         menuService.addOptionsMenuListener(menuListener);
     }
 
@@ -101,11 +99,8 @@ public class RootView extends DrawerLayout implements RootInteractor.RootPresent
 
     @SuppressLint("WrongConstant")
     private void setupToolbar() {
-        ((RibActivity) getContext()).setSupportActionBar(toolbar);
-        ActionBar ab = (ActionBar) getContext().getSystemService(TodoActivity.ACTION_BAR_SERVICE);
-        if (ab != null) {
-            ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-            ab.setDisplayHomeAsUpEnabled(true);
-        }
+        Services.setSupportActionBar(getContext(), toolbar);
+        // set the home as hamburger menu
+        Services.setToolbarHomeAsMenu(getContext());
     }
 }
