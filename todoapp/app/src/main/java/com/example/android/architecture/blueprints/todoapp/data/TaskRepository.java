@@ -13,7 +13,7 @@ public class TaskRepository implements TaskDataSource {
     private final LocalTaskDataSource localSource;
     private final AppExecutors executors;
 
-    public TaskRepository(AppExecutors appExecutors, @NonNull LocalTaskDataSource localTaskDataSource) {
+    TaskRepository(AppExecutors appExecutors, @NonNull LocalTaskDataSource localTaskDataSource) {
         this.localSource = localTaskDataSource;
         this.executors = appExecutors;
     }

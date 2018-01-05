@@ -6,10 +6,10 @@ import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import java.util.List;
 
-public final class LocalTaskDataSource implements TaskDataSource {
+final class LocalTaskDataSource implements TaskDataSource {
     private final TaskDao taskDao;
 
-    public LocalTaskDataSource(TodoDatabase todoDatabase) {
+    LocalTaskDataSource(TodoDatabase todoDatabase) {
         taskDao = todoDatabase.taskDao();
     }
 

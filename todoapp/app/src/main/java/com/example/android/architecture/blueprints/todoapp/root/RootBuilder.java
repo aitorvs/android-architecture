@@ -1,14 +1,11 @@
 package com.example.android.architecture.blueprints.todoapp.root;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import com.example.android.architecture.blueprints.todoapp.AppExecutors;
 import com.example.android.architecture.blueprints.todoapp.R;
-import com.example.android.architecture.blueprints.todoapp.data.LocalTaskDataSource;
+import com.example.android.architecture.blueprints.todoapp.data.RepositoryFactory;
 import com.example.android.architecture.blueprints.todoapp.data.TaskRepository;
-import com.example.android.architecture.blueprints.todoapp.data.TodoDatabase;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerBuilder;
 import com.example.android.architecture.blueprints.todoapp.root.menu_drawer.MenuDrawerInteractor;
 import com.example.android.architecture.blueprints.todoapp.root.statistics.StatisticsBuilder;
@@ -96,9 +93,7 @@ public class RootBuilder
         @RootScope
         @Provides
         static TaskRepository taskRepository(Context context) {
-            TodoDatabase db = Room
-                .databaseBuilder(context.getApplicationContext(), TodoDatabase.class, "Tasks.db").build();
-            return new TaskRepository(new AppExecutors(), new LocalTaskDataSource(db));
+            return RepositoryFactory.createTaskRepository(context);
         }
 
         @RootScope
