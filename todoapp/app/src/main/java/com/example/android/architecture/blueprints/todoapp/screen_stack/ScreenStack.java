@@ -76,6 +76,14 @@ public class ScreenStack implements ScreenStackBase {
         return backStack.size();
     }
 
+    /**
+     * Returns the index of the last item in the stack.
+     * @return -1 is return when the backstack is empty.
+     */
+    public int indexOfLastItem() {
+        return size() - 1;
+    }
+
     private void onCurrentViewHidden() {
         ViewProvider vp = getCurrentViewProvider();
         if (vp != null) {

@@ -29,7 +29,7 @@ public class TaskDetailsFlowRouter
         super(interactor, component);
 
         this.backStack = stack;
-        this.backStackIndex = backStack.size() - 1; // save the index to the last item in the backstack
+        this.backStackIndex = backStack.indexOfLastItem(); // save the index to the last item in the backstack
         this.editTaskScreen = addTaskScreen;
         this.taskDetailScreen = taskDetailScreen;
     }
