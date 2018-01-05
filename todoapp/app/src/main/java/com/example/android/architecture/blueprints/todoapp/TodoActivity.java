@@ -39,7 +39,8 @@ public class TodoActivity extends RibActivity implements OptionsMenuService {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        for (Listener listener : menuListeners) {
+        for (int i = menuListeners.size() - 1; i >= 0; i--) {
+            Listener listener = menuListeners.get(i);
             boolean result = listener.onOptionsItemSelected(item);
             if (result) {
                 return true;
