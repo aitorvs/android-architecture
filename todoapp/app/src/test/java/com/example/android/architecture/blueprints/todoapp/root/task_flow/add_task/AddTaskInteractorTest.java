@@ -16,8 +16,7 @@ import static org.mockito.Mockito.when;
 
 public class AddTaskInteractorTest extends RibTestBasePlaceholder {
 
-    private static final TaskViewModel TASK_VIEW_MODEL = new TaskViewModel("title", "desc");
-    private static final Task TASK = Task.create(TASK_VIEW_MODEL.title, TASK_VIEW_MODEL.description);
+    private static final Task TASK = Task.create("title", "desc");
 
     @Mock AddTaskInteractor.Listener listener;
     @Mock AddTaskInteractor.AddTaskPresenter presenter;
@@ -31,28 +30,21 @@ public class AddTaskInteractorTest extends RibTestBasePlaceholder {
         MockitoAnnotations.initMocks(this);
 
         interactor = TestAddTaskInteractor.create(listener, presenter, taskRepository, TASK);
+        // These are called when interactor is attached
         when(taskRepository.getTaskById(TASK.getId())).thenReturn(Maybe.just(TASK));
-        when(presenter.task()).thenReturn(Observable.just(TASK_VIEW_MODEL));
+        when(presenter.editOrAddTask(TASK)).thenReturn(Observable.just(TASK));
     }
 
     @Test
-    public void whenAddTaskClicked_shouldCallPresenterClear() {
-        InteractorHelper.attach(interactor, presenter, router, null);
-        verify(presenter).clear();
-    }
-
-    @Test
-    public void whenAddTaskClicked_andTaskEmpty_shouldCallRepoNewTask() {
-        when(taskRepository.getTaskById(TASK.getId())).thenReturn(Maybe.just(Task.EMPTY));
-        InteractorHelper.attach(interactor, presenter, router, null);
-        verify(taskRepository).newTask(TASK_VIEW_MODEL.title, TASK_VIEW_MODEL.description);
-    }
-
-    @Test
-    public void whenAddTaskClicked_andTaskNotEmpty_shouldCallRepoUpdate() {
-        when(taskRepository.getTaskById(TASK.getId())).thenReturn(Maybe.just(TASK));
+    public void whenAddTaskClicked_shouldCallUpdateTask() {
         InteractorHelper.attach(interactor, presenter, router, null);
         verify(taskRepository).updateTask(TASK);
+    }
+
+    @Test
+    public void whenAddTaskClicked_shouldCallListenerOnComplete() {
+        InteractorHelper.attach(interactor, presenter, router, null);
+        verify(listener).onActionCompleted();
     }
 
     @Test
@@ -64,6 +56,6 @@ public class AddTaskInteractorTest extends RibTestBasePlaceholder {
     @Test
     public void whenBecomeActive_shouldCallPresenterWithEditableTask() {
         InteractorHelper.attach(interactor, presenter, router, null);
-        verify(presenter).editTask(TASK);
+        verify(presenter).editOrAddTask(TASK);
     }
 }

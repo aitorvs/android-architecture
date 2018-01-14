@@ -29,8 +29,9 @@ public class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.
     @BindView(R.id.add_task_description) EditText description;
     @BindView(R.id.done_button) View doneButton;
 
-    private final Relay<TaskViewModel> publishRelay = PublishRelay.<TaskViewModel>create().toSerialized();
+    private final Relay<Task> publishRelay = PublishRelay.<Task>create().toSerialized();
     private CharSequence savedToolbarTitle;
+    private Task task;
 
     public AddTaskView(Context context) {
         this(context, null);
@@ -56,19 +57,18 @@ public class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.
     }
 
     @Override
-    public Observable<TaskViewModel> task() {
-        return publishRelay;
-    }
-
-    @Override
-    public void editTask(Task editableTask) {
-        title.setText(editableTask.getTitle());
-        description.setText(editableTask.getDescription());
+    public Observable<Task> editOrAddTask(Task addOrEditTask) {
+        this.task = addOrEditTask;
+        title.setText(addOrEditTask.getTitle());
+        description.setText(addOrEditTask.getDescription());
         // saved previous toolbar title and set the one for this view
         savedToolbarTitle = getActionBar().getTitle();
-        getActionBar().setTitle(editableTask.isEmpty()
+        getActionBar().setTitle(addOrEditTask.isEmpty()
             ? R.string.new_todo
             : R.string.edit_todo);
+
+
+        return publishRelay;
     }
 
     @Override
@@ -79,17 +79,19 @@ public class AddTaskView extends CoordinatorLayout implements AddTaskInteractor.
         super.onDetachedFromWindow();
     }
 
-    @Override
-    public void clear() {
-        title.setText("");
-        description.setText("");
-    }
-
     @OnClick(R.id.done_button) void done() {
         if (isValidInput()) {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getWindowToken(), 0);
-            publishRelay.accept(new TaskViewModel(title.getText().toString(), description.getText().toString()));
+            String newTitle = this.title.getText().toString();
+            String newDescription = this.description.getText().toString();
+            if (task.isEmpty()) {
+                // ADD new task
+                publishRelay.accept(Task.create(newTitle, newDescription));
+            } else {
+                // EDIT new task
+                publishRelay.accept(task.update(newTitle, newDescription));
+            }
         } else {
             Snackbar.make(AddTaskView.this, R.string.todos_cannot_be_empty, Snackbar.LENGTH_LONG).show();
         }
