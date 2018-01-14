@@ -6,6 +6,7 @@ import com.uber.rib.core.Interactor;
 import com.uber.rib.core.RibInteractor;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.exceptions.OnErrorNotImplementedException;
 import javax.inject.Inject;
 
 /**
@@ -33,7 +34,7 @@ public class MenuDrawerInteractor
                 } else if (event == MenuEvent.STATISTICS) {
                     listener.statisticsSelected();
                 }
-            }));
+            }, OnErrorNotImplementedException::new));
     }
 
     @Override

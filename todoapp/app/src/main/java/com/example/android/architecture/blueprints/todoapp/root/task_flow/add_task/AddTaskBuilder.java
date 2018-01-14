@@ -36,15 +36,7 @@ public class AddTaskBuilder
      * @return a new {@link AddTaskRouter}.
      */
     public AddTaskRouter build(ViewGroup parentViewGroup) {
-        AddTaskView view = createView(parentViewGroup);
-        AddTaskInteractor interactor = new AddTaskInteractor();
-        Component component = DaggerAddTaskBuilder_Component.builder()
-                .parentComponent(getDependency())
-                .view(view)
-                .task(Task.EMPTY)
-                .interactor(interactor)
-                .build();
-        return component.addtaskRouter();
+        return build(parentViewGroup, Task.EMPTY);
     }
 
     /**

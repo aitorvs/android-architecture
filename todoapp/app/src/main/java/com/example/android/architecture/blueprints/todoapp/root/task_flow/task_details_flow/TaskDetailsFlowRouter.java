@@ -8,6 +8,7 @@ import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_d
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.task_detail.TaskDetailScreen;
 import com.example.android.architecture.blueprints.todoapp.screen_stack.ScreenStack;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.exceptions.OnErrorNotImplementedException;
 
 /**
  * Adds and removes children of {@link TaskDetailsFlowBuilder.TaskDetailsFlowScope}.
@@ -41,14 +42,14 @@ public class TaskDetailsFlowRouter
             .subscribe(event -> {
                 TaskDetailRouter router = taskDetailScreen.getRouter();
                 handleScreenEvents(router, event);
-            }));
+            }, OnErrorNotImplementedException::new));
 
         disposables.add(editTaskScreen
             .lifecycle()
             .subscribe(event -> {
                 AddTaskRouter router = editTaskScreen.getRouter();
                 handleScreenEvents(router, event);
-            }));
+            }, OnErrorNotImplementedException::new));
     }
 
     @Override

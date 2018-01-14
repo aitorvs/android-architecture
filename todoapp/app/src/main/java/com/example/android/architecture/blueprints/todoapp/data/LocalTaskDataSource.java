@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import java.util.Collections;
 import java.util.List;
 
 final class LocalTaskDataSource implements TaskDataSource {
@@ -15,17 +16,27 @@ final class LocalTaskDataSource implements TaskDataSource {
 
     @Override
     public Observable<List<Task>> getTasks() {
-        return taskDao.getTasks().onBackpressureBuffer().toObservable();
+        return taskDao.getTasks()
+            .onBackpressureBuffer()
+            .toObservable()
+            .map(Collections::unmodifiableList);
+
     }
 
     @Override
     public Observable<List<Task>> getCompletedTasks() {
-        return taskDao.getCompletedTasks().onBackpressureBuffer().toObservable();
+        return taskDao.getCompletedTasks()
+            .onBackpressureBuffer()
+            .toObservable()
+            .map(Collections::unmodifiableList);
     }
 
     @Override
     public Observable<List<Task>> getActiveTasks() {
-        return taskDao.getActiveTasks().onBackpressureBuffer().toObservable();
+        return taskDao.getActiveTasks()
+            .onBackpressureBuffer()
+            .toObservable()
+            .map(Collections::unmodifiableList);
     }
 
     @Override

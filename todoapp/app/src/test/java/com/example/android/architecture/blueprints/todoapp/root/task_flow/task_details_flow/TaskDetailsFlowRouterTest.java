@@ -77,6 +77,6 @@ public class TaskDetailsFlowRouterTest extends RibTestBasePlaceholder {
         // Use RouterHelper to drive your router's lifecycle.
         RouterHelper.attach(router);
         RouterHelper.detach(router);
-        verify(backStack).popBackTo(-1, false);
+        verify(backStack).popBackTo(0, false);
     }
 }

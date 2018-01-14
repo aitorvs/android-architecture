@@ -10,6 +10,7 @@ import com.example.android.architecture.blueprints.todoapp.root.task_flow.TaskFl
 import com.example.android.architecture.blueprints.todoapp.root.task_flow.TaskFlowRouter;
 import com.example.android.architecture.blueprints.todoapp.screen_stack.ScreenStack;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.exceptions.OnErrorNotImplementedException;
 import timber.log.Timber;
 
 /**
@@ -44,7 +45,7 @@ public class RootRouter extends ViewRouterExtended<RootView, RootInteractor, Roo
             .subscribe(event -> {
                 StatisticsRouter router = statisticsScreen.getRouter();
                 handleScreenEvents(router, event);
-            }));
+            }, OnErrorNotImplementedException::new));
     }
 
     @Override

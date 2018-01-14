@@ -7,6 +7,7 @@ import com.uber.rib.core.Bundle;
 import com.uber.rib.core.Interactor;
 import com.uber.rib.core.RibInteractor;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.exceptions.OnErrorNotImplementedException;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -30,7 +31,7 @@ public class StatisticsInteractor
 
         disposables.add(taskRepository
             .getTasks()
-            .subscribe(this::showStatistics));
+            .subscribe(this::showStatistics, OnErrorNotImplementedException::new));
     }
 
     private void showStatistics(List<Task> tasks) {

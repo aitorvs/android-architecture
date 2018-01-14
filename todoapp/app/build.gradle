@@ -39,6 +39,9 @@ dependencies {
     implementation deps.external.timber
     implementation deps.external.butterknife
     implementation deps.external.stetho
+    implementation deps.external.retrofit2
+    implementation deps.external.retrofit2AdapterRxJava
+    implementation deps.external.retrofit2Mock
     implementation deps.arch.room
     implementation deps.arch.roomRxJava2
 

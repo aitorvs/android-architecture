@@ -25,6 +25,7 @@ def versions = [
     butterknife: '8.8.1',
     room: '1.0.0',
     ribs: '0.9.1',
+    retrofit2: '2.3.0',
 ]
 
 def apt = [
@@ -91,6 +92,9 @@ def external = [
     leakcanaryDebug: 'com.squareup.leakcanary:leakcanary-android:1.5.4',
     butterknife: "com.jakewharton:butterknife:${versions.butterknife}",
     stetho: "com.facebook.stetho:stetho:1.5.0",
+    retrofit2: "com.squareup.retrofit2:retrofit:${versions.retrofit2}",
+    retrofit2AdapterRxJava: "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit2}",
+    retrofit2Mock: "com.squareup.retrofit2:retrofit-mock:${versions.retrofit2}",
 ]
 
 def uber = [

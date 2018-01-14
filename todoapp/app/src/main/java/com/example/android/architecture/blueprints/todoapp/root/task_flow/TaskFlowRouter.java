@@ -16,6 +16,7 @@ import com.example.android.architecture.blueprints.todoapp.screen_stack.ScreenSt
 import com.example.android.architecture.blueprints.todoapp.util.Services;
 import com.uber.rib.core.screenstack.lifecycle.ScreenStackEvent;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.exceptions.OnErrorNotImplementedException;
 import timber.log.Timber;
 
 /**
@@ -62,14 +63,14 @@ public class TaskFlowRouter extends RouterExtended<TaskFlowInteractor, TaskFlowB
                 } else {
                     Services.setToolbarHomeAsUp(context);
                 }
-            }));
+            }, OnErrorNotImplementedException::new));
 
         disposables.add(addTaskScreen
             .lifecycle()
             .subscribe(event -> {
                 AddTaskRouter router = addTaskScreen.getRouter();
                 handleScreenEvents(router, event);
-            }));
+            }, OnErrorNotImplementedException::new));
     }
 
     @Override
